@@ -1,8 +1,6 @@
-<!-- ******* ROLE: gère l'affichage et la logique de l'authentification -->
-
 <!-- On implémente le HTML-->
-<template>  
-    <div id="loginBox" class="container">
+<template>
+  <div id="loginBox" class="container">
         <div class="row justify-content-center">
             <form class="form col-10 col-md-8 col-lg-6 col-xl-4 ">
                 <img alt="Groupomania logo" src="../assets/images/logo_groupo.png" id="logoAccueil">
@@ -26,12 +24,11 @@
 
 <!-- On écrit la logique du composant puis on l'exporte -->
 <script>
-export default {
-  name: 'AuthAppli',
-  props: {
 
-  }
+export default {
+  name: 'HomeView',
 }
+
 </script>
 
 <!-- On gère le style du HTML du composant. On ajoute l'attribut "scoped" pour limiter le code CSS au composant -->
@@ -55,9 +52,4 @@ export default {
 .creationCompte {
     margin-top: 40px;
 }
-
-
-
-
-
 </style>

@@ -2,6 +2,7 @@
 
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -20,6 +21,7 @@ library.add(faMagnifyingGlass)
 
 createApp(App)
     .component('font-awesome-icon', FontAwesomeIcon)
+    .use(router) // on exporte pour l'ensemble des composants un middleware utilisant vue-router.
     .use(VueAxios, axios) // on exporte pour l'ensemble des composants un middleware utilisant axios. On l'appelera dans le composant concerné avec le mot clé "this". 
     .mount('#app')
 

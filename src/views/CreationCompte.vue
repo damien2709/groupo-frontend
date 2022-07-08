@@ -1,5 +1,3 @@
-<!-- ******* ROLE: gère l'affichage et la logique de la création de compte -->
-
 <!-- On implémente le HTML-->
 <template>  
     <div id="loginBox" class="container">
@@ -105,3 +103,4 @@ export default {
 
 
 </style>
+

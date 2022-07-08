@@ -2,29 +2,16 @@
 
 <!-- Dans la balise "template" on va insérer le code HTML à afficher sur la page de notre application-->
 <template>
-  <!--On appelle le composant .vue "AuthAppli"-->
-  <AuthAppli v-if= "false"/>
-  <createAccount v-if= "false"/>
-  <MyWall v-if= "true"/>
-
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/creation">création</router-link> |
+    <router-link to="/Wall">Wall</router-link>
+  </nav>
+  <router-view/>
 </template>
 
 <!-- Dans la balise "Script", nous allons écrire toute la logique de notre composant. -->
 <script>
-// on importe les composants que nous allons utiliser dans la balise "template" ci-dessus.
-import createAccount from './components/compte.vue'
-import AuthAppli from './components/auth.vue'
-import MyWall from './components/wall.vue'
-
-export default {
-  name: 'App',
-  components: {
-    AuthAppli,
-    createAccount,
-    MyWall
-  },   
- }
-
 </script>
 
 <!-- La balise "style" accueille le code CSS de notre composant. Il y a une feuille de style incorporée pour chaque composant.-->
@@ -35,6 +22,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
 
+nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>

@@ -1,5 +1,3 @@
-<!-- ************ ROLE : composant gérant l'affichage et la logique de la page du mur d'articles -->
-
 <template>
   <div class="container-fluid MyNavbar">
     <nav class=" row navbar navbar-light bg-light justify-content-space-between">
