@@ -5,28 +5,29 @@
             <form class="form col-10 col-md-8 col-lg-6 col-xl-4 ">
                 <img alt="Groupomania logo" src="../assets/images/logo_groupo.png" id="logoAccueil">
                 <h1 class="titleNetwork">Votre réseau social</h1>
-                <div class="form-group">
+                <div class="col">
                     <input type="text" class="form-control" id="username" aria-describedby="userName" placeholder="Nom d'utilisateur" required>
-                </div>
-                <div class="form-group">
                     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
                 </div>
-                <div class="form-group">
+                <div class="col">
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                </div>
+                <div class="col">
                     <input type="text" class="form-control" id="surname" aria-describedby="Surname" placeholder="Prénom" required>
                 </div>
-                <div class="form-group">
+                <div class="col">
                     <input type="text" class="form-control" id="name" aria-describedby="Name" placeholder="Nom" required>
                 </div>
-                <div class="form-group">
+                <div class="col">
                     <input type="email" class="form-control" id="email" aria-describedby="helpEmail" placeholder="Email" required>
                 </div>
-                <div class="form-group">
+                <div class="col">
                     <input type="text" class="form-control" id="Department" aria-describedby="Department" placeholder="Service" required>
                 </div>
-                <div class="form-group">
+                <div class="col">
                     <input type="tel" class="form-control" id="tel" aria-describedby="Telephone" placeholder="Tel du poste">
                 </div>
-                <div class="form-group">
+                <div class="col">
                     <div class="form-check">
                         <input class="form-check-input is-invalid" type="checkbox" value="" id="agrementCheck" required>
                         <label class="agrementText" for="agrementCheck">
@@ -46,10 +47,8 @@
 <!-- On écrit la logique du composant puis on l'exporte -->
 <script>
 export default {
-  name: 'createAccount',
-  props: {
+  name: 'CreationCompte',
 
-  }
 }
 </script>
 
@@ -99,8 +98,6 @@ export default {
         }   
     }
 }
-
-
 
 </style>
 

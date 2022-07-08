@@ -16,7 +16,7 @@
             </form>
         </div>
         <div class="row creationCompte justify-content-center">
-            <p>Vous n'avez pas encore de compte : <a href="">Créez un compte</a></p>
+            <p>Vous n'avez pas encore de compte : <a href="http://localhost:8080/#/creation/">Créez un compte</a></p>
             <p>Vous avez oublié votre mot de passe : <a href="">Réinitialiser le mot de passe</a></p>
         </div>
     </div>

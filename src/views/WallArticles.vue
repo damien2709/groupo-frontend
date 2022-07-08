@@ -1,18 +1,5 @@
 <template>
-  <div class="container-fluid MyNavbar">
-    <nav class=" row navbar navbar-light bg-light justify-content-space-between">
-        <a class="navbar-brand logoNavbar col-4 col-md-3" href="#">
-            <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo">
-        </a>
-        <form class="form-inline col-7 col-md-5">
-            <input class="form-control mr-sm-2" type="search" placeholder="Rechercher des articles" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
-        </form>
-        <div class="buttonsGroup col-md-3">
-                <button type="button" class="btn btn-primary">Se déconnecter</button>
-        </div>
-    </nav>
-  </div>
+  <MyNav/>
   <div class="container MyCategories">
     <div class="row titleBlock">
         <h2 class="titleH2">
@@ -76,9 +63,13 @@
 <script>
 
 /* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
+import MyNav from '@/components/MyNav.vue'
 
 export default {
-    name: 'MyWall',
+    name: 'WallArticles',
+    components: {
+        MyNav
+    },
     methods: {
         getListOfPosts () {
             this.axios.get('https://ghibliapi.herokuapp.com/films')
