@@ -19,6 +19,7 @@
         </div>
         <div class="row creationCompte justify-content-center">
             <p>Vous n'avez pas encore de compte : <a href="">Créez un compte</a></p>
+            <p>Vous avez oublié votre mot de passe : <a href="">Réinitialiser le mot de passe</a></p>
         </div>
     </div>
 </template>
@@ -52,7 +53,7 @@ export default {
 }
 
 .creationCompte {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 

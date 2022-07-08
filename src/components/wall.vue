@@ -1,19 +1,21 @@
+<!-- ************ ROLE : composant gérant l'affichage et la logique de la page du mur d'articles -->
+
 <template>
   <div class="container-fluid MyNavbar">
-    <div class="row">
-         <nav class=" col navbar navbar-light bg-light justify-content-between">
-            <a class="navbar-brand logoNavbar" href="#">
-                <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo">
-            </a>
-            <form class="form-inline ">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-
-        </nav>
-    </div>
+    <nav class=" row navbar navbar-light bg-light justify-content-space-between">
+        <a class="navbar-brand logoNavbar col-4 col-md-3" href="#">
+            <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo">
+        </a>
+        <form class="form-inline col-7 col-md-5">
+            <input class="form-control mr-sm-2" type="search" placeholder="Rechercher des articles" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
+        </form>
+        <div class="buttonsGroup col-md-3">
+                <button type="button" class="btn btn-primary">Se déconnecter</button>
+        </div>
+    </nav>
   </div>
-  <div class="container">
+  <div class="container MyCategories">
     <div class="row titleBlock">
         <h2 class="titleH2">
             Nos catégories d'articles
@@ -54,13 +56,14 @@
         </div>
     </div>
   </div>
-  <div class="container">
+<div class=" container myArticles">
     <div class=" row titleBlock">
         <h2 class="titleH2">Les articles</h2>
     </div>
     <div class="row wall">
-        <div class="col col allArticles">
+        <div class="col col allArticles ">
             <p>Le mur de tous les articles</p>
+            <p>{{ getListOfPosts () }}</p> <!-- Ici j'appelle la méthode 'getListOfPosts' définie plus bas.  -->
 
         </div>
         <div class="col lastArticles">
@@ -69,15 +72,23 @@
         </div>
 
     </div>
-  </div>
+</div>
 </template>
 
 <script>
+
+/* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
+
 export default {
     name: 'MyWall',
-    props: {
-
-  }
+    methods: {
+        getListOfPosts () {
+            this.axios.get('https://ghibliapi.herokuapp.com/films')
+            .then((response) => {
+                console.log(response.data)
+            })
+        } // Je vais appeler cette méthode en utilisant les doubles accolades dans l'élément HTML concerné. 
+    },
 }
 </script>
 
@@ -85,11 +96,20 @@ export default {
 .navbar {
     & .logoNavbar {
         & .logo {
-            max-width: 200px;
+            max-width: 100%;
+            object-fit: contain;
+
         }
     }
     & form {
         display: flex;
+    }
+    & .buttonsGroup {
+        & .btn {
+            display: inline-block;
+            margin-right: 10px;
+            width: 150px;
+        }
     }
 }
 
