@@ -1,11 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomePage from '../views/HomePage.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'homepage',
+    component: HomePage
   },
   {
     path: '/creation',
@@ -13,12 +13,6 @@ const routes = [
     // composant qui est lazy-loaded quand la route est sollicitée. On l'appelle par une fonction.
     component: () => import('../views/CreationCompte.vue')
   },
-  {
-    path: '/wall',
-    name: 'wall',
-    // composant qui est lazy-loaded quand la route est sollicitée. On l'appelle par une fonction.
-    component: () => import('../views/WallArticles.vue')
-  }
 ]
 
 const router = createRouter({

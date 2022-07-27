@@ -6,30 +6,83 @@
                 <img alt="Groupomania logo" src="../assets/images/logo_groupo.png" id="logoAccueil">
                 <h1 class="titleNetwork">Votre réseau social</h1>
                 <div class="col">
-                    <input type="text" class="form-control" id="username" aria-describedby="userName" placeholder="Nom d'utilisateur" required>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                    <input 
+                    type="text" 
+                    class="form-control" 
+                    id="username" 
+                    aria-describedby="userName" 
+                    placeholder="Nom d'utilisateur" 
+                    v-model="username"
+                    required>
                 </div>
                 <div class="col">
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                    <!-- SI toutes mes règles de validation sont contrôlées dans le backend, je suis obligé de valider le mot de passe initial dans html5 car dans le back, la règle de validation s'applique après le traitement Bcrypt et pas à l'envoie de la requête !-->
+                    <input 
+                    type="password" 
+                    class="form-control" 
+                    id="exampleInputPassword1" 
+                    placeholder="Mot de passe" 
+                    v-model="password" 
+                    required  
+                    pattern="(?=^.{8,}$)((?=.*d)|(?=.*W+))(?![.n])(?=.*[A-Z])(?=.*[a-z]).*" />
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" id="surname" aria-describedby="Surname" placeholder="Prénom" required>
+                    <input 
+                    type="text" 
+                    class="form-control" 
+                    id="surname" 
+                    aria-describedby="Surname" 
+                    placeholder="Prénom"
+                    v-model="surname" 
+                    required>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" id="name" aria-describedby="Name" placeholder="Nom" required>
+                    <input 
+                    type="text" 
+                    class="form-control" 
+                    id="name" 
+                    aria-describedby="Name" 
+                    placeholder="Nom"
+                    v-model="name" 
+                    required>
                 </div>
                 <div class="col">
-                    <input type="email" class="form-control" id="email" aria-describedby="helpEmail" placeholder="Email" required>
+                    <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email" 
+                    aria-describedby="helpEmail" 
+                    placeholder="Email"
+                    v-model="email" 
+                    required>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" id="Department" aria-describedby="Department" placeholder="Service" required>
+                    <input 
+                    type="text" 
+                    class="form-control" 
+                    id="department" 
+                    aria-describedby="Department" 
+                    placeholder="Service"
+                    v-model="department" 
+                    required>
                 </div>
                 <div class="col">
-                    <input type="tel" class="form-control" id="tel" aria-describedby="Telephone" placeholder="Tel du poste">
+                    <input 
+                    type="tel" 
+                    class="form-control" 
+                    id="tel" 
+                    aria-describedby="Telephone" 
+                    placeholder="Tel du poste"
+                    v-model="tel">
                 </div>
                 <div class="col">
                     <div class="form-check">
-                        <input class="form-check-input is-invalid" type="checkbox" value="" id="agrementCheck" required>
+                        <input 
+                        class="form-check-input is-invalid" 
+                        type="checkbox" 
+                        value="" 
+                        id="agrementCheck" 
+                        required>
                         <label class="agrementText" for="agrementCheck">
                             Je suis d'accord avec les <a href="">termes et conditions</a> du réseau social
                         </label>
@@ -38,7 +91,11 @@
                         </div>
                         </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Créer son compte</button>
+                <button 
+                    type="submit" 
+                    class="btn btn-primary" 
+                    @click="createAccount()"
+                    >Créer son compte</button>
             </form>
         </div>
     </div>
@@ -48,6 +105,12 @@
 <script>
 export default {
   name: 'CreationCompte',
+
+  methods: {
+    createAccount: function () {
+        console.log(this.username, this.name, this.email)
+    }
+  }
 
 }
 </script>
