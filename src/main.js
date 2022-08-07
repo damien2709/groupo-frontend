@@ -21,7 +21,7 @@ library.add(faMagnifyingGlass)
 
 createApp(App)
     .component('font-awesome-icon', FontAwesomeIcon)
-    .use(router) // on exporte pour l'ensemble des composants un middleware utilisant vue-router.
     .use(VueAxios, axios) // on exporte pour l'ensemble des composants un middleware utilisant axios. On l'appelera dans le composant concerné avec le mot clé "this". 
+    .use(router) // on exporte pour l'ensemble des composants un middleware utilisant vue-router.
     .mount('#app')
 

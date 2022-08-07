@@ -37,7 +37,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Fun</h5>
                     <p class="card-text">Pour les loisirs et les moments de convivialité intra ou extra entreprise, c'est ici !</p>
-                    <a href="#" class="btn btn-primary">Let' go !</a>
+                    <a href="#" class="btn btn-primary" >Let' go !</a>
                 </div>
             </div>
         </div>
@@ -73,11 +73,32 @@ export default {
     components: {
         MyNav
     },
+
+
+    //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "beforeCreate"
+    beforeMount: function() {
+        this.isHeLogged();
+    },
+
     methods: {
+        isHeLogged: function (){
+            let isLogged = JSON.parse(localStorage.getItem("login"));
+            console.log(isLogged);
+            if(isLogged) {
+                this.getListOfPosts();
+            }
+            else {
+                window.location.href = "http://localhost:8080/login";
+
+            }
+        }, 
+        
         getListOfPosts () {
-            console.log("a faire");
+            console.log("la liste des posts à afficher");
         } // Je vais appeler cette méthode en utilisant les doubles accolades dans l'élément HTML concerné. 
     },
+
+   
 }
 </script>
 

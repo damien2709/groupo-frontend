@@ -24,14 +24,15 @@
                     v-model="password" >
                 </div>
                 
-                <button type="submit" 
+                <button 
+                type="button" 
                 class="btn btn-primary"
                 @click="loginUser()">
                 Connexion</button>
             </form>
         </div>
         <div class="row creationCompte justify-content-center">
-            <p>Vous n'avez pas encore de compte : <a href="http://localhost:8080/#/creation/">Créez un compte</a></p>
+            <p>Vous n'avez pas encore de compte : <a href="http://localhost:8080/creation/">Créez un compte</a></p>
             <p>Vous avez oublié votre mot de passe : <a href="">Réinitialiser le mot de passe</a></p>
         </div>
     </div>
@@ -42,6 +43,12 @@
 
 export default {
   name: 'MyLogin',
+
+  data() {
+    return {
+        isLogged: '',
+    }
+  },
 
   methods: {
     loginUser: function () {
@@ -56,22 +63,20 @@ export default {
                 { "Content-Type": "application/json"}
             }
         )
-        // je récupère la réponse de l'API, je change la valeur de la propriété "isLogged" à true (l'utilisateur est connecté), je vérifie qu'elle est bien à true, je retourne la valeur du token. 
+        // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token". 
         .then(response => {
-            console.log(response.data);
-            response.data.isLogged = true;
-            localStorage.setItem("login", JSON.stringify(response.data.isLogged));
-            console.log(response.data.isLogged);
-            return response.data.token;
-            }        
+                console.log(response.status);
+                this.isLogged = true;
+                localStorage.setItem("login", JSON.stringify(this.isLogged));
+                console.log(this.isLogged);
+                localStorage.setItem("token", JSON.stringify(response.data.token));
+                window.location.href = "http://localhost:8080/";
+            }      
         )
-        // j'enregistre le token dans le localStorage du navigateur.
-        .then(response => {
-            localStorage.setItem("token", JSON.stringify(response))
-            })
-        /* 
-        On va renvoyer le user vers la page du mur d'articles
-        */
+        .catch((error) =>{
+            console.log(error.message);
+        })
+
     }
   }
 }
@@ -86,6 +91,7 @@ export default {
     padding : 15vh 20px;
     & input {
         margin-bottom: 30px;
+        
     }
     & #logoAccueil {
     margin-bottom: 40px;

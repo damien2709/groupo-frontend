@@ -2,8 +2,7 @@
 
 <!-- Dans la balise "template" on va insérer le code HTML à afficher sur la page de notre application-->
 <template>
-
-  <router-view/>
+  <router-view />
 </template>
 
 <!-- Dans la balise "Script", nous allons écrire toute la logique de notre composant. -->

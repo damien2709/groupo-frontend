@@ -24,7 +24,7 @@
                     placeholder="Mot de passe" 
                     v-model="password" 
                     required  
-                    pattern="(?=^.{8,}$)((?=.*d)|(?=.*W+))(?![.n])(?=.*[A-Z])(?=.*[a-z]).*" />
+                    pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" />
                 </div>
                 <div class="col">
                     <input 
@@ -75,22 +75,17 @@
                     placeholder="Tel du poste"
                     v-model="tel">
                 </div>
-                <div class="col">
-                    <div class="form-check">
-                        <input 
-                        class="form-check-input is-invalid" 
+                <p>
+                    <!-- Ici on va créer un input checkbox qui devra être coché pour valider le formulaire. On va devoir envoyer la valeur de l'input une fois validé (value="ok") à l'API (propriété "checkConditions" du modèle User)pour que le formulaire ne soit pas envoyé sans que la box soit checkée. -->
+                    <input 
+                        class="form-check-input" 
                         type="checkbox" 
-                        value="" 
-                        id="agrementCheck" 
+                        id="agrementCheck"
+                        v-model="checkConditions"
+                        value= "ok" 
                         required>
-                        <label class="agrementText" for="agrementCheck">
                             Je suis d'accord avec les <a href="">termes et conditions</a> du réseau social
-                        </label>
-                        <div class="agrementAlert invalid-feedback">
-                            Vous devez agréer avant de créer votre compte 
-                        </div>
-                        </div>
-                </div>
+                </p>
                 <button 
                     type="submit" 
                     class="btn btn-primary" 
@@ -103,16 +98,44 @@
 
 <!-- On écrit la logique du composant puis on l'exporte -->
 <script>
+
 export default {
   name: 'CreationCompte',
 
   methods: {
     createAccount: function () {
-        console.log(this.username, this.name, this.email)
+        //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
+        
+       this.axios
+        .post('http://localhost:3000/api/createAccount', 
+            {
+            username: this.username,
+            password: this.password,
+            surname: this.surname,
+            name: this.name,
+            email: this.email, 
+            department: this.department,
+            tel: this.tel,
+            },
+            {headers: 
+                { "Content-Type": "application/json"}
+            }
+        )
+        // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
+        .then(response => {
+                console.log(response.message);
+                window.location.href = "http://localhost:8080/login";
+            }      
+        )
+        .catch((error) =>{
+            console.log(error.message);
+        })
+
     }
   }
 
 }
+
 </script>
 
 <!-- On gère le style du HTML du composant. On ajoute l'attribut "scoped" pour limiter le code CSS au composant -->
