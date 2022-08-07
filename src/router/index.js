@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import WallArticles from '@/views/WallArticles.vue' // j'importe le fichier .view. @ permet de se placer directement dans le fichier "src"
 import MyLogin from '@/views/MyLogin.vue'
-import CreationCompte from '@/views/CreationCompte.vue'
 import ProfilPage from '@/views/ProfilPage.vue'
 import NotFound from '@/views/NotFound.vue'
 
@@ -26,14 +25,6 @@ const routes = [
     component: MyLogin,
     meta: {
       title: "Connexion Groupomania",
-    }
-  },
-  {
-    name: 'creation',
-    path: '/creation',
-    component: CreationCompte,
-    meta: {
-      title: "Création compte Groupomania",
     }
   },
   {
