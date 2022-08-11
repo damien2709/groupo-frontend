@@ -19,15 +19,7 @@
                         v-model="username" 
                         required>
                     </div>
-                    <div class="col" v-if="mode == 'login'">
-                        <input 
-                        type="password" 
-                        class="form-control" 
-                        id="password" 
-                        placeholder="Mot de passe"
-                        v-model="password" >
-                    </div>
-                    <div class="col" v-else>
+                    <div class="col">
                         <!-- SI toutes mes règles de validation sont contrôlées dans le backend, je suis obligé de valider le mot de passe initial dans html5 car dans le back, la règle de validation s'applique après le traitement Bcrypt et pas à l'envoie de la requête !-->
                         <input 
                         type="password" 
@@ -40,22 +32,24 @@
                     </div>
                 </div>
                 <div class="form-group" v-if="mode == 'create'" >
-                    <input 
-                    type="text" 
-                    class="form-control" 
-                    id="surname" 
-                    aria-describedby="Surname" 
-                    placeholder="Prénom"
-                    v-model="surname" 
-                    required>
-                    <input 
-                    type="text" 
-                    class="form-control" 
-                    id="name" 
-                    aria-describedby="Name" 
-                    placeholder="Nom"
-                    v-model="name" 
-                    required>
+                    <div class="d-flex justify-content-between" >
+                        <input 
+                        type="text" 
+                        class="form-control me-2" 
+                        id="surname" 
+                        aria-describedby="Surname" 
+                        placeholder="Prénom"
+                        v-model="surname" 
+                        required>
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="name" 
+                        aria-describedby="Name" 
+                        placeholder="Nom"
+                        v-model="name" 
+                        required>
+                    </div>
                     <input 
                     type="email" 
                     class="form-control" 
@@ -70,8 +64,7 @@
                     id="department" 
                     aria-describedby="Department" 
                     placeholder="Service"
-                    v-model="department" 
-                    required>
+                    v-model="department">
                     <input 
                     type="tel" 
                     class="form-control" 
@@ -87,14 +80,16 @@
                         type="checkbox" 
                         id="agrementCheck"
                         v-model="checkConditions"
-                        value= "ok" 
+                        @click="validateConditions()" 
                         required>
                             Je suis d'accord avec les <a href="">termes et conditions</a> du réseau social
                 </p>
                 <!-- EN mode 'login', en cliquant sur le bouton j'appelle la méthode de login-->
+                <!-- Je vais créer un bouton qui aura une classe dynamique en fontion d'un état (true ou false, selon le résultat de la méthode validatedFields qui vérifie que tous les champs sont remplis), grace à v-bind. C'est la classe disabled-->
                 <button 
                     type="button" 
                     class="btn btn-primary login_button"
+                    :class="{'disabled' : !validatedFields}"
                     v-if="mode == 'login'"
                     @click="loginUser()">
                     Connexion</button>
@@ -102,6 +97,7 @@
                 <button 
                     type="submit" 
                     class="btn btn-primary createAccount_button"
+                    :class="{'disabled' : !validatedFields}"
                     v-else 
                     @click="createAccount()"
                     >Créer son compte</button>
@@ -122,13 +118,48 @@ export default {
 
   data() {
     return {
-        isLogged: '',
+        // je crée un état "isLogged" qui exprime si le user est loggé ou pas. La valeur par défaut est non, donc false. 
+        isLogged: false,
         // je crée une donnée/état "mode" qui aura pour valeur initiale "login". Le mode me permettra de switcher entre l'affichage pour se logger ou celui pour créer un compte. 
-        mode: 'login', //par défaut au chargment de la page, le mode a pour valeur 'login', on affichera donc les éléments qui concernent ce mode. 
+        mode: 'login', //par défaut au chargement de la page, le mode a pour valeur 'login', on affichera donc les éléments qui concernent ce mode. 
+        // je créé maintenant mes données issus des champs qui utilisent v-model, et je leur passe la valeur "" (vide) par défaut. Dés qu'un user va entrer une valeur, la donnée correspondante sera mise à jour. 
+        username : "",
+        password: "",
+        surname: "",
+        name:"",
+        email: "",
+        department: "",
+        tel: "",
+        checkConditions: false,
+    }
+  },
+
+  computed: {
+    // Je crée la fonction qui va retourner une valeur true ou false si les champs sont remplis ou pas. 
+    validatedFields: function () {
+        if(this.mode == 'create') {
+            if(this.username != "" && this.password != "" && this.surname != "" && this.name != "" && this.email != "" && this.checkConditions != false) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            if(this.username != "" && this.password != "")
+                return true;
+            else{
+                return false;
+            }
+        }
     }
   },
 
   methods: {
+    validateConditions : function () {
+        this.checkConditions = true; // Lorsque l'on coche la validation des conditions, la donnée "checkConditions" passe à "true".
+    },
+
     switchToCreateAccount : function () {
         this.mode = 'create'; // la méthode sert à passer la valeur du 'mode' à 'create' quand on clique sur le lien de création de compte. 
     },
@@ -151,7 +182,8 @@ export default {
                 localStorage.setItem("login", JSON.stringify(this.isLogged));
                 console.log(this.isLogged);
                 localStorage.setItem("token", JSON.stringify(response.data.token));
-                window.location.href = "http://localhost:8080/";
+                localStorage.setItem("userId", JSON.stringify(response.data.data.id));
+                this.$router.push('/'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
             }      
         )
         .catch((error) =>{
@@ -180,7 +212,7 @@ export default {
         // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
         .then(response => {
                 console.log(response.message);
-                window.location.href = "http://localhost:8080/login";
+                this.$router.push('/login');
             }      
         )
         .catch((error) =>{
@@ -219,6 +251,9 @@ export default {
     & .form-group {
         width: 60%;
         margin: auto;
+    }
+    & .disabled{
+        background-color: rgb(170, 170, 170);
     }
 }
 

@@ -26,18 +26,21 @@
 
 export default {
   name: 'MyNav',
+  data () {
+    return {
+        isLogged: '',
+        token: '',
+    }
+  },
 
   methods: {
         deconnectUser: function () {
-            let isLogged= JSON.parse(localStorage.getItem("login"));
-            isLogged = false;
-            localStorage.setItem("login", JSON.stringify(isLogged));
-            console.log(isLogged);
-            let token= JSON.parse(localStorage.getItem("token"));
-            token = '';
+            this.isLogged = false;
+            localStorage.setItem("login", JSON.stringify(this.isLogged));
+            console.log(this.isLogged);
+            let token = this.token;
             localStorage.setItem("token", JSON.stringify(token));
-            window.location.href = "http://localhost:8080/login";
-
+            this.$router.push('/login');
         }
         
     },

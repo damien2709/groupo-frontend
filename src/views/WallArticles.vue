@@ -75,21 +75,19 @@ export default {
     },
 
 
-    //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "beforeCreate"
-    beforeMount: function() {
-        this.isHeLogged();
+    //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
+    created: function() {
+        this.getTheWallPage();
     },
 
     methods: {
-        isHeLogged: function (){
+        getTheWallPage: function (){
             let isLogged = JSON.parse(localStorage.getItem("login"));
-            console.log(isLogged);
-            if(isLogged) {
-                this.getListOfPosts();
+            if(!isLogged) {
+                this.$router.push('/login'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
             }
             else {
-                window.location.href = "http://localhost:8080/login";
-
+                this.getListOfPosts();
             }
         }, 
         
