@@ -8,7 +8,7 @@
                 <input class="form-control mr-sm-2" type="search" placeholder="Rechercher des articles par mots clés" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
             </form>
-            <div class="col-2 d-flex flex-column">
+            <div class="col-2 d-flex flex-column dropDownMenu">
                 <div 
                     class="monProfil text-start d-flex align-item-end">
                     <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
@@ -18,7 +18,7 @@
                 <div class="routerNav d-flex flex-column text-start" v-if="seeMenu == true">
                     <router-link to="/">Accueil</router-link>
                     <router-link to="/profil">Profil</router-link>
-                    <a href=""  @click="deconnectUser()">Se déconnecter</a>
+                    <a href=""  @click="deconnectUser()">Déconnexion</a>
             </div>
             </div>
             
@@ -67,7 +67,7 @@ export default {
                 })
         },
         deconnectUser: function () {
-            localStorage.setItem("login");
+            localStorage.removeItem("login");
             localStorage.removeItem("token");
             localStorage.removeItem("userId");
             this.$router.push('/login');
@@ -109,11 +109,19 @@ export default {
     cursor: pointer;
 }
 
+.dropDownMenu {
+    position: relative;
+}
+
 .routerNav {
     position: absolute;
-    top: 70px;
+    top: 68px;
+    left: 0;
+    z-index: 2;
     background-color: #e3f2fd;
     padding: 10px;
+    padding-right: 20px;
+    font-size: 15px;
 }
 
 
