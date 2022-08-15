@@ -195,7 +195,7 @@ export default {
         //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
         
        this.axios
-        .post('http://localhost:3000/api/createAccount', 
+        .post('http://localhost:3000/api/users', 
             {
             username: this.username,
             password: this.password,

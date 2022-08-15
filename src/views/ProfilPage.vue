@@ -1,24 +1,39 @@
 <template>
     <MyNav/>
-    <div class="container rounded bg-white mt-5">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="d-flex flex-column align-items-center text-center mt-5 mb-4">
-                    <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
-                    <img :src="this.userPicture" id="userPicture" alt="user Profil" style="height: 120px width:auto; object-fit: cover;">
-                </div>
-                <div class="text-center">
-                    <button class="btn btn-info profile-button" type="button" >Changer la photo</button>
-                </div>
+    <div class="container rounded bg-white">
+        <div class="row mt-5">
+            <div class="col-12 d-flex justify-content-center mt-3">
+                <h1>Profil utilisateur</h1>
             </div>
-            <div class="col-md-8 border-right">
-                <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h1 class="text-right">Profil utilisateur</h1>
+            <form class="d-flex">
+                <div class="col-md-4">
+                    <div class="d-flex flex-column align-items-center text-center mt-5 mb-4">
+                        <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
+                        <img :src="this.userPicture" id="userPicture" alt="user Profil">
                     </div>
-                    <div class="row mt-2 text-start">
+                    <div class="text-center">
+                        <button 
+                        class="btn btn-info profile-button" 
+                        type="button"
+                        v-if="changePicture == false" 
+                        @click="modifyPictureTrue()">Changer la photo
+                        </button>
+                    </div>
+                    <div v-if="changePicture == true">
+                        <input
+                            type="url"
+                            name="picture"
+                            >
+                        <button class="btn btn-info profile-button" 
+                        type="button" @click="modifyPictureFalse()"
+                        >enregistrer la photo
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group d-flex">
                         <div class="col-md-6"  >
-                            <!-- Je vais afficher les données récupérées de la BDD sur le user dans les champs du formulaire, grace à l'attribut "value" de l'input et la directive "v-bind" de VueJS qui me permet d'afficher des valeurs dynamiques. Ensuite, si le status "modifyStatus est "false", il est impossible de modifier les champs car l'attribut "disabled" défini dynamiquement est actif grace au test conditionnel de savoir si "modifyStatus" est false ou true. Si le status est true, alors on peut modifier. -->
+                        <!--Je vais afficher les données récupérées de la BDD sur le user dans les champs du formulaire, grace à l'attribut "value" de l'input et la directive "v-bind" de VueJS qui me permet d'afficher des valeurs dynamiques. Ensuite, si le status "modifyStatus est "false", il est impossible de modifier les champs car l'attribut "disabled" défini dynamiquement est actif grace au test conditionnel de savoir si "modifyStatus" est false ou true. Si le status est true, alors on peut modifier. -->
                             <label for="surname" class="col-form-label text-primary fw-bold">Prénom</label>
                             <input 
                             type="text" 
@@ -29,7 +44,8 @@
                         </div>
                         <div class="col-md-6">
                             <label for="name" class="col-form-label text-primary fw-bold">Nom</label>
-                            <input type="text" 
+                            <input 
+                            type="text" 
                             class="form-control" 
                             id="name" 
                             v-bind:value= "this.name" 
@@ -40,10 +56,10 @@
                         <div class="col-md-12">
                             <label for="username" class="col-form-label text-primary fw-bold">Nom d'utilisateur</label>
                             <input type="text" 
-                            class="form-control"
-                            id="username" 
-                            v-bind:value= "this.username" 
-                            :disabled="modifyStatus ? false : true">
+                                class="form-control"
+                                id="username" 
+                                v-bind:value= "this.username" 
+                                :disabled="modifyStatus ? false : true">
                         </div>
                         <div class="col-md-12">
                             <label for="email" class="col-form-label text-primary fw-bold">Email</label>
@@ -67,34 +83,32 @@
                             id="tel"
                             v-bind:value= "this.tel" 
                             :disabled="modifyStatus ? false : true">
-                        </div>
-                        
+                        </div>       
                     </div>
-                    
                     <div class="mt-5 text-center d-flex justify-content-between">
                         <button 
-                            class="btn btn-primary profile-button" 
-                            type="button" 
-                            v-if="modifyStatus == false"
-                            @click="changeStatus()">
-                            Modifier le profil
+                        class="btn btn-primary profile-button" 
+                        type="button" 
+                        v-if="modifyStatus == false"
+                        @click="changeStatus()">
+                        Modifier le profil
                         </button>
                         <button 
-                            class="btn btn-primary profile-button" 
-                            type="button" 
+                        class="btn btn-primary profile-button" 
+                        type="button" 
                             v-else
                             @click="updateAccount()">
                             Sauvegarder le profil
                         </button>
-                        <button 
-                        class="btn btn-danger profile-button" type="button">Supprimer le profil</button>
+                        <button
+                        class="btn btn-danger 
+                        profile-button" type="button">Supprimer le profil
+                        </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-
-  
 </template>
 
 <script>
@@ -111,7 +125,7 @@ export default {
         return {
             userId: 0,
             token: '',
-            userPicture: '',
+            picture: '',
             surname: '',
             name: '',
             username: '',
@@ -119,7 +133,8 @@ export default {
             department: '',
             tel: '',
             modifyStatus: false,
-
+            changePicture: false,
+            userPicture: '',
         }
     },
 
@@ -129,9 +144,19 @@ export default {
     },
 
     methods: {
+        // pour rendre les inputs  modifiables
         changeStatus: function () {
             this.modifyStatus = true;
         },
+        // Une méthode pour indiquer que le user veut changer sa photo
+        modifyPictureTrue: function () {
+            this.changePicture = true;
+        },
+        // Une méthode pour indiquer que le user veut changer sa photo
+        modifyPictureFalse: function () {
+            this.changePicture = false;
+        },
+        // Pour vérifier si le user est bien loggé et peut accèder à la page et peut afficher son profil
         getTheProfilPage: function (){
             let isLogged = JSON.parse(localStorage.getItem("login"));
             if(!isLogged) {
@@ -143,7 +168,7 @@ export default {
                 this.getProfil();
             }
         }, 
-        //je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
+        // pour récupérer et afficher les infos du profil : je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
         getProfil: function () {
             console.log(`je vois mon profil et le token : ${this.token}`);
             this.axios
@@ -163,27 +188,48 @@ export default {
                     this.department = response.data.data.department;
                     this.tel = response.data.data.tel;
                     this.userPicture = response.data.data.picture;
-
                 })
                 .catch((error) =>{
                     console.log(error.message);
                 })
         },
-        updateAccount: function () {
-            this.modifyStatus = false; // je repasse le status de mofifier à false, pour empêcher de modifier les champs. 
+        updateAccount : function () {
+            console.log(this.token);
+            this.axios
+                .put(`http://localhost:3000/api/users/${this.userId}`, 
+                    {
+                        surname: document.getElementById('surname').value, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
+                        name: document.getElementById('name').value,
+                        username: document.getElementById('username').value,
+                        email: document.getElementById('email').value, 
+                        department: document.getElementById('department').value,
+                        tel: document.getElementById('tel').value,
+                    },
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                .then(response => {
+                    console.log(response.data);
+                    this.modifyStatus = false;
+                    this.getProfil();
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                })
         }
-
-    },
+    }
 }
-
+        
 </script>
 
 
 <style scoped lang="scss">
 
 #userPicture {
-    height: 100%;
-    width: 100%;
+    height: 150px;
+    width: 150px;
     border-radius: 50%;
     object-fit: cover;
 }
