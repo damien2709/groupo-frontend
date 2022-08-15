@@ -102,7 +102,9 @@
                         </button>
                         <button
                         class="btn btn-danger 
-                        profile-button" type="button">Supprimer le profil
+                        profile-button" 
+                        type="button"
+                        @click="deleteAccount ()">Supprimer le profil
                         </button>
                     </div>
                 </div>
@@ -218,6 +220,25 @@ export default {
                 .catch((error) =>{
                     console.log(error.message);
                 })
+        },
+        deleteAccount: function () {
+            if(window.confirm("Voulez-vous vraiment supprimer votre compte ?") == true) {
+                this.axios
+                    .delete(`http://localhost:3000/api/users/${this.userId}`)
+                    .then(response => {
+                        console.log(response.message);
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("login");
+                        localStorage.removeItem("userId");
+                        this.$router.push('/login');
+                    })
+                    .catch(error => {
+                        console.log(error.message);
+                    })
+            }
+            else {
+                console.log("pas de confirmation");
+            }
         }
     }
 }
