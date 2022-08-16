@@ -1,9 +1,6 @@
 <template>
-  <div class="container MyCategories">
+  <div class="container MyCategories mt-2">
         <div class="row titleBlock">
-            <h2 class="titleH2">
-                Nos catégories d'articles
-            </h2>
         </div>
         <div class="row blockCard">
             <div class="card col-md-6 col-lg-3">
@@ -50,5 +47,9 @@ export default {
 </script>
 
 <style scope lang="scss">
-
+.card-img-top {
+    height: 60px;
+    width: auto;
+    object-fit: cover;
+}
 </style>

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import WallArticles from '@/views/WallArticles.vue' // j'importe le fichier .view. @ permet de se placer directement dans le fichier "src"
 import MyLogin from '@/views/MyLogin.vue'
 import ProfilPage from '@/views/ProfilPage.vue'
+import CreatePost from '@/views/CreatePost.vue'
 import NotFound from '@/views/NotFound.vue'
 
 /* Ici, les routes de notre application Vue sont définies via un tableau contenant des objets qui définissent chaque route. Chaque objet route contient trois propriétés clés :
@@ -33,6 +34,14 @@ const routes = [
     component: ProfilPage,
     meta: {
       title: "Profil",
+    }
+  },
+  {
+    name: "Création d'article",
+    path: '/createPost',
+    component: CreatePost,
+    meta: {
+      title: "Création d'article Groupomania",
     }
   },
   // On va créer une route pour gérer les 404 : 

@@ -12,8 +12,8 @@
                 <div 
                     class="monProfil text-start d-flex align-item-end">
                     <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
-                    <img :src="this.userPicture" id="userPicture" alt="user Profil" @click="dropdownTheMenu()">
-                    <img src="../assets/images/down-filled-triangular-arrow.png" alt="" class="arrowDown rounded" style="background-color: white; padding: 2px;" @click="dropdownTheMenu()">
+                    <img :src="this.userPicture" id="userPicture" alt="user Profil" @click="dropdownTheMenu()"/>
+                    <img src="../assets/images/down-filled-triangular-arrow.png" alt="" class="arrowDown rounded" style="background-color: white; padding: 2px;" @click="dropdownTheMenu()"/>
                 </div>
                 <div class="routerNav d-flex flex-column text-start" v-if="seeMenu == true">
                     <router-link to="/">Accueil</router-link>
@@ -70,6 +70,8 @@ export default {
             localStorage.removeItem("login");
             localStorage.removeItem("token");
             localStorage.removeItem("userId");
+            localStorage.removeItem("userSurname");
+            localStorage.removeItem("userName");
             this.$router.push('/login');
         }
         

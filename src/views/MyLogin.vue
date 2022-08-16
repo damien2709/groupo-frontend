@@ -183,6 +183,8 @@ export default {
                 console.log(this.isLogged);
                 localStorage.setItem("token", JSON.stringify(response.data.token));
                 localStorage.setItem("userId", JSON.stringify(response.data.data.id));
+                localStorage.setItem("userSurname", JSON.stringify(response.data.data.surname));
+                localStorage.setItem("userName", JSON.stringify(response.data.data.name))
                 this.$router.push('/'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
             }      
         )
@@ -211,7 +213,7 @@ export default {
         )
         // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
         .then(response => {
-                console.log(response.message);
+                console.log(response.data.message);
                 this.$router.push('/login');
             }      
         )

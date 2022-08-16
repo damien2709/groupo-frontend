@@ -1,14 +1,14 @@
 <template>
     <MyNav/>
     <MyCategories/>
-    <MyPost/>
+    <AllPosts/>
 </template>
 
 <script>
 
 /* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
 import MyNav from '@/components/MyNav.vue'
-import MyPost from '@/components/AllPosts.vue' // import du composant
+import AllPosts from '@/components/AllPosts.vue' // import du composant
 import MyCategories from '@/components/MyCategories.vue'
 
 export default {
@@ -16,7 +16,7 @@ export default {
     components: {
         MyNav,
         MyCategories,
-        MyPost,
+        AllPosts,
     },
     //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
     created: function() {

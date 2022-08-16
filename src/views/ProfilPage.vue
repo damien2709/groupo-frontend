@@ -93,6 +93,7 @@
                         @click="changeStatus()">
                         Modifier le profil
                         </button>
+                        <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
                         <button 
                         class="btn btn-primary profile-button" 
                         type="button" 
@@ -103,7 +104,7 @@
                         <button
                         class="btn btn-danger 
                         profile-button" 
-                        type="button"
+                        type="button" 
                         @click="deleteAccount ()">Supprimer le profil
                         </button>
                     </div>
@@ -226,7 +227,7 @@ export default {
                 this.axios
                     .delete(`http://localhost:3000/api/users/${this.userId}`)
                     .then(response => {
-                        console.log(response.message);
+                        console.log(response.data.message);
                         localStorage.removeItem("token");
                         localStorage.removeItem("login");
                         localStorage.removeItem("userId");
