@@ -1,23 +1,27 @@
 <template>
     <div class="container mt-2">
         <div class="row d-flex justify-content-between">
-            <div class="bg-white wall">
+            <div class="wallOfPosts p-0">
+                <PostBanniere/>
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler -->
-                <div v-for="(item, index) in listOfPosts"  v-bind:key="index" class="postTemplate border text-start">
-                    <div class="d-flex justify-content-start">
+                <div v-for="(item, index) in listOfPosts"  v-bind:key="index" class="postTemplate card text-start mb-3">
+                    <div class="d-flex card-header justify-content-start">
                         <img src="../../../backend/images/unknownUser.jpg" id="userPicture" alt="user Profil"/>
                         <p class="authorPost">{{ item.authorSurname }} {{item.authorName}}</p>
                     </div>
-                    <h2 class="titlePost fs-3">{{ item.title }}</h2>
-                    <p class="contentPost">{{ item.content }}</p>
-                    <div class="like">
+                    <div class="card-img-top"></div>
+                    <div class="card-body">
+                        <h2 class="titlePost card-title fs-3">{{ item.title }}</h2>
+                        <p class="contentPost card-text">{{ item.content }}</p>
+                    </div>
+                    <div class="like card-footer">
                         <img src="../assets/images/heart.png" alt="" class="likeImg">
                         <span class="countLike">{{ item.like }}</span>
                     </div>
                 </div>  
             </div>
             <div class="bg-white famousPosts">
-                <h2 class="fs-5">Les articles les plus populaires</h2>
+                <h2 class="fs-5 mt-3">Les articles les plus populaires</h2>
             </div>
         </div>
     </div>
@@ -25,6 +29,7 @@
 </template>
 
 <script>
+import PostBanniere from '@/components/PostBanniere.vue'
 
 export default {
     name: 'AllPosts',
@@ -41,7 +46,7 @@ export default {
         }
     },
     components: {
-
+        PostBanniere,
     },
         //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
     created: function() {
@@ -71,7 +76,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.wall {
+.wallOfPosts {
     width: 70%;
 }
 .famousPosts {
@@ -88,4 +93,18 @@ export default {
     object-fit: cover;
 }
 
+.postTemplate {
+    padding: 8px;
+}
+
+.card {
+    box-shadow: 1px 1px 3px rgb(220, 219, 219);
+    border-radius: 5px;
+    border: none;
+    
+}
+
+.card-img-top{
+        height: auto;
+    }
 </style>

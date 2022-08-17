@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid MyNav">
-        <nav class=" row navbar justify-content-space-between" style="background-color: #e3f2fd;">
+        <nav class=" row navbar justify-content-space-between" style="background-color: aliceblue;">
             <a class="navbar-brand logoNavbar col-3" href="#">
                 <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo">
             </a>

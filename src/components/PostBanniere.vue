@@ -1,32 +1,37 @@
 <template>
-    <div class="container d-flex justify-content-around mt-2 mb-2 bg-white">
-        <h1>Tous les articles</h1>
+    <div class="container d-flex mb-3 p-3 bg-white">
+        <img src="../assets/images/Sylvester_Stallone.jpeg" id="userPicture" alt="user Profil" class="me-2"/>
+        <input class="inputPost w-100 p-2" @click="showModal = true" :placeholder=" 'Quoi de neuf' + ' '+ this.authorSurname + ' ?'">
         <vue-final-modal v-model="showModal" >
-            <div class="d-flex justify-content-center align-item-center" >
-                <div class="createPost w-75 bg-white h-auto rounded">
-                <form class="form mt-5 mb-5 ">
-                    <div>
-                        <input type="text" class="title mt-3" v-model="title" placeholder="Titre">
-                    </div>
-                    <div>
-                        <input type="text" class="content mt-3" v-model="content" placeholder="Contenu">
-                    </div>
-                    <div>
-                        <select v-model="category" class="mt-3">
-                            <option value="" disabled>Catégorie</option>
-                            <option>Fun</option>
-                            <option>Entraide</option>
-                            <option>Infos</option>
-                            <option>Projet</option>
-                        </select>
-                    </div>
-                        <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
-                    <button type="button" class="btn btn-primary mt-3" @click="createPost()">Créer le post</button>
-                </form>
+            <div class="d-flex justify-content-center align-items-center" >
+                <div class="createPost w-50 bg-white h-auto rounded">
+                    <h3 class="border-bottom py-3">Créer une publication</h3>
+                    <form class="form mt-3 mb-5 ">
+                        <div class=" d-flex text-center">
+                            <input type="text" class="title mt-3 mx-auto" style="width: 75%;" v-model="title" placeholder="Titre">
+                        </div>
+                        <div>
+                            <textarea type="text" class="content mt-3 mx-auto" style="width: 75%;" v-model="content" placeholder="Ecrivez votre article !"></textarea>
+                        </div>
+                        <div class="mx-auto text-start" style="width: 75%;">
+                            <span class="me-3">Choisissez une catégorie : </span>
+                            <select v-model="category" class="mt-3">
+                                <option value="" disabled>Catégorie</option>
+                                <option>Fun</option>
+                                <option>Entraide</option>
+                                <option>Infos</option>
+                                <option>Projet</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-between mx-auto" style="width: 75%;">
+                            <button type="button" class="btn btn-secondary mt-5" @click="showModal = false">Annuler</button>
+                            <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
+                            <button type="button" class="btn btn-primary mt-5" @click="createPost()">Créer le post</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </vue-final-modal>
-        <button class="btn btn-primary" @click="showModal = true">Créer un article</button>
     </div>
 </template>
 
@@ -41,6 +46,7 @@ export default {
             authorSurname: JSON.parse(localStorage.getItem("userSurname")),
             authorName: JSON.parse(localStorage.getItem("userName")),
             token: JSON.parse(localStorage.getItem("token")),
+            userPicture: '../assets/images/Sylvester_Stallone.jpeg',
             title: "",
             content: "",
             category: "",
@@ -93,6 +99,27 @@ export default {
 <style scoped lang="scss">
 .createPost {
     margin-top: 20vh;
+}
+
+.inputPost {
+    cursor : pointer;
+    border-radius: 15px;
+    border: 1px solid rgb(202, 202, 202);
+    &:hover {
+        background-color: aliceblue;
+    } 
+}
+
+.container {
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px rgb(220, 219, 219);
+}
+
+#userPicture {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 </style>
