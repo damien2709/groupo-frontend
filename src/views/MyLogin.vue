@@ -85,7 +85,7 @@
                             Je suis d'accord avec les <a href="">termes et conditions</a> du réseau social
                 </p>
                 <!-- EN mode 'login', en cliquant sur le bouton j'appelle la méthode de login-->
-                <!-- Je vais créer un bouton qui aura une classe dynamique en fontion d'un état (true ou false, selon le résultat de la méthode validatedFields qui vérifie que tous les champs sont remplis), grace à v-bind. C'est la classe disabled-->
+                <!-- Je vais créer un bouton qui aura une classe dynamique en fontion d'un état (true ou false, selon le résultat de la méthode validatedFields qui vérifie que tous les champs sont remplis), grace à v-bind. C'est la classe disabled--><!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
                 <button 
                     type="button" 
                     class="btn btn-primary login_button"
@@ -93,9 +93,9 @@
                     v-if="mode == 'login'"
                     @click="loginUser()">
                     Connexion</button>
-                <!-- EN mode 'creation de compte', en cliquant sur le bouton j'appelle la méthode createAccount-->
+                <!-- EN mode 'creation de compte', en cliquant sur le bouton j'appelle la méthode createAccount--><!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
                 <button 
-                    type="submit" 
+                    type="button" 
                     class="btn btn-primary createAccount_button"
                     :class="{'disabled' : !validatedFields}"
                     v-else 
@@ -214,6 +214,7 @@ export default {
         // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
         .then(response => {
                 console.log(response.data.message);
+                this.mode = 'login';
                 this.$router.push('/login');
             }      
         )

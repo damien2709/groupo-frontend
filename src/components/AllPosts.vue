@@ -2,10 +2,6 @@
     <div class="container mt-2">
         <div class="row d-flex justify-content-between">
             <div class="bg-white wall">
-                <div class="d-flex justify-content-around mt-4 mb-4">
-                    <h1>Tous les articles</h1>
-                    <a class="btn btn-primary" href="/createPost">Créer un article</a>
-                </div>
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler -->
                 <div v-for="(item, index) in listOfPosts"  v-bind:key="index" class="postTemplate border text-start">
                     <div class="d-flex justify-content-start">

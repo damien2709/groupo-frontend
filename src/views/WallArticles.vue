@@ -1,6 +1,7 @@
 <template>
     <MyNav/>
     <MyCategories/>
+    <PostBanniere/>
     <AllPosts/>
 </template>
 
@@ -10,12 +11,14 @@
 import MyNav from '@/components/MyNav.vue'
 import AllPosts from '@/components/AllPosts.vue' // import du composant
 import MyCategories from '@/components/MyCategories.vue'
+import PostBanniere from '@/components/PostBanniere.vue'
 
 export default {
     name: 'WallArticles',
     components: {
         MyNav,
         MyCategories,
+        PostBanniere,
         AllPosts,
     },
     //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
