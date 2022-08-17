@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import { vfmPlugin } from 'vue-final-modal'
 import "bootstrap/dist/css/bootstrap.min.css"
 
 /* import the fontawesome core */
@@ -23,5 +24,6 @@ createApp(App)
     .component('font-awesome-icon', FontAwesomeIcon)
     .use(VueAxios, axios) // on exporte pour l'ensemble des composants un middleware utilisant axios. On l'appelera dans le composant concerné avec le mot clé "this". 
     .use(router) // on exporte pour l'ensemble des composants un middleware utilisant vue-router.
+    .use(vfmPlugin) // on exporte le module pour les popups pour l'ensemble du projet
     .mount('#app')
 
