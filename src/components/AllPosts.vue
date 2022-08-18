@@ -12,7 +12,11 @@
                             <p class="authorPost ms-3 mb-0">{{ item.authorSurname }} {{item.authorName}}</p>
                         </div>
                         <div>
-                            <b-dropdown :id="'dropdown-'+ item.id" text="menu" class="m-md-2">
+                            <!-- Ici je crée un bouton dropdown menu avec Bootstrap pour modifier ou supprimer le post, uniquement si le post appartient au user. Je remplace le texte du bouton par une image en utilisant "template" et l'attribut "no-caret"-->
+                            <b-dropdown  size="sm" class="dropdownMenu m-md-2" variant="link" toggle-class="text-decoration-none" no-caret v-if="item.authorId == this.userId">
+                                <template #button-content>
+                                    <img class="menuImage" src="../assets/images/dots.png" alt="">
+                                </template>
                                 <b-dropdown-item  href="#" @click="modifyPost ()">Modifier l'article</b-dropdown-item>
                                 <b-dropdown-item href="#" @click="deletePost ()">Supprimer l'article</b-dropdown-item>
                             </b-dropdown>
@@ -52,6 +56,8 @@ export default {
             picture: "",
             like: "",
             token: JSON.parse(localStorage.getItem("token")),
+            thatsMyArticle: false,
+            userId: JSON.parse(localStorage.getItem("userId")),
         }
     },
     components: {
@@ -74,12 +80,12 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     this.listOfPosts = response.data.data;
-                    console.log(this.listOfPosts);
+                    console.log(response.data);
                 })
                 .catch((error) =>{
                     console.log(error.message);
                 })
-        } // Je vais appeler cette méthode en utilisant les doubles accolades dans l'élément HTML concerné. 
+        }, // Je vais appeler cette méthode en utilisant les doubles accolades dans l'élément HTML concerné. 
     },
 }
 </script>
@@ -99,8 +105,8 @@ export default {
 }
 
 #userPicture {
-    height: 25px;
-    width: 25px;
+    height: 35px;
+    width: 35px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -115,5 +121,10 @@ export default {
 
 .card-img-top{
         height: auto;
-    }
+}
+
+.menuImage {
+    height: 20px;
+    width: auto;
+}
 </style>
