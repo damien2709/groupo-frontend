@@ -4,19 +4,28 @@
             <div class="wallOfPosts p-0">
                 <PostBanniere/>
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler -->
-                <div v-for="(item, index) in listOfPosts"  v-bind:key="index" class="postTemplate card text-start mb-3">
-                    <div class="d-flex card-header justify-content-start">
-                        <img src="../../../backend/images/unknownUser.jpg" id="userPicture" alt="user Profil"/>
-                        <p class="authorPost">{{ item.authorSurname }} {{item.authorName}}</p>
+                <div class="card text-start mb-3" v-for="(item, index) in listOfPosts"  v-bind:key="index" >
+                    <div class="d-flex card-header justify-content-between">
+                        
+                        <div class="d-flex align-items-center">
+                            <img src="../../../backend/images/unknownUser.jpg" id="userPicture" alt="user Profil"/>
+                            <p class="authorPost ms-3 mb-0">{{ item.authorSurname }} {{item.authorName}}</p>
+                        </div>
+                        <div>
+                            <b-dropdown :id="'dropdown-'+ item.id" text="menu" class="m-md-2">
+                                <b-dropdown-item  href="#" @click="modifyPost ()">Modifier l'article</b-dropdown-item>
+                                <b-dropdown-item href="#" @click="deletePost ()">Supprimer l'article</b-dropdown-item>
+                            </b-dropdown>
+                        </div>
                     </div>
                     <div class="card-img-top"></div>
                     <div class="card-body">
                         <h2 class="titlePost card-title fs-3">{{ item.title }}</h2>
                         <p class="contentPost card-text">{{ item.content }}</p>
                     </div>
-                    <div class="like card-footer">
+                    <div class="like card-footer d-flex align-items-center">
                         <img src="../assets/images/heart.png" alt="" class="likeImg">
-                        <span class="countLike">{{ item.like }}</span>
+                        <span class="countLike ms-2">{{ item.like }}</span>
                     </div>
                 </div>  
             </div>
@@ -79,13 +88,16 @@ export default {
 .wallOfPosts {
     width: 70%;
 }
+
 .famousPosts {
     width: 29%;
 }
+
 .likeImg {
     height: 20px;
     width: auto;
 }
+
 #userPicture {
     height: 25px;
     width: 25px;
@@ -93,14 +105,11 @@ export default {
     object-fit: cover;
 }
 
-.postTemplate {
-    padding: 8px;
-}
-
 .card {
     box-shadow: 1px 1px 3px rgb(220, 219, 219);
     border-radius: 5px;
     border: none;
+    padding: 8px;
     
 }
 
