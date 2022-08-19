@@ -9,17 +9,16 @@
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
             </form>
             <div class="col-2 d-flex flex-column dropDownMenu">
-                <div 
-                    class="monProfil text-start d-flex align-item-end">
+                <div class="dropdown">
                     <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
-                    <img :src="this.userPicture" id="userPicture" alt="user Profil" @click="dropdownTheMenu()"/>
-                    <img src="../assets/images/down-filled-triangular-arrow.png" alt="" class="arrowDown rounded" style="background-color: white; padding: 2px;" @click="dropdownTheMenu()"/>
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img src="../assets/images/Sylvester_Stallone.jpeg" alt="" class="userPicture"></a>
+                    <div class="dropdown-menu">
+                        <router-link class="dropdown-item" to="/">Accueil</router-link>
+                        <router-link class="dropdown-item" to="/profil">Profil</router-link>
+                        <a href="#"  class="dropdown-item" @click="deconnectUser()">Déconnexion</a>
+                    </div>
                 </div>
-                <div class="routerNav d-flex flex-column text-start" v-if="seeMenu == true">
-                    <router-link to="/">Accueil</router-link>
-                    <router-link to="/profil">Profil</router-link>
-                    <a href=""  @click="deconnectUser()">Déconnexion</a>
-            </div>
+                
             </div>
             
         </nav>
@@ -36,7 +35,6 @@ export default {
         token: JSON.parse(localStorage.getItem("token")),
         userId: JSON.parse(localStorage.getItem("userId")),
         userPicture: '',
-        seeMenu: false,
     }
   },
 
@@ -46,10 +44,6 @@ export default {
     },
 
   methods: {
-        dropdownTheMenu : function () {
-            this.seeMenu = !this.seeMenu;
-            console.log(this.seeMenu);
-        },
         getProfilPicture: function () {
             this.axios
                 .get(`http://localhost:3000/api/users/${this.userId}`, 
@@ -99,7 +93,7 @@ export default {
     width: auto;
 }
 
-#userPicture {
+.userPicture {
     height: 60px;
     width: 60px;
     border-radius: 50%;
@@ -120,11 +114,15 @@ export default {
     top: 68px;
     left: 0;
     z-index: 2;
-    background-color: #e3f2fd;
+    background-color: white;
     padding: 10px;
-    padding-right: 20px;
+    padding-right: 40px;
     font-size: 15px;
+    border-radius: 10px;
 }
 
+a {
+    text-decoration: none;
+}
 
 </style>
