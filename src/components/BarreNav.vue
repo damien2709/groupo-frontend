@@ -13,7 +13,7 @@
                 <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="../assets/images/Sylvester_Stallone.jpeg" alt="" class="userPicture">
                 </a>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu dropdown-menu-end">
                     <router-link class="dropdown-item" to="/">Accueil</router-link>
                     <router-link class="dropdown-item" to="/profil">Profil</router-link>
                     <a href="#"  class="dropdown-item" @click="deconnectUser()">Déconnexion</a>
