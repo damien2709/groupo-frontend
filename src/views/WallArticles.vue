@@ -1,17 +1,30 @@
 <template>
-    <BarreNav/>
-    <BarreCategories/>
-    <BarreCreationPost/>
-    <AllPosts/>
+    <div class="container">
+        <div class="row">
+            <BarreNav/>
+            <BarreCategories/>
+            <BarreCreationPost/>
+        </div>
+        <div class="row">
+            <div class="col-lg-8  px-0">
+                <AllPosts/>
+            </div>
+            <div class="col-lg-4">
+                <FamousPosts/>
+            </div>
+            
+        </div>
+    </div>
 </template>
 
 <script>
 
 /* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
 import BarreNav from '@/components/BarreNav.vue'
-import AllPosts from '@/components/AllPosts.vue' // import du composant
 import BarreCategories from '@/components/BarreCategories.vue'
 import BarreCreationPost from '@/components/BarreCreationPost.vue'
+import AllPosts from '@/components/AllPosts.vue' // import du composant
+import FamousPosts from '@/components/FamousPosts.vue' // import du composant
 
 export default {
     name: 'WallArticles',
@@ -20,6 +33,7 @@ export default {
         BarreCategories,
         BarreCreationPost,
         AllPosts,
+        FamousPosts,
  
     },
     //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"

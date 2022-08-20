@@ -2,7 +2,7 @@
     <div class="container">
             <div class="row wallOfPosts">
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler -->
-                <div class="card col-8 text-start mb-3" v-for="(item, index) in listOfPosts"  v-bind:key="index" >
+                <div class="card text-start mb-3" v-for="(item, index) in listOfPosts"  v-bind:key="index" >
                     <div class="d-flex card-header justify-content-between">
                         
                         <div class="d-flex align-items-center">

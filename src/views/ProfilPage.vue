@@ -1,31 +1,31 @@
 <template>
     <BarreNav/>
-    <div class="container rounded bg-white pb-5 w-50">
+    <div class="container rounded bg-white pb-5 w-75">
         <div class="row mt-5">
             <div class="col-12 d-flex justify-content-center mt-3">
                 <h1>Profil utilisateur</h1>
             </div>
             <form class="form d-flex flex-wrap">
                 <div class="infos-utilisateur col-12 col-lg-8 ps-3">
-                    <div class="form-group d-flex flex-wrap">
-                        <div class="col-12 col-md-6"  >
-                        <!--Je vais afficher les données récupérées de la BDD sur le user dans les champs du formulaire, grace à l'attribut "value" de l'input et la directive "v-bind" de VueJS qui me permet d'afficher des valeurs dynamiques. Ensuite, si le status "modifyStatus est "false", il est impossible de modifier les champs car l'attribut "disabled" défini dynamiquement est actif grace au test conditionnel de savoir si "modifyStatus" est false ou true. Si le status est true, alors on peut modifier. -->
+                    <div class="row g-2"  >
+                    <!--Je vais afficher les données récupérées de la BDD sur le user dans les champs du formulaire, grace à l'attribut "value" de l'input et la directive "v-bind" de VueJS qui me permet d'afficher des valeurs dynamiques. Ensuite, si le status "modifyStatus est "false", il est impossible de modifier les champs car l'attribut "disabled" défini dynamiquement est actif grace au test conditionnel de savoir si "modifyStatus" est false ou true. Si le status est true, alors on peut modifier. -->
+                        <div class="col">
                             <label for="surname" class="col-form-label text-primary fw-bold ">Prénom</label>
                             <input 
-                            type="text" 
-                            class="form-control"
-                            id="surname"
-                            v-bind:value= "this.surname" 
-                            :disabled="modifyStatus ? false : true">
+                                type="text" 
+                                class="form-control"
+                                id="surname"
+                                v-bind:value= "this.surname" 
+                                :disabled="modifyStatus ? false : true">
                         </div>
-                        <div class="col-12 col-md-6">
+                        <div class="col">
                             <label for="name" class="col-form-label text-primary fw-bold">Nom</label>
                             <input 
-                            type="text" 
-                            class="form-control" 
-                            id="name" 
-                            v-bind:value= "this.name" 
-                            :disabled="modifyStatus ? false : true">
+                                type="text" 
+                                class="form-control" 
+                                id="name" 
+                                v-bind:value= "this.name" 
+                                :disabled="modifyStatus ? false : true">
                         </div>
                     </div>
                     <div class="row text-start">

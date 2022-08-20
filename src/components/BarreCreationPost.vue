@@ -8,14 +8,14 @@
                     <h3 class="border-bottom py-3">Créer une publication</h3>
                     <form class="form mt-3 mb-5 ">
                         <div class=" d-flex text-center">
-                            <input type="text" class="title mt-3 mx-auto" style="width: 75%;" v-model="title" placeholder="Titre">
+                            <input type="text" class="form-control title mt-3 mx-auto" style="width: 75%;" v-model="title" placeholder="Titre">
                         </div>
                         <div>
-                            <textarea type="text" class="content mt-3 mx-auto" style="width: 75%;" v-model="content" placeholder="Ecrivez votre article !"></textarea>
+                            <textarea type="text" class="form-control content mt-3 mx-auto" style="width: 75%;" v-model="content" placeholder="Ecrivez votre article !"></textarea>
                         </div>
                         <div class="mx-auto text-start" style="width: 75%;">
-                            <span class="me-3">Choisissez une catégorie : </span>
-                            <select v-model="category" class="mt-3">
+                            <p class="me-3 mt-2">Choisissez une catégorie : </p>
+                            <select v-model="category" class="form-select mt-3">
                                 <option value="" disabled>Catégorie</option>
                                 <option>Fun</option>
                                 <option>Entraide</option>

@@ -1,16 +1,14 @@
 <template>
     <div class="container-fluid BarreNav">
-        <nav class=" row navbar justify-content-between" style="background-color: aliceblue;">
-            <a class="navbar-brand logoNavbar col-3" href="#">
-                <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo">
+        <nav class="navbar d-flex flex-nowrap" style="background-color: aliceblue;">
+            <a class="navbar-brand logoNavbar" href="#">
+                <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo" height="50">
             </a>
-            <div class="col-6">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Rechercher vos articles par mots clés !" aria-label="Search">
-                    <button class="btn btn-outline-primary" type="submit"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
-                </form>
-            </div>
-            <div class=" col-2 dropdown">
+            <form class="input-group d-flex me-3 w-50" role="search">
+                <input class="form-control" type="search" placeholder="Rechercher vos articles par mots clés !" aria-label="Search">
+                <button class="btn btn-outline-primary" type="button"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
+            </form>
+            <div class="profil-menu dropdown">
                 <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
                 <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="../assets/images/Sylvester_Stallone.jpeg" alt="" class="userPicture">
@@ -75,50 +73,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.form-control {
-    width: 80%;
-    display: inline-block;
-}
-
-.logo {
-    height: 50px;
-    width: auto;
-    object-fit: cover; 
-}
-
-.arrowDown {
-    margin-top: auto;
-    height: 15px;
-    margin-left: -15px;
-    width: auto;
-}
 
 .userPicture {
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     object-fit: cover;
-    cursor: pointer;
-}
-
-.arrowDown {
-    cursor: pointer;
-}
-
-.dropDownMenu {
-    position: relative;
-}
-
-.routerNav {
-    position: absolute;
-    top: 68px;
-    left: 0;
-    z-index: 2;
-    background-color: white;
-    padding: 10px;
-    padding-right: 40px;
-    font-size: 15px;
-    border-radius: 10px;
 }
 
 a {
