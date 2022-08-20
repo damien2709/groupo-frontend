@@ -2,7 +2,7 @@
     <div class="container mt-2">
         <div class="row d-flex justify-content-between">
             <div class="wallOfPosts p-0">
-                <PostBanniere/>
+                <BarreCreationPost/>
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler -->
                 <div class="card text-start mb-3" v-for="(item, index) in listOfPosts"  v-bind:key="index" >
                     <div class="d-flex card-header justify-content-between">
@@ -11,15 +11,17 @@
                             <img src="../../../backend/images/unknownUser.jpg" id="userPicture" alt="user Profil"/>
                             <p class="authorPost ms-3 mb-0">{{ item.authorSurname }} {{item.authorName}}</p>
                         </div>
-                        <div>
-                            <!-- Ici je crée un bouton dropdown menu avec Bootstrap pour modifier ou supprimer le post, uniquement si le post appartient au user. Je remplace le texte du bouton par une image en utilisant "template" et l'attribut "no-caret"-->
-                            <b-dropdown  size="sm" class="dropdownMenu m-md-2" variant="link" toggle-class="text-decoration-none" no-caret v-if="item.authorId == this.userId">
-                                <template #button-content>
+                        <div v-if="item.authorId == this.userId">
+                            <!-- Ici je crée un bouton dropdown menu avec Bootstrap pour modifier ou supprimer le post, uniquement si le post appartient au user.-->
+                            <div class="dropdown">
+                                <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img class="menuImage" src="../assets/images/dots.png" alt="">
-                                </template>
-                                <b-dropdown-item  href="#" @click="modifyPost ()">Modifier l'article</b-dropdown-item>
-                                <b-dropdown-item href="#" @click="deletePost ()">Supprimer l'article</b-dropdown-item>
-                            </b-dropdown>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a href="" class="dropdown-item" @click="modifyPost ()">Modifier l'article</a>
+                                    <a href="" class="dropdown-item" @click="deletePost ()">Supprimer l'article</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-img-top"></div>
@@ -42,7 +44,7 @@
 </template>
 
 <script>
-import PostBanniere from '@/components/PostBanniere.vue'
+import BarreCreationPost from '@/components/BarreCreationPost.vue'
 
 export default {
     name: 'AllPosts',
@@ -61,7 +63,7 @@ export default {
         }
     },
     components: {
-        PostBanniere,
+        BarreCreationPost,
     },
         //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
     created: function() {

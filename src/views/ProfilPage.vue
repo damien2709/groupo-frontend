@@ -1,6 +1,6 @@
 <template>
-    <MyNav/>
-    <div class="container rounded bg-white">
+    <BarreNav/>
+    <div class="container rounded bg-white pb-5">
         <div class="row mt-5">
             <div class="col-12 d-flex justify-content-center mt-3">
                 <h1>Profil utilisateur</h1>
@@ -28,6 +28,31 @@
                         type="button" @click="modifyPictureFalse()"
                         >enregistrer la photo
                         </button>
+                    </div>
+                    <div class="mt-5">
+                        <button
+                            class="btn btn-danger" 
+                            data-bs-toggle="modal" data-bs-target="#confirmationDeleteAccount" 
+                            type="button">Supprimer le profil
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="confirmationDeleteAccount" tabindex="-1" aria-labelledby="confirmationDeleteAccount" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="">Êtes-vous sûr(e) ?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Voulez-vous vraiment supprimer votre compte ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn btn-primary" @click="deleteAccount ()">Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -85,6 +110,7 @@
                             :disabled="modifyStatus ? false : true">
                         </div>       
                     </div>
+                    
                     <div class="mt-5 text-center d-flex justify-content-between">
                         <button 
                         class="btn btn-primary profile-button" 
@@ -101,12 +127,6 @@
                             @click="updateAccount()">
                             Sauvegarder le profil
                         </button>
-                        <button
-                        class="btn btn-danger 
-                        profile-button" 
-                        type="button" 
-                        @click="deleteAccount ()">Supprimer le profil
-                        </button>
                     </div>
                 </div>
             </form>
@@ -116,13 +136,13 @@
 
 <script>
 /* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
-import MyNav from '@/components/MyNav.vue' // import du composant
+import BarreNav from '@/components/BarreNav.vue' // import du composant
 
 export default {
     name: 'ProfilPage',
 
     components: {
-        MyNav
+        BarreNav
     },
     data() {
         return {
@@ -223,7 +243,6 @@ export default {
                 })
         },
         deleteAccount: function () {
-            if(window.confirm("Voulez-vous vraiment supprimer votre compte ?") == true) {
                 this.axios
                     .delete(`http://localhost:3000/api/users/${this.userId}`)
                     .then(response => {
@@ -231,17 +250,17 @@ export default {
                         localStorage.removeItem("token");
                         localStorage.removeItem("login");
                         localStorage.removeItem("userId");
-                        this.$router.push('/login');
+                        localStorage.removeItem("userName");
+                        localStorage.removeItem("userSurname");
+                        this.$router.go(); // pour enlever le modal qui est bloqué suite à la supression du profil. Pas besoin de renvoyer vers la page login, comme l'utilisateur n'est plus connecté, il y est automatiquement redirigé   
                     })
                     .catch(error => {
                         console.log(error.message);
                     })
             }
-            else {
-                console.log("pas de confirmation");
-            }
-        }
-    }
+
+
+     }
 }
         
 </script>

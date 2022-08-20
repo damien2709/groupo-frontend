@@ -1,5 +1,5 @@
 <template>
-    <MyNav/>
+    <BarreNav/>
     <MyCategories/>
     <AllPosts/>
 </template>
@@ -7,14 +7,14 @@
 <script>
 
 /* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
-import MyNav from '@/components/MyNav.vue'
+import BarreNav from '@/components/BarreNav.vue'
 import AllPosts from '@/components/AllPosts.vue' // import du composant
 import MyCategories from '@/components/MyCategories.vue'
 
 export default {
     name: 'WallArticles',
     components: {
-        MyNav,
+        BarreNav,
         MyCategories,
         AllPosts,
     },

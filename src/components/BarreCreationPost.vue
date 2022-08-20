@@ -38,7 +38,7 @@
 <script>
 
 export default {
-    name: 'PostBanniere',
+    name: 'BarreCreationPost',
 
     data () {
         return {
