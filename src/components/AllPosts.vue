@@ -1,10 +1,8 @@
 <template>
-    <div class="container mt-2">
-        <div class="row d-flex justify-content-between">
-            <div class="wallOfPosts p-0">
-                <BarreCreationPost/>
+    <div class="container">
+            <div class="row wallOfPosts">
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler -->
-                <div class="card text-start mb-3" v-for="(item, index) in listOfPosts"  v-bind:key="index" >
+                <div class="card col-8 text-start mb-3" v-for="(item, index) in listOfPosts"  v-bind:key="index" >
                     <div class="d-flex card-header justify-content-between">
                         
                         <div class="d-flex align-items-center">
@@ -35,16 +33,11 @@
                     </div>
                 </div>  
             </div>
-            <div class="bg-white famousPosts">
-                <h2 class="fs-5 mt-3">Les articles les plus populaires</h2>
-            </div>
-        </div>
     </div>
   
 </template>
 
 <script>
-import BarreCreationPost from '@/components/BarreCreationPost.vue'
 
 export default {
     name: 'AllPosts',
@@ -63,7 +56,7 @@ export default {
         }
     },
     components: {
-        BarreCreationPost,
+
     },
         //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
     created: function() {
@@ -93,9 +86,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.wallOfPosts {
-    width: 70%;
-}
 
 .famousPosts {
     width: 29%;

@@ -1,65 +1,16 @@
 <template>
     <BarreNav/>
-    <div class="container rounded bg-white pb-5">
+    <div class="container rounded bg-white pb-5 w-50">
         <div class="row mt-5">
             <div class="col-12 d-flex justify-content-center mt-3">
                 <h1>Profil utilisateur</h1>
             </div>
-            <form class="d-flex">
-                <div class="col-md-4">
-                    <div class="d-flex flex-column align-items-center text-center mt-5 mb-4">
-                        <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
-                        <img :src="this.userPicture" id="userPicture" alt="user Profil">
-                    </div>
-                    <div class="text-center">
-                        <button 
-                        class="btn btn-info profile-button" 
-                        type="button"
-                        v-if="changePicture == false" 
-                        @click="modifyPictureTrue()">Changer la photo
-                        </button>
-                    </div>
-                    <div v-if="changePicture == true">
-                        <input
-                            type="url"
-                            name="picture"
-                            >
-                        <button class="btn btn-info profile-button" 
-                        type="button" @click="modifyPictureFalse()"
-                        >enregistrer la photo
-                        </button>
-                    </div>
-                    <div class="mt-5">
-                        <button
-                            class="btn btn-danger" 
-                            data-bs-toggle="modal" data-bs-target="#confirmationDeleteAccount" 
-                            type="button">Supprimer le profil
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="confirmationDeleteAccount" tabindex="-1" aria-labelledby="confirmationDeleteAccount" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="">Êtes-vous sûr(e) ?</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Voulez-vous vraiment supprimer votre compte ?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-primary" @click="deleteAccount ()">Supprimer</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="form-group d-flex">
-                        <div class="col-md-6"  >
+            <form class="form d-flex flex-wrap">
+                <div class="infos-utilisateur col-12 col-lg-8 ps-3">
+                    <div class="form-group d-flex flex-wrap">
+                        <div class="col-12 col-md-6"  >
                         <!--Je vais afficher les données récupérées de la BDD sur le user dans les champs du formulaire, grace à l'attribut "value" de l'input et la directive "v-bind" de VueJS qui me permet d'afficher des valeurs dynamiques. Ensuite, si le status "modifyStatus est "false", il est impossible de modifier les champs car l'attribut "disabled" défini dynamiquement est actif grace au test conditionnel de savoir si "modifyStatus" est false ou true. Si le status est true, alors on peut modifier. -->
-                            <label for="surname" class="col-form-label text-primary fw-bold">Prénom</label>
+                            <label for="surname" class="col-form-label text-primary fw-bold ">Prénom</label>
                             <input 
                             type="text" 
                             class="form-control"
@@ -67,7 +18,7 @@
                             v-bind:value= "this.surname" 
                             :disabled="modifyStatus ? false : true">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="name" class="col-form-label text-primary fw-bold">Nom</label>
                             <input 
                             type="text" 
@@ -113,7 +64,7 @@
                     
                     <div class="mt-5 text-center d-flex justify-content-between">
                         <button 
-                        class="btn btn-primary profile-button" 
+                        class="btn btn-primary profile-button mx-auto" 
                         type="button" 
                         v-if="modifyStatus == false"
                         @click="changeStatus()">
@@ -127,6 +78,55 @@
                             @click="updateAccount()">
                             Sauvegarder le profil
                         </button>
+                    </div>
+                </div>
+                <div class="photo-delete col-12 col-lg-4 d-flex flex-column align-items-center  text-center">
+                    <div class=" photo-utilisateur  mt-5 mb-4">
+                        <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
+                        <img :src="this.userPicture" id="userPicture" alt="user Profil">
+                    </div>
+                    <div class="changer-photo text-center mb-5">
+                        <button 
+                        class="btn btn-info profile-button" 
+                        type="button"
+                        v-if="changePicture == false" 
+                        @click="modifyPictureTrue()">Changer la photo
+                        </button>
+                    </div>
+                    <div v-if="changePicture == true">
+                        <input
+                            type="url"
+                            name="picture"
+                            >
+                        <button class="btn btn-info profile-button" 
+                        type="button" @click="modifyPictureFalse()"
+                        >enregistrer la photo
+                        </button>
+                    </div>
+                    <div class="bouton-delete mt-auto">
+                        <button
+                            class="btn btn-danger" 
+                            data-bs-toggle="modal" data-bs-target="#confirmationDeleteAccount" 
+                            type="button">Supprimer le profil
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="confirmationDeleteAccount" tabindex="-1" aria-labelledby="confirmationDeleteAccount" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="">Êtes-vous sûr(e) ?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Voulez-vous vraiment supprimer votre compte ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn btn-primary" @click="deleteAccount ()">Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>

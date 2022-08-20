@@ -1,7 +1,5 @@
 <template>
-  <div class="container MyCategories mt-2">
-        <div class="row titleBlock">
-        </div>
+  <div class="container BarreCategories mt-2">
         <div class="row blockCard">
             <button class="card col-md-6 col-lg-3 h-25">
                 <img class="card-img-top" src="../assets/images/entreprise-1.jpeg" alt="entreprise Groupomania">
@@ -33,7 +31,7 @@
 
 <script>
 export default {
-    name: 'MyCategories',
+    name: 'BarreCategories',
 
 }
 </script>

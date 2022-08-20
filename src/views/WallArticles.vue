@@ -1,6 +1,7 @@
 <template>
     <BarreNav/>
-    <MyCategories/>
+    <BarreCategories/>
+    <BarreCreationPost/>
     <AllPosts/>
 </template>
 
@@ -9,14 +10,17 @@
 /* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
 import BarreNav from '@/components/BarreNav.vue'
 import AllPosts from '@/components/AllPosts.vue' // import du composant
-import MyCategories from '@/components/MyCategories.vue'
+import BarreCategories from '@/components/BarreCategories.vue'
+import BarreCreationPost from '@/components/BarreCreationPost.vue'
 
 export default {
     name: 'WallArticles',
     components: {
         BarreNav,
-        MyCategories,
+        BarreCategories,
+        BarreCreationPost,
         AllPosts,
+ 
     },
     //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
     created: function() {

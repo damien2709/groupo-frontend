@@ -1,5 +1,5 @@
 <template>
-    <div class="container d-flex mb-3 p-3 bg-white">
+    <div class="container d-flex my-2 p-3 bg-white">
         <img src="../assets/images/Sylvester_Stallone.jpeg" id="userPicture" alt="user Profil" class="me-2"/>
         <input class="inputPost w-100 p-2" @click="showModal = true" :placeholder=" 'Quoi de neuf' + ' '+ this.authorSurname + ' ?'">
         <vue-final-modal v-model="showModal" >
