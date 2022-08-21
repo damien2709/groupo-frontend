@@ -215,11 +215,13 @@ export default {
         // Une fonction pour mettre à jour les informations de son compte
         updateAccount : function () {
             console.log(this.token);
+                this.surname = document.getElementById('surname').value;
+                this.name = document.getElementById('name').value;
             this.axios
                 .put(`http://localhost:3000/api/users/${this.userId}`, 
                     {
-                        surname: document.getElementById('surname').value, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
-                        name: document.getElementById('name').value,
+                        surname: this.surname, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
+                        name: this.name,
                         username: document.getElementById('username').value,
                         email: document.getElementById('email').value, 
                         department: document.getElementById('department').value,
@@ -232,6 +234,8 @@ export default {
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
                     console.log(response.data);
+                    localStorage.setItem('userSurname', JSON.stringify(this.surname));
+                    localStorage.setItem('userName', JSON.stringify(this.name));
                     this.modifyStatus = false;
                     this.getProfil();
                 })
