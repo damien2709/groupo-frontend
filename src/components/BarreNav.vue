@@ -33,6 +33,7 @@ export default {
         token: JSON.parse(localStorage.getItem("token")),
         userId: JSON.parse(localStorage.getItem("userId")),
         userPicture: '',
+        isLogged: '',
     }
   },
 
@@ -42,6 +43,7 @@ export default {
     },
 
   methods: {
+        // Fonction pour afficher la photo du profil dans la barre de navigation
         getProfilPicture: function () {
             this.axios
                 .get(`http://localhost:3000/api/users/${this.userId}`, 
@@ -58,8 +60,9 @@ export default {
                     console.log(error.message);
                 })
         },
+        // Fonction pour déconnecter le user et modifier le localStorage
         deconnectUser: function () {
-            localStorage.removeItem("login");
+            localStorage.setItem("login", false);
             localStorage.removeItem("token");
             localStorage.removeItem("userId");
             localStorage.removeItem("userSurname");

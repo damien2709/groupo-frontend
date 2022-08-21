@@ -103,7 +103,7 @@
                     >Créer son compte</button>
             </form>
         </div>
-        <div class="row creationCompte justify-content-center" v-if="mode == 'login'">
+        <div class="row creationCompte justify-content-center" >
             <p>Vous n'avez pas encore de compte : <span @click="switchToCreateAccount()">Créez un compte</span></p>
             <p>Vous avez oublié votre mot de passe : <span>Réinitialiser le mot de passe</span></p>
         </div>
@@ -135,7 +135,7 @@ export default {
   },
 
   computed: {
-    // Je crée la fonction qui va retourner une valeur true ou false si les champs sont remplis ou pas. 
+    // Je crée la fonction qui va retourner une valeur true ou false (et donc une erreur à afficher) si les champs sont remplis ou pas. 
     validatedFields: function () {
         if(this.mode == 'create') {
             if(this.username != "" && this.password != "" && this.surname != "" && this.name != "" && this.email != "" && this.checkConditions != false) {
@@ -155,14 +155,33 @@ export default {
     }
   },
 
+   //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
+    created: function() {
+        this.redirectionIfIsLogged();
+    },
+
   methods: {
     validateConditions : function () {
         this.checkConditions = true; // Lorsque l'on coche la validation des conditions, la donnée "checkConditions" passe à "true".
     },
 
+    // fonction pour l'affichage conditionnel des champs du formulaire login/création de compte
     switchToCreateAccount : function () {
         this.mode = 'create'; // la méthode sert à passer la valeur du 'mode' à 'create' quand on clique sur le lien de création de compte. 
     },
+
+    // fonction pour renvoyer le user vers la page d'accueil s'il est déjà loggé
+    redirectionIfIsLogged : function () {
+        let isLogged = JSON.parse(localStorage.getItem("login"));
+        if(isLogged == true) {
+            this.$router.push('/'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
+        }
+        else {
+            console.log("l'accès à la page est autorisée")
+        }
+    }, 
+
+    // fonction pour se logger
     loginUser: function () {
         //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
        this.axios
@@ -193,6 +212,7 @@ export default {
         })
 
     },
+    // fonction pour créer un compte
     createAccount: function () {
         //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
         

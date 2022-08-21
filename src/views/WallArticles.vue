@@ -41,9 +41,10 @@ export default {
         this.getTheWallPage();
     },
     methods: {
+        // Une fonction pour vérifier l'autorisation d'accès à la page, le user doit être loggé 
         getTheWallPage: function (){
             let isLogged = JSON.parse(localStorage.getItem("login"));
-            if(!isLogged) {
+            if(isLogged == false) {
                 this.$router.push('/login'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
             }
             else {

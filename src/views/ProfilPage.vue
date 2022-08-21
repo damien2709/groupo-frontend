@@ -122,7 +122,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-primary" @click="deleteAccount ()">Supprimer</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="deleteAccount ()">Supprimer</button>
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@ export default {
     },
 
     methods: {
-        // pour rendre les inputs  modifiables
+        // pour rendre les inputs  modifiables en cas de modification de compte
         changeStatus: function () {
             this.modifyStatus = true;
         },
@@ -175,14 +175,10 @@ export default {
         modifyPictureTrue: function () {
             this.changePicture = true;
         },
-        // Une méthode pour indiquer que le user veut changer sa photo
-        modifyPictureFalse: function () {
-            this.changePicture = false;
-        },
         // Pour vérifier si le user est bien loggé et peut accèder à la page et peut afficher son profil
         getTheProfilPage: function (){
             let isLogged = JSON.parse(localStorage.getItem("login"));
-            if(!isLogged) {
+            if(isLogged == false) {
                 this.$router.push('/login'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
             }
             else {
@@ -216,6 +212,7 @@ export default {
                     console.log(error.message);
                 })
         },
+        // Une fonction pour mettre à jour les informations de son compte
         updateAccount : function () {
             console.log(this.token);
             this.axios
@@ -242,6 +239,7 @@ export default {
                     console.log(error.message);
                 })
         },
+        // Une fonction pour supprimer son compte
         deleteAccount: function () {
                 this.axios
                     .delete(`http://localhost:3000/api/users/${this.userId}`)
@@ -252,7 +250,7 @@ export default {
                         localStorage.removeItem("userId");
                         localStorage.removeItem("userName");
                         localStorage.removeItem("userSurname");
-                        this.$router.go(); // pour enlever le modal qui est bloqué suite à la supression du profil. Pas besoin de renvoyer vers la page login, comme l'utilisateur n'est plus connecté, il y est automatiquement redirigé   
+                        this.$router.push('/login'); // pour enlever le modal qui est bloqué suite à la supression du profil. Pas besoin de renvoyer vers la page login, comme l'utilisateur n'est plus connecté, il y est automatiquement redirigé   
                     })
                     .catch(error => {
                         console.log(error.message);

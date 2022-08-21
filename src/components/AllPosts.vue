@@ -64,6 +64,7 @@ export default {
     },
 
     methods: {
+        // Fonction pour récupérer et afficher la liste des posts
         getListOfPosts() {
             this.axios
                 .get('http://localhost:3000/api/posts', 

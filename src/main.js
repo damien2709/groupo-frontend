@@ -5,7 +5,6 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import { vfmPlugin } from 'vue-final-modal'
 import BootstrapVue3 from 'bootstrap-vue-3'
 
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -28,6 +27,5 @@ createApp(App)
     .use(BootstrapVue3)
     .use(VueAxios, axios) // on exporte pour l'ensemble des composants un middleware utilisant axios. On l'appelera dans le composant concerné avec le mot clé "this". 
     .use(router) // on exporte pour l'ensemble des composants un middleware utilisant vue-router.
-    .use(vfmPlugin) // on exporte le module pour les popups pour l'ensemble du projet
     .mount('#app')
 
