@@ -6,7 +6,7 @@
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler. Pour les éléments créés qui seront modifiables individuellement, je dois leur attribuer des id dynamiques -->
                 <div class="card cardPost text-start mb-3"  v-for="(item) in listOfPosts"  v-bind:key="item.id">
 
-    <!-- CARD HEADER NOM USER + MENU POST-->
+    <!-- CARD HEADER NOM USER + MENU POST - DROPDOWN-->
                     <div class="card-header d-flex justify-content-between">
                         <div class="d-flex align-items-center">
                             <img src="../../../backend/images/unknownUser.jpg" id="userPicture" alt="user Profil"/>
@@ -94,14 +94,16 @@
     <!-- CARD FOOTER NOMBRE DE LIKES-->
                     <div class="like card-footer d-flex align-items-center">
                         <font-awesome-icon icon="fa-brands fa-gratipay" class="fa-gratipay"/>
-                        <span class="countLike ms-2">{{ item.like }}</span>
+                        <span class="countLike ms-2">{{ item.nbLike }}</span>
                     </div>
 
     <!-- CARD FOOTER LIKER ET COMMENTER -->
                     <div class="like card-footer d-flex align-items-stretch bg-white px-0 pt-1 pb-1 border-bottom">
-                        <div class="d-flex align-items-center toLike w-50 justify-content-center py-1" >
-                            <font-awesome-icon icon="fa-regular fa-heart" class="fa-heart"/>
-                            <span class="jaime ms-3">J'aime</span>
+                        <div class="d-flex align-items-center toLike w-50 justify-content-center py-1" @click="addLike(item.id)">
+                            <font-awesome-icon icon="fa-solid fa-heart" class="fa-heart-solid text-primary" v-if="item.iLike == true"/>
+                            <font-awesome-icon icon="fa-regular fa-heart" class="fa-heart-regular" v-else/>
+                            <span class="jaime ms-3 text-primary" v-if="item.iLike == true">J'aime</span>
+                            <span class="jaime ms-3" v-else>J'aime</span>
                         </div>
                         <div class="d-flex align-items-center toComment w-50 justify-content-center" >
                             <font-awesome-icon icon="fa-regular fa-message" />
@@ -169,8 +171,9 @@ export default {
                 })
                 .catch((error) =>{
                     console.log(error.message);
-                })
-        }, // Je vais appeler cette méthode en utilisant les doubles accolades dans l'élément HTML concerné. 
+                }) 
+                // Je vais appeler cette méthode en utilisant les doubles accolades dans l'élément HTML concerné. 
+        }, 
 
         // Fonction de modification d'un post où l'ID de la carte correspond à l'ID du post. EN paramètre de la fonction, je passerais  le "item.id" récupéré dans la boucle for de l'élément HTML. 
         modifyPost: function (para, title, content, category) {
@@ -194,6 +197,8 @@ export default {
                     console.log(error.message);
                 })
         },
+
+        // Fonction de suppression d'un post. 
         deletePost: function (para) {
             this.axios
                 .delete(`http://localhost:3000/api/posts/${para}`, 
@@ -208,9 +213,72 @@ export default {
                 .catch(error => {
                     console.log(error.message);
                 })
-        }
+        },
+        addLike: function (para) {
+            this.axios
+                .get(`http://localhost:3000/api/posts/${para}`, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                    .then(response => {
+                        let iLike = response.data.data.iLike; 
+                        console.log(iLike); 
+                        if(iLike == false) {
+                            iLike = true;
+                            this.axios
+                                .put(`http://localhost:3000/api/posts/${para}`, 
+                                    {
+                                        iLike: iLike,
+                                    },
+                                    {headers: 
+                                        { 
+                                            "Authorization": `Bearer ${this.token}`,
+                                            "Content-Type": "application/json"
+
+                                        }
+                                    }
+                                )
+                                // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
+                                .then(response => {
+                                        console.log(response.data.message);
+                                        this.$router.go();
+                                    }      
+                                )
+                                .catch((error) =>{
+                                    console.log(error.message);
+                                })
+                        }
+                        else {
+                            iLike = false;
+                            this.axios
+                                .put(`http://localhost:3000/api/posts/${para}`, 
+                                    {
+                                        iLike: iLike,
+                                    },
+                                    {headers: 
+                                        { 
+                                            "Authorization": `Bearer ${this.token}`,
+                                            "Content-Type": "application/json"
+
+                                        }
+                                    }
+                    )
+                                // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
+                                .then(response => {
+                                        console.log(response.data.message);
+                                        this.$router.go();
+                                    }      
+                                )
+                                .catch((error) =>{
+                                    console.log(error.message);
+                                })
+            }
+        })
+
     }
-}
+}}
 
 </script>
 
@@ -274,5 +342,6 @@ export default {
 .contentPost {
     border-radius: 25px;
 }
+
 
 </style>

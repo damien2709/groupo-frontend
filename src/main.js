@@ -19,14 +19,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { faGratipay } from '@fortawesome/free-brands-svg-icons'
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
+import { faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons'
 import { faMessage } from '@fortawesome/free-regular-svg-icons'
 
 /* add icons to the library */
-library.add(faMagnifyingGlass)
-library.add(faHeart)
-library.add(faGratipay)
-library.add(faMessage)
+library.add(faMagnifyingGlass, farHeart, fasHeart, faGratipay, faMessage)
+
 
 createApp(App)
     .component('font-awesome-icon', FontAwesomeIcon)
