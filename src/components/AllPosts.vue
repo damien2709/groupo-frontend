@@ -1,8 +1,12 @@
 <template>
-    <div class="container">
+    <div class="container px-0">
             <div class="row wallOfPosts">
+
+<!-- CARD POST -->
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler. Pour les éléments créés qui seront modifiables individuellement, je dois leur attribuer des id dynamiques -->
                 <div class="card cardPost text-start mb-3"  v-for="(item) in listOfPosts"  v-bind:key="item.id">
+
+    <!-- CARD HEADER NOM USER + MENU POST-->
                     <div class="card-header d-flex justify-content-between">
                         <div class="d-flex align-items-center">
                             <img src="../../../backend/images/unknownUser.jpg" id="userPicture" alt="user Profil"/>
@@ -77,14 +81,46 @@
                             </div>
                         </div>
                     </div>
+
+    <!-- CARD IMAGE -->
                     <div class="card-img-top"></div>
-                    <div class="card-body">
+
+    <!-- CARD BODY TITRE ET CONTENU POST -->
+                    <div class="card-body bodyPost">
                         <h2 class="titlePost card-title fs-3">{{ item.title }}</h2>
                         <p class="contentPost card-text">{{ item.content }}</p>
                     </div>
+
+    <!-- CARD FOOTER NOMBRE DE LIKES-->
                     <div class="like card-footer d-flex align-items-center">
-                        <img src="../assets/images/heart.png" alt="" class="likeImg">
+                        <font-awesome-icon icon="fa-brands fa-gratipay" class="fa-gratipay"/>
                         <span class="countLike ms-2">{{ item.like }}</span>
+                    </div>
+
+    <!-- CARD FOOTER LIKER ET COMMENTER -->
+                    <div class="like card-footer d-flex align-items-stretch bg-white px-0 pt-1 pb-1 border-bottom">
+                        <div class="d-flex align-items-center toLike w-50 justify-content-center py-1" >
+                            <font-awesome-icon icon="fa-regular fa-heart" class="fa-heart"/>
+                            <span class="jaime ms-3">J'aime</span>
+                        </div>
+                        <div class="d-flex align-items-center toComment w-50 justify-content-center" >
+                            <font-awesome-icon icon="fa-regular fa-message" />
+                            <span class="jaime ms-3">Commenter</span>
+                        </div>
+                    </div>
+
+    <!-- CARD BODY AFFICHAGE COMMENTAIRES-->
+                    <div class="card-body commentPost w-75 ps-5">
+                        <div class="d-flex">
+                            <img src="../assets/images/unknownUser.jpg" id="userPicture" alt="user Profil" class="me-2"/>
+                            <p class="contentPost card-text bg-light py-2 px-4">{{ item.content }}</p>
+                        </div>
+                    </div>
+
+    <!-- CARD FOOTER ECRIRE UN COMMENTAIRE -->
+                    <div class="like card-footer d-flex bg-white">
+                        <img src="../assets/images/Sylvester_Stallone.jpeg" id="userPicture" alt="user Profil" class="me-2"/>
+                        <input class="form-control inputComment" type="text" placeholder="Écrivez un commentaire">
                     </div>
                 </div>  
             </div>
@@ -184,11 +220,6 @@ export default {
     width: 29%;
 }
 
-.likeImg {
-    height: 20px;
-    width: auto;
-}
-
 #userPicture {
     height: 35px;
     width: 35px;
@@ -212,4 +243,36 @@ export default {
     height: 20px;
     width: auto;
 }
+
+.fa-gratipay {
+    color: red;
+}
+
+.toLike,
+.toComment {
+    cursor: pointer;
+}
+
+.toLike:hover {
+    background-color: rgb(240, 249, 255);
+}
+
+.toComment:hover {
+    background-color: rgb(240, 249, 255);
+}
+
+.countLike {
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+.inputComment {
+    border-radius: 15px;
+    background-color: rgba(0,0,0,.03);
+}
+
+.contentPost {
+    border-radius: 25px;
+}
+
 </style>

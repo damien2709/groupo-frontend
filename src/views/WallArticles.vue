@@ -6,7 +6,7 @@
             <BarreCreationPost/>
         </div>
         <div class="row">
-            <div class="col-lg-8  px-0">
+            <div class="col-lg-8">
                 <AllPosts/>
             </div>
             <div class="col-lg-4">
