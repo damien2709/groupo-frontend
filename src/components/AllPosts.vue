@@ -143,13 +143,15 @@ export default {
             titlePost: '',
             contentPost: '',
             categoryPost: '',
+            iLike: '',
+            usersLike: [],
         }
     },
     components: {
 
     },
-        //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
-    created: function() {
+        //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
+    mounted: function() {
         this.getListOfPosts();
     },
 
@@ -166,8 +168,7 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     this.listOfPosts = response.data.data;
-
-                    console.log(response.data);
+                    console.log(this.listOfPosts);
                 })
                 .catch((error) =>{
                     console.log(error.message);
@@ -215,22 +216,27 @@ export default {
                 })
         },
         addLike: function (para) {
+            // Je fais une requête GET pour vérifier si le user like déjà cet article ou pas.
             this.axios
                 .get(`http://localhost:3000/api/posts/${para}`, 
                     {headers: 
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                // je récupère la réponse de l'API, 
                     .then(response => {
-                        let iLike = response.data.data.iLike; 
-                        console.log(iLike); 
-                        if(iLike == false) {
-                            iLike = true;
+                        this.iLike = response.data.data.iLike; 
+                        this.usersLike = response.data.data.usersLike;
+                        console.log(this.iLike); 
+                        if(this.iLike == false) {
+                            this.iLike = true;
+                            this.usersLike.push(this.userId);
+                            console.log(`Le user avec l'ID ${this.userId} a bien été ajouté en frontend de la liste des likers pour cet article`)
                             this.axios
                                 .put(`http://localhost:3000/api/posts/${para}`, 
                                     {
-                                        iLike: iLike,
+                                        iLike: this.iLike,
+                                        usersLike: this.usersLike,
                                     },
                                     {headers: 
                                         { 
@@ -243,7 +249,6 @@ export default {
                                 // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
                                 .then(response => {
                                         console.log(response.data.message);
-                                        this.$router.go();
                                     }      
                                 )
                                 .catch((error) =>{
@@ -251,11 +256,22 @@ export default {
                                 })
                         }
                         else {
-                            iLike = false;
+                            this.iLike = false;
+                            // Je dois supprimer le user du tableau des likers
+                            let myIndex = this.usersLike.indexOf(this.userId); // je cherche dans le tableau l'index dont le numéro  détient bien la valeur du userID de l'utilisateur actuel.
+                            // S'il existe, donc s'il renvoie autre chose que -1, je le supprime du tableau
+                            if (myIndex !== -1) {
+                                this.usersLike.splice(myIndex, 1);
+                                console.log(`Le user avec l'ID ${this.userId} a bien été retiré en frontend de la liste des likers pour cet article`);
+                            }
+                            else {
+                                console.log(`l'utilisateur avec l'ID ${this.userId} n'est pas dans le tableau des likers`);
+                            }
                             this.axios
                                 .put(`http://localhost:3000/api/posts/${para}`, 
                                     {
-                                        iLike: iLike,
+                                        iLike: this.iLike,
+                                        usersLike: this.usersLike,
                                     },
                                     {headers: 
                                         { 
@@ -268,7 +284,6 @@ export default {
                                 // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
                                 .then(response => {
                                         console.log(response.data.message);
-                                        this.$router.go();
                                     }      
                                 )
                                 .catch((error) =>{

@@ -155,8 +155,8 @@ export default {
     }
   },
 
-   //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
-    created: function() {
+   //pour exécuter la méthode après le monatge de la page, on va l'appeler dans le hook "mounted
+    mounted: function() {
         this.redirectionIfIsLogged();
     },
 
