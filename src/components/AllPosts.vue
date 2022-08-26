@@ -1,7 +1,6 @@
 <template>
     <div class="container px-0">
             <div class="row wallOfPosts">
-
 <!-- CARD POST -->
                 <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler. Pour les éléments créés qui seront modifiables individuellement, je dois leur attribuer des id dynamiques -->
                 <div class="card cardPost text-start mb-3"  v-for="(item, id) in listOfPosts"  v-bind:key="id">
@@ -99,11 +98,9 @@
 
     <!-- CARD FOOTER LIKER ET COMMENTER -->
                     <div class="like card-footer d-flex align-items-stretch bg-white px-0 pt-1 pb-1 border-bottom">
-                        <div class="d-flex align-items-center toLike w-50 justify-content-center py-1" @click="addLike(item.id)">
-                            <font-awesome-icon icon="fa-solid fa-heart" class="fa-heart-solid text-primary" v-if="doLike(item.usersLike)"/>
-                            <font-awesome-icon icon="fa-solid fa-heart" class="fa-heart-solid" v-else/>
-                            <span class="jaime ms-3 text-primary" v-if="doLike(item.usersLike)">J'aime</span>
-                            <span class="jaime ms-3" v-else>J'aime</span>
+                        <div class="d-flex align-items-center toLike w-50 justify-content-center py-1" :id="'like'+item.id" :class="doLike(item.usersLike) ? 'text-primary' : '' " @click="addLike(item.id, `like${item.id}`)">
+                            <font-awesome-icon icon="fa-solid fa-heart" class="fa-heart-solid"/>
+                            <span class="jaime ms-3">J'aime</span>
                         </div>
                         <div class="d-flex align-items-center toComment w-50 justify-content-center" >
                             <font-awesome-icon icon="fa-regular fa-message" />
@@ -143,7 +140,7 @@ export default {
             titlePost: '',
             contentPost: '',
             categoryPost: '',
-            liker: '',
+            usersLike: '',
         }
     },
     components: {
@@ -168,7 +165,6 @@ export default {
                     console.log(response.data);
                     this.listOfPosts = response.data.data;
                     console.log(this.listOfPosts);
-                    this.usersLike = response.data.data.usersLike;
                 })
                 .catch((error) =>{
                     console.log(error.message);
@@ -216,7 +212,7 @@ export default {
                 })
         },
         // Fonction d'ajout ou de suppression du user du tableau des likers de post. Permet de savoir qui aime tel ou tel post et d'afficher la liste des likers
-        addLike: function (para) {
+        addLike: function (para, id) {
             // Je fais une requête GET pour vérifier si le user like déjà cet article ou pas.
             this.axios
                 .get(`http://localhost:3000/api/posts/${para}`, 
@@ -225,10 +221,12 @@ export default {
                     }
                 )
                 // je récupère la réponse de l'API, 
-                    .then( () => {
+                    .then( (response) => {
+                        this.usersLike = response.data.data.usersLike; // j'enregistre le tableau des likers
                         let myIndex = this.usersLike.indexOf(this.userId); // je cherche si le userId est présente dans le tableau.
                         // S'il' n'existe pas, ça renvoie -1, et donc je vais ajouter l'utilisateur dans la liste des likers
                             if (myIndex == -1) {
+                                document.getElementById(id).classList.add('text-primary'); // j'ajoute la classe "text-primary" de l'élément avec l'id concerné. Comme c'est un id, je peux écraser la méthode "doLike" qui agit sur la classe pour changer la couleur des posts que le user aime déjà. 
                                 this.usersLike.push(this.userId);
                                 console.log(`Le user avec l'ID ${this.userId} a bien été ajouté en frontend de la liste des likers pour cet article`)
                                 this.axios
@@ -253,9 +251,10 @@ export default {
                                     })
                             }
                             else {
+                                document.getElementById(id).classList.remove("text-primary"); // je retire la class "text-primary" de l'élément avec l'id concerné. 
                                 // Si le user est déjà dans le tableau, Je dois le supprimer car il n'aime plus !
                                 let myIndex = this.usersLike.indexOf(this.userId); // je cherche dans le tableau l'index dont le numéro  détient bien la valeur du userID de l'utilisateur actuel.
-                                // S'il existe, donc s'il renvoie autre chose que -1, je le supprime du tableau
+                                //  je le supprime du tableau
                                 this.usersLike.splice(myIndex, 1);
                                 console.log(`Le user avec l'ID ${this.userId} a bien été retiré en frontend de la liste des likers pour cet article`);
                                 this.axios
@@ -279,8 +278,7 @@ export default {
                                         console.log(error.message);
                                     })
                             }
-                    })
-
+                    });
         },
         // Une fonction qui me permet de comparer si le userId de l'utilisateur est dans le tableau des likers du post. Si oui, je returnn true. Ensuite j'incorpore la fonction (par la-même son résultat) dans un v-if dans la boucle d'itération de chaque post. D'où le paramètre de la fonction qui me permet de rentrer dans le scope de la boucle. 
         doLike : function (para) {
@@ -288,12 +286,9 @@ export default {
                 if(this.userId == para[i]) {
                     return true;
                 }
-                else {
-                    return false;
-                }
+
             }
-            
-        }
+        },
     }
     }
 

@@ -7,7 +7,7 @@
         </div>
         <div class="row">
             <div class="col-lg-8">
-                <AllPosts/>
+                <AllPosts :key="componentKey"/>
             </div>
             <div class="col-lg-4">
                 <FamousPosts/>
