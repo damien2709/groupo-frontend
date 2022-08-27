@@ -7,7 +7,7 @@
             <img alt="Groupomania logo" src="../assets/images/logo_groupo.png" id="logoAccueil">
             <h1 class= "login_title" v-if="mode == 'login'">Se connecter</h1>
             <h1 class= "login_title" v-else>Créer son compte</h1>
-            <form class="form col-10 col-md-8 col-lg-6 ">
+            <form class="form col-10 col-md-8 col-lg-6" enctype='multipart/form-data'>
                 <div class="form-group">
                     <div class="col">
                         <input 
@@ -72,6 +72,11 @@
                     aria-describedby="Telephone" 
                     placeholder="Tel du poste"
                     v-model="tel">
+                    <input 
+                    type="file" 
+                    class="form-control" 
+                    id="pictureProfil"
+                    name="picture">
                 </div>
                 <p v-if="mode == 'create'">
                     <!-- Ici on va créer un input checkbox qui devra être coché pour valider le formulaire. On va devoir envoyer la valeur de l'input une fois validé (value="ok") à l'API (propriété "checkConditions" du modèle User)pour que le formulaire ne soit pas envoyé sans que la box soit checkée. -->
@@ -214,26 +219,25 @@ export default {
     },
     // fonction pour créer un compte
     createAccount: function () {
+        const pictureUpload = document.getElementById('pictureProfil').files[0];
+        let formData = new FormData()
+      formData.append('username', this.username)
+      formData.append('password', this.password)
+      formData.append('surname', this.surname)
+      formData.append('name', this.name)
+       formData.append('email', this.email)
+      formData.append('department', this.department)
+      formData.append('tel', this.tel)
+      formData.append('picture', pictureUpload)
         //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
-        
        this.axios
-        .post('http://localhost:3000/api/users', 
-            {
-            username: this.username,
-            password: this.password,
-            surname: this.surname,
-            name: this.name,
-            email: this.email, 
-            department: this.department,
-            tel: this.tel,
-            },
+        .post('http://localhost:3000/api/users', formData,
             {headers: 
-                { "Content-Type": "application/json"}
+                { 'Content-Type': 'multipart/form-data'}
             }
         )
         // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
-        .then(response => {
-                console.log(response.data.message);
+        .then( () => {
                 this.mode = 'login';
                 this.$router.push('/login');
             }      
