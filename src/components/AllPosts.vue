@@ -82,7 +82,9 @@
                     </div>
 
     <!-- CARD IMAGE -->
-                    <div class="card-img-top"></div>
+                    <div class="card-img-top">
+                        <img :src="item.picture" alt="" class="postPicture">
+                    </div>
 
     <!-- CARD BODY TITRE ET CONTENU POST -->
                     <div class="card-body bodyPost">
@@ -305,6 +307,12 @@ export default {
     height: 35px;
     width: 35px;
     border-radius: 50%;
+    object-fit: cover;
+}
+
+.postPicture{
+    max-height: 300px;
+    width: 100%;
     object-fit: cover;
 }
 

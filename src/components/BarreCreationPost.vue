@@ -11,22 +11,46 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="form mt-3 mb-5 ">
+                        <form class="form mt-3 mb-5" id='form' action="" method="put" enctype='multipart/form-data'>
                             <div class=" d-flex text-center">
-                                <input type="text" class="form-control title mt-3 mx-auto" style="width: 75%;" v-model="title" placeholder="Titre">
+                                <input 
+                                type="text" 
+                                class="form-control title mt-3 mx-auto" 
+                                style="width: 75%;" 
+                                v-model="title" 
+                                name="title"
+                                placeholder="Titre">
                             </div>
                             <div>
-                                <textarea type="text" class="form-control content mt-3 mx-auto" style="width: 75%;" v-model="content" placeholder="Ecrivez votre article !"></textarea>
+                                <textarea 
+                                type="text" 
+                                class="form-control content mt-3 mx-auto" 
+                                style="width: 75%;" 
+                                v-model="content" 
+                                name="content"
+                                placeholder="Ecrivez votre article !"></textarea>
                             </div>
                             <div class="mx-auto text-start" style="width: 75%;">
                                 <p class="me-3 mt-2">Choisissez une catégorie : </p>
-                                <select v-model="category" class="form-select mt-3">
+                                <select 
+                                v-model="category"
+                                name="category" 
+                                class="form-select mt-3">
                                     <option value="" disabled>Catégorie</option>
                                     <option>Fun</option>
                                     <option>Entraide</option>
                                     <option>Infos</option>
                                     <option>Projet</option>
                                 </select>
+                            </div>
+                            <div class="mt-3 mx-auto" style="width: 75%;" >
+                                <p class="me-3 mt-2 text-start">Sélectionner une image :</p>
+                                <input 
+                                type="file" 
+                                class="form-control mt-3 mx-auto" 
+                                id="picture" 
+                                name="picture"
+                                @change="onFileUpload">
                             </div>
                         </form>
                     </div>
@@ -54,10 +78,11 @@ export default {
             token: JSON.parse(localStorage.getItem("token")),
             userId: JSON.parse(localStorage.getItem("userId")),
             userPicture: '',
+            postPicture: '',
             title: "",
             content: "",
             category: "",
-            like: 0, 
+            nbLike: 0, 
             showModal: false,
         }
     },
@@ -68,6 +93,10 @@ export default {
     },
 
     methods: {
+        // Pour récupérer le fichier de l'input de type file associé
+        onFileUpload: function (event) {
+            this.postPicture = event.target.files[0]
+        },
         // pour récupérer et afficher les infos du profil : je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
         getProfil: function () {
             this.axios
@@ -97,12 +126,13 @@ export default {
                     title: this.title,
                     content: this.content,
                     category: this.category,
-                    like: this.like,
+                    nbLike: this.nbLike,
+                    picture: this.postPicture,
                 },
                 {headers: 
                     { 
                         "Authorization": `Bearer ${this.token}`,
-                         "Content-Type": "application/json"
+                         "Content-Type": 'multipart/form-data'
 
                     }
                 }
