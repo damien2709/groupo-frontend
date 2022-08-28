@@ -11,7 +11,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="form mt-3 mb-5" id='form' action="" method="put" enctype='multipart/form-data'>
+                        <form class="form mt-3 mb-5" id='form' action="" method="post" enctype='multipart/form-data'>
                             <div class=" d-flex text-center">
                                 <input 
                                 type="text" 
@@ -133,7 +133,6 @@ export default {
                     { 
                         "Authorization": `Bearer ${this.token}`,
                          "Content-Type": 'multipart/form-data'
-
                     }
                 }
             )

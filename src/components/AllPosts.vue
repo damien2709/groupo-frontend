@@ -33,7 +33,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <!-- J'utilise ':value="item.x"' pour afficher le contenu de chaque post dans les champs du formulaire. Les id des champs sont dynamiques pour afficher le contenu de chaque post issu de la boucle. -->
-                                    <div class="modal-body">
+                                    <div class="modal-body" id='form' action="" method="post" enctype='multipart/form-data'>
                                         <form class="form mt-3 mb-5 ">
                                             <div class=" d-flex text-center">
                                                 <input type="text" :id="'titlePost'+item.id" class="form-control title mt-3 mx-auto" style="width: 75%;" :value="item.title" placeholder="Titre">
@@ -44,19 +44,28 @@
                                             <div class="mx-auto text-start" style="width: 75%;">
                                                 <p class="me-3 mt-2">Choisissez une catégorie : </p>
                                                 <select :value="item.category" :id="'categoryPost'+item.id" class="form-select mt-3">
-                                                    <option value="" disabled>Catégorie</option>
+                                                    <option :value="item.category" disabled>Catégorie</option>
                                                     <option>Fun</option>
                                                     <option>Entraide</option>
                                                     <option>Infos</option>
                                                     <option>Projet</option>
                                                 </select>
                                             </div>
+                                            <div class="mt-3 mx-auto" style="width: 75%;" >
+                                                <p class="me-3 mt-2 text-start">Modifier l'image :</p>
+                                                <input 
+                                                type="file" 
+                                                class="form-control mt-3 mx-auto" 
+                                                id="picture" 
+                                                name="picture"
+                                                @change="onFileUpload">
+                                            </div>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!! Ici je passe en paramètres de la fonction l'ID du post (item) récupéré dans la boucle, puis les id dynamiques des inputs du titre, du content, de la catégorie, pour que le bon post soit modifié ! -->
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="modifyPost(item.id, 'titlePost'+item.id, 'contentPost'+item.id, 'categoryPost'+item.id)">Modifier le post</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="modifyPost(item.id, 'titlePost'+item.id, 'contentPost'+item.id, 'categoryPost'+item.id, )">Modifier le post</button>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +152,8 @@ export default {
             contentPost: '',
             categoryPost: '',
             usersLike: '',
-            userPicture: localStorage.getItem("userPicture",)
+            userPicture: localStorage.getItem("userPicture"),
+            postPicture: '',
         }
     },
     components: {
@@ -155,6 +165,10 @@ export default {
     },
 
     methods: {
+        // Pour récupérer le fichier de l'input de type file associé
+        onFileUpload: function (event) {
+            this.postPicture = event.target.files[0]
+        },
         // Fonction pour récupérer et afficher la liste des posts
         getListOfPosts: function () {
             this.axios
@@ -167,6 +181,7 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     this.listOfPosts = response.data.data;
+                    this.postPicture = response.data.data.picture;
                     console.log(this.listOfPosts);
                 })
                 .catch((error) =>{
@@ -183,9 +198,13 @@ export default {
                         title: document.getElementById(`${title}`).value, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
                         content: document.getElementById(`${content}`).value,
                         category: document.getElementById(`${category}`).value,
+                        picture: this.postPicture,
                     },
                     {headers: 
-                        { "Authorization": `Bearer ${this.token}`}
+                        { 
+                            "Authorization": `Bearer ${this.token}`,
+                            "Content-Type": 'multipart/form-data'
+                        }
                     }
                 )
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
