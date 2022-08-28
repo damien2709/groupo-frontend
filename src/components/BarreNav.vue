@@ -11,7 +11,7 @@
             <div class="profil-menu dropdown">
                 <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
                 <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../assets/images/Sylvester_Stallone.jpeg" alt="" class="userPicture">
+                    <img :src="userPicture" alt="" class="userPicture">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
                     <router-link class="dropdown-item" to="/">Accueil</router-link>
@@ -38,7 +38,7 @@ export default {
   },
 
     //pour exécuter la méthode avant le lancement de la page, on va l'appeler dans le hook "created"
-    created: function() {
+    mounted: function() {
         this.getProfilPicture();
     },
 

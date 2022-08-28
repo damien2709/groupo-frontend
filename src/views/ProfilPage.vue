@@ -1,11 +1,15 @@
 <template>
     <BarreNav/>
-    <div class="container rounded bg-white pb-5 w-75">
-        <div class="row mt-5">
-            <div class="col-12 d-flex justify-content-center mt-3">
+    <div class="container rounded bg-white p-5 w-75">
+        <div class="row ">
+            <div class="col-12 d-flex justify-content-center align-items-center">
                 <h1>Profil utilisateur</h1>
+                <div class=" photo-utilisateur col-md-6  mb-4 text-end">
+                    <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
+                    <img :src="this.userPicture" id="userPicture" alt="user Profil">
+                </div> 
             </div>
-            <form class="form d-flex flex-wrap">
+            <form class="form d-flex flex-wrap" id='form' action="" method="put" enctype='multipart/form-data'>
                 <div class="infos-utilisateur col-12 col-lg-8 ps-3">
                     <div class="row g-2"  >
                     <!--Je vais afficher les données récupérées de la BDD sur le user dans les champs du formulaire, grace à l'attribut "value" de l'input et la directive "v-bind" de VueJS qui me permet d'afficher des valeurs dynamiques. Ensuite, si le status "modifyStatus est "false", il est impossible de modifier les champs car l'attribut "disabled" défini dynamiquement est actif grace au test conditionnel de savoir si "modifyStatus" est false ou true. Si le status est true, alors on peut modifier. -->
@@ -15,6 +19,7 @@
                                 type="text" 
                                 class="form-control"
                                 id="surname"
+                                name="surname"
                                 v-bind:value= "this.surname" 
                                 :disabled="modifyStatus ? false : true">
                         </div>
@@ -23,7 +28,8 @@
                             <input 
                                 type="text" 
                                 class="form-control" 
-                                id="name" 
+                                id="name"
+                                name="name" 
                                 v-bind:value= "this.name" 
                                 :disabled="modifyStatus ? false : true">
                         </div>
@@ -34,6 +40,7 @@
                             <input type="text" 
                                 class="form-control"
                                 id="username" 
+                                name="username"
                                 v-bind:value= "this.username" 
                                 :disabled="modifyStatus ? false : true">
                         </div>
@@ -42,6 +49,7 @@
                             <input type="email" 
                             class="form-control" 
                             id="email"
+                            name="email"
                             v-bind:value= "this.email" 
                             :disabled="modifyStatus ? false : true">
                         </div>
@@ -50,6 +58,7 @@
                             <input type="text" 
                             class="form-control" 
                             id="department"
+                            name=" department"
                             v-bind:value= "this.department" :disabled="modifyStatus ? false : true">
                         </div>
                         <div class="col-md-12">
@@ -57,53 +66,50 @@
                             <input type="tel" 
                             class="form-control" 
                             id="tel"
+                            name="tel"
                             v-bind:value= "this.tel" 
                             :disabled="modifyStatus ? false : true">
-                        </div>       
+                        </div> 
+                        <div class="d-flex align-items-center">
+                            <div class="col-md-6">
+                                <label for="picture" class="col-form-label text-primary fw-bold" v-if="modifyStatus == true">Changer la photo du profil</label>
+                                <input type="file" 
+                                class="form-control" 
+                                id="picture"
+                                name="picture"
+                                v-if="modifyStatus == true"
+                                @change="onFileUpload">
+                            </div>  
+                        </div>    
                     </div>
                     
-                    <div class="mt-5 text-center d-flex justify-content-between">
+                    <div class="text-start mt-5">
                         <button 
-                        class="btn btn-primary profile-button mx-auto" 
+                        class="btn btn-primary profile-button" 
                         type="button" 
                         v-if="modifyStatus == false"
                         @click="changeStatus()">
                         Modifier le profil
                         </button>
                         <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
-                        <button 
-                        class="btn btn-primary profile-button" 
+                        <div v-else>
+                            <button 
+                        class="btn btn-primary profile-button me-3" 
                         type="button" 
-                            v-else
-                            @click="updateAccount()">
+                        @click="updateAccount()">
                             Sauvegarder le profil
-                        </button>
+                            </button>
+                            <button 
+                        class="btn btn-secondary profile-button" 
+                        type="button" 
+                        @click="changeStatus()">
+                            Annuler
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="photo-delete col-12 col-lg-4 d-flex flex-column align-items-center  text-center">
-                    <div class=" photo-utilisateur  mt-5 mb-4">
-                        <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
-                        <img :src="this.userPicture" id="userPicture" alt="user Profil">
-                    </div>
-                    <div class="changer-photo text-center mb-5">
-                        <button 
-                        class="btn btn-info profile-button" 
-                        type="button"
-                        v-if="changePicture == false" 
-                        @click="modifyPictureTrue()">Changer la photo
-                        </button>
-                    </div>
-                    <div v-if="changePicture == true">
-                        <input
-                            type="url"
-                            name="picture"
-                            >
-                        <button class="btn btn-info profile-button" 
-                        type="button" @click="modifyPictureFalse()"
-                        >enregistrer la photo
-                        </button>
-                    </div>
-                    <div class="bouton-delete mt-auto">
+                <div class="photo-delete col-12 col-lg-4">
+                    <div class="bouton-delete mt-2 text-end">
                         <button
                             class="btn btn-danger" 
                             data-bs-toggle="modal" data-bs-target="#confirmationDeleteAccount" 
@@ -156,7 +162,6 @@ export default {
             department: '',
             tel: '',
             modifyStatus: false,
-            changePicture: false,
             userPicture: '',
         }
     },
@@ -169,11 +174,14 @@ export default {
     methods: {
         // pour rendre les inputs  modifiables en cas de modification de compte
         changeStatus: function () {
-            this.modifyStatus = true;
+            this.modifyStatus = !this.modifyStatus;
         },
         // Une méthode pour indiquer que le user veut changer sa photo
         modifyPictureTrue: function () {
             this.changePicture = true;
+        },
+        onFileUpload: function (event) {
+          this.userPicture = event.target.files[0]
         },
         // Pour vérifier si le user est bien loggé et peut accèder à la page et peut afficher son profil
         getTheProfilPage: function (){
@@ -226,9 +234,13 @@ export default {
                         email: document.getElementById('email').value, 
                         department: document.getElementById('department').value,
                         tel: document.getElementById('tel').value,
+                        picture: this.userPicture,
                     },
                     {headers: 
-                        { "Authorization": `Bearer ${this.token}`}
+                        { 
+                        'Authorization': `Bearer ${this.token}`,
+                        'Content-Type': 'multipart/form-data'
+                        }
                     }
                 )
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
@@ -237,7 +249,7 @@ export default {
                     localStorage.setItem('userSurname', JSON.stringify(this.surname));
                     localStorage.setItem('userName', JSON.stringify(this.name));
                     this.modifyStatus = false;
-                    this.getProfil();
+                    this.$router.go();
                 })
                 .catch((error) =>{
                     console.log(error.message);
@@ -271,8 +283,8 @@ export default {
 <style scoped lang="scss">
 
 #userPicture {
-    height: 150px;
-    width: 150px;
+    height: 80px;
+    width: 80px;
     border-radius: 50%;
     object-fit: cover;
 }

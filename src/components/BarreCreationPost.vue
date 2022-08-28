@@ -1,6 +1,6 @@
 <template>
     <div class="container d-flex my-2 p-3 bg-white">
-        <img src="../assets/images/Sylvester_Stallone.jpeg" id="userPicture" alt="user Profil" class="me-2"/>
+        <img :src="userPicture" id="userPicture" alt="user Profil" class="me-2"/>
         <input class="inputPost w-100 p-2" data-bs-toggle="modal" data-bs-target="#creationPost" :placeholder=" 'Quoi de neuf' + ' '+ this.authorSurname + ' ?'">
         <!-- Modal -->
         <div class="modal fade" id="creationPost" tabindex="-1" aria-labelledby="creationPost" aria-hidden="true">
@@ -52,17 +52,39 @@ export default {
             authorSurname: JSON.parse(localStorage.getItem("userSurname")),
             authorName: JSON.parse(localStorage.getItem("userName")),
             token: JSON.parse(localStorage.getItem("token")),
-            userPicture: '../assets/images/Sylvester_Stallone.jpeg',
+            userId: JSON.parse(localStorage.getItem("userId")),
+            userPicture: '',
             title: "",
             content: "",
             category: "",
-            picture: "",
             like: 0, 
             showModal: false,
         }
     },
 
+    //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
+    mounted: function() {
+        this.getProfil();
+    },
+
     methods: {
+        // pour récupérer et afficher les infos du profil : je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
+        getProfil: function () {
+            this.axios
+                .get(`http://localhost:3000/api/users/${this.userId}`, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                .then(response => {
+                    console.log(response.data);
+                    this.userPicture = response.data.data.picture;
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                })
+        },
         // Fonction pour créer un post
         createPost: function () {
         //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.

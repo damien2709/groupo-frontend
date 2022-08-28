@@ -118,7 +118,7 @@
 
     <!-- CARD FOOTER ECRIRE UN COMMENTAIRE -->
                     <div class="like card-footer d-flex bg-white">
-                        <img src="../assets/images/Sylvester_Stallone.jpeg" id="userPicture" alt="user Profil" class="me-2"/>
+                        <img :src="userPicture" id="userPicture" alt="user Profil" class="me-2"/>
                         <input class="form-control inputComment" type="text" placeholder="Écrivez un commentaire">
                     </div>
                 </div>  
@@ -141,6 +141,7 @@ export default {
             contentPost: '',
             categoryPost: '',
             usersLike: '',
+            userPicture: localStorage.getItem("userPicture",)
         }
     },
     components: {
