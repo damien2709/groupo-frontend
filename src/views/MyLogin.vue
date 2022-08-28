@@ -7,13 +7,14 @@
             <img alt="Groupomania logo" src="../assets/images/logo_groupo.png" id="logoAccueil">
             <h1 class= "login_title" v-if="mode == 'login'">Se connecter</h1>
             <h1 class= "login_title" v-else>Créer son compte</h1>
-            <form class="form col-10 col-md-8 col-lg-6" enctype='multipart/form-data'>
+            <form class="form col-10 col-md-8 col-lg-6" id="form" action="" enctype='multipart/form-data'>
                 <div class="form-group">
                     <div class="col">
                         <input 
                         type="text" 
                         class="form-control" 
                         id="username" 
+                        name="username"
                         aria-describedby="userName" 
                         placeholder="Nom d'utilisateur"
                         v-model="username" 
@@ -24,7 +25,8 @@
                         <input 
                         type="password" 
                         class="form-control" 
-                        id="exampleInputPassword1" 
+                        id="password"
+                        name="password" 
                         placeholder="Mot de passe" 
                         v-model="password" 
                         required  
@@ -36,7 +38,8 @@
                         <input 
                         type="text" 
                         class="form-control me-2" 
-                        id="surname" 
+                        id="surname"
+                        name="surname" 
                         aria-describedby="Surname" 
                         placeholder="Prénom"
                         v-model="surname" 
@@ -54,6 +57,7 @@
                     type="email" 
                     class="form-control" 
                     id="email" 
+                    name="email"
                     aria-describedby="helpEmail" 
                     placeholder="Email"
                     v-model="email" 
@@ -68,7 +72,8 @@
                     <input 
                     type="tel" 
                     class="form-control" 
-                    id="tel" 
+                    id="tel"
+                    name="tel" 
                     aria-describedby="Telephone" 
                     placeholder="Tel du poste"
                     v-model="tel">
@@ -76,7 +81,8 @@
                     type="file" 
                     class="form-control" 
                     id="pictureProfil"
-                    name="picture">
+                    name="picture"
+                    @change="onFileUpload">
                 </div>
                 <p v-if="mode == 'create'">
                     <!-- Ici on va créer un input checkbox qui devra être coché pour valider le formulaire. On va devoir envoyer la valeur de l'input une fois validé (value="ok") à l'API (propriété "checkConditions" du modèle User)pour que le formulaire ne soit pas envoyé sans que la box soit checkée. -->
@@ -135,6 +141,7 @@ export default {
         email: "",
         department: "",
         tel: "",
+        userPicture: '',
         checkConditions: false,
     }
   },
@@ -166,6 +173,9 @@ export default {
     },
 
   methods: {
+    onFileUpload: function (event) {
+   this.userPicture = event.target.files[0]
+    },
     validateConditions : function () {
         this.checkConditions = true; // Lorsque l'on coche la validation des conditions, la donnée "checkConditions" passe à "true".
     },
@@ -219,16 +229,15 @@ export default {
     },
     // fonction pour créer un compte
     createAccount: function () {
-        const pictureUpload = document.getElementById('pictureProfil').files[0];
-        let formData = new FormData()
-      formData.append('username', this.username)
-      formData.append('password', this.password)
-      formData.append('surname', this.surname)
-      formData.append('name', this.name)
-       formData.append('email', this.email)
-      formData.append('department', this.department)
-      formData.append('tel', this.tel)
-      formData.append('picture', pictureUpload)
+        let formData = new FormData() // Je crée un nouvel objet formData
+        formData.append('username', this.username) // j'ajoute la propriété et sa valeur à formData
+        formData.append('password', this.password)
+        formData.append('surname', this.surname)
+        formData.append('name', this.name)
+        formData.append('email', this.email)
+        formData.append('department', this.department)
+        formData.append('tel', this.tel)
+        formData.append('picture', this.userPicture)
         //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
        this.axios
         .post('http://localhost:3000/api/users', formData,
@@ -239,13 +248,12 @@ export default {
         // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
         .then( () => {
                 this.mode = 'login';
-                this.$router.push('/login');
+                this.$router.push('/login'); // je renvoie vers la page de login
             }      
         )
         .catch((error) =>{
             console.log(error.message);
         })
-
     }
 
   }
