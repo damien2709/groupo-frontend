@@ -128,6 +128,7 @@ export default {
                     category: this.category,
                     nbLike: this.nbLike,
                     picture: this.postPicture,
+                    UserId: this.authorId,
                 },
                 {headers: 
                     { 

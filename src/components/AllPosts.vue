@@ -109,7 +109,7 @@
 
     <!-- CARD FOOTER LIKER ET COMMENTER -->
                     <div class="like card-footer d-flex align-items-stretch bg-white px-0 pt-1 pb-1 border-bottom">
-                        <div class="d-flex align-items-center toLike w-50 justify-content-center py-1" :id="'like'+item.id" :class="doLike(item.usersLike) ? 'text-primary' : '' " @click="addLike(item.id, `like${item.id}`)">
+                        <div class="d-flex align-items-center toLike w-50 justify-content-center py-1" :id="'like'+item.id" :class="doLike(item.usersLike) ? 'text-primary' : '' " @click="addLike(item.id, `like${item.id}`, item)">
                             <font-awesome-icon icon="fa-solid fa-heart" class="fa-heart-solid"/>
                             <span class="jaime ms-3">J'aime</span>
                         </div>
@@ -122,7 +122,7 @@
     <!-- CARD BODY AFFICHAGE COMMENTAIRES-->
                     <div class="card-body commentPost w-75 ps-5">
                         <div class="d-flex">
-                            <img src="../assets/images/unknownUser.jpg" id="userPicture" alt="user Profil" class="me-2"/>
+                            <img src="http://localhost:3000/images/unknownUser.jpg" id="userPicture" alt="user Profil" class="me-2"/>
                             <p class="contentPost card-text bg-light py-2 px-4">{{ item.content }}</p>
                         </div>
                     </div>
@@ -151,8 +151,8 @@ export default {
             titlePost: '',
             contentPost: '',
             categoryPost: '',
-            usersLike: '',
-            userPicture: localStorage.getItem("userPicture"),
+            usersLike: [],
+            userPicture: '',
             postPicture: '',
         }
     },
@@ -162,12 +162,30 @@ export default {
         //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
     mounted: function() {
         this.getListOfPosts();
+        this.getProfil();
     },
 
     methods: {
         // Pour récupérer le fichier de l'input de type file associé
         onFileUpload: function (event) {
             this.postPicture = event.target.files[0]
+        },
+        // pour récupérer et afficher les infos du profil : je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
+        getProfil: function () {
+            this.axios
+                .get(`http://localhost:3000/api/users/${this.userId}`, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                .then(response => {
+                    console.log(response.data);
+                    this.userPicture = response.data.data.picture;
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                })
         },
         // Fonction pour récupérer et afficher la liste des posts
         getListOfPosts: function () {
@@ -234,7 +252,7 @@ export default {
                 })
         },
         // Fonction d'ajout ou de suppression du user du tableau des likers de post. Permet de savoir qui aime tel ou tel post et d'afficher la liste des likers
-        addLike: function (para, id) {
+        addLike: function (para, id, para2) {
             // Je fais une requête GET pour vérifier si le user like déjà cet article ou pas.
             this.axios
                 .get(`http://localhost:3000/api/posts/${para}`, 
@@ -244,17 +262,19 @@ export default {
                 )
                 // je récupère la réponse de l'API, 
                     .then( (response) => {
-                        this.usersLike = response.data.data.usersLike; // j'enregistre le tableau des likers
+                        this.usersLike = response.data.data.usersLike; // je récupère le tableau des likers
                         let myIndex = this.usersLike.indexOf(this.userId); // je cherche si le userId est présente dans le tableau.
-                        // S'il' n'existe pas, ça renvoie -1, et donc je vais ajouter l'utilisateur dans la liste des likers
+                        // S'il' n'existe pas, ça renvoie -1, et donc je vais ajouter l'utilisateur dans la liste des likers et je vais incrémenter nbLike puis enregistrer le tout dans la BDD. 
                             if (myIndex == -1) {
                                 document.getElementById(id).classList.add('text-primary'); // j'ajoute la classe "text-primary" de l'élément avec l'id concerné. Comme c'est un id, je peux écraser la méthode "doLike" qui agit sur la classe pour changer la couleur des posts que le user aime déjà. 
                                 this.usersLike.push(this.userId);
+                                para2.nbLike++;
                                 console.log(`Le user avec l'ID ${this.userId} a bien été ajouté en frontend de la liste des likers pour cet article`)
                                 this.axios
                                     .put(`http://localhost:3000/api/posts/${para}`, 
                                         {
                                             usersLike: this.usersLike,
+                                            nbLike: para2.nbLike,
                                         },
                                         {headers: 
                                             { 
@@ -274,15 +294,17 @@ export default {
                             }
                             else {
                                 document.getElementById(id).classList.remove("text-primary"); // je retire la class "text-primary" de l'élément avec l'id concerné. 
-                                // Si le user est déjà dans le tableau, Je dois le supprimer car il n'aime plus !
+                                // Si le user est déjà dans le tableau, Je dois le supprimer car il n'aime plus ! Je dois décrémenter également nbLike et l'enregistrer. 
                                 let myIndex = this.usersLike.indexOf(this.userId); // je cherche dans le tableau l'index dont le numéro  détient bien la valeur du userID de l'utilisateur actuel.
                                 //  je le supprime du tableau
                                 this.usersLike.splice(myIndex, 1);
+                                para2.nbLike--;
                                 console.log(`Le user avec l'ID ${this.userId} a bien été retiré en frontend de la liste des likers pour cet article`);
                                 this.axios
                                     .put(`http://localhost:3000/api/posts/${para}`, 
                                         {
                                             usersLike: this.usersLike,
+                                            nbLike: para2.nbLike,
                                         },
                                         {headers: 
                                             { 
