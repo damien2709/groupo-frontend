@@ -1,13 +1,18 @@
 <template>
+    <div class="container-fluid sticky-top">
+        <div class="row ">
+            <BarreNav/>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
-            <BarreNav/>
-            <BarreCategories/>
+            <BarrePresentation/>
             <BarreCreationPost/>
         </div>
         <div class="row">
             <div class="col-lg-8">
                 <AllPosts :key="componentKey"/>
+
             </div>
             <div class="col-lg-4">
                 <FamousPosts/>
@@ -15,13 +20,14 @@
             
         </div>
     </div>
+
 </template>
 
 <script>
 
 /* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
 import BarreNav from '@/components/BarreNav.vue'
-import BarreCategories from '@/components/BarreCategories.vue'
+import BarrePresentation from '@/components/BarrePresentation.vue'
 import BarreCreationPost from '@/components/BarreCreationPost.vue'
 import AllPosts from '@/components/AllPosts.vue' // import du composant
 import FamousPosts from '@/components/FamousPosts.vue' // import du composant
@@ -30,7 +36,7 @@ export default {
     name: 'WallArticles',
     components: {
         BarreNav,
-        BarreCategories,
+        BarrePresentation,
         BarreCreationPost,
         AllPosts,
         FamousPosts,

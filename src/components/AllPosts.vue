@@ -1,9 +1,24 @@
 <template>
     <div class="container px-0">
-            <div class="row wallOfPosts">
+        <div class="row mb-2 d-flex justify-content-between">
+            <div class="col-8 text-start">
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Infos')">Infos</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Projets')">Projets</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Entraide')">Entraide</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Fun')">Fun</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPostAll()">Toutes</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Projets')">Populaires</button>
+                <p v-if="noPost == true" class="mt-2">Il n'y a pas d'article pour le moment !</p>
+            </div>
+            <div class="col-4 text-end">
+                <button class=" btn btn-success me-2" @click="setCatPost('Infos')">Mes posts</button>
+                
+            </div>
+        </div>
+        <div class="row wallOfPosts">
 <!-- CARD POST -->
-                <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler. Pour les éléments créés qui seront modifiables individuellement, je dois leur attribuer des id dynamiques -->
-                <div class="card cardPost text-start mb-3"  v-for="(item, id) in listOfPosts"  v-bind:key="id">
+            <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler. Pour les éléments créés qui seront modifiables individuellement, je dois leur attribuer des id dynamiques -->
+            <div class="card cardPost text-start mb-3"  v-for="(item, id) in listOfPosts"  v-bind:key="id">
 
     <!-- CARD HEADER NOM USER + MENU POST - DROPDOWN-->
                     <div class="card-header d-flex justify-content-between">
@@ -154,6 +169,8 @@ export default {
             usersLike: [],
             userPicture: '',
             postPicture: '',
+            url: '',
+            noPost: false,
         }
     },
     components: {
@@ -166,7 +183,14 @@ export default {
     },
 
     methods: {
-        // Pour récupérer le fichier de l'input de type file associé
+        setCatPost: function (para){
+            this.url = `http://localhost:3000/api/posts?category=${para}`;
+            this.getListOfPosts();
+        },   
+        setCatPostAll: function (){
+            this.url = `http://localhost:3000/api/posts`;
+            this.getListOfPosts();
+        },    // Pour récupérer le fichier de l'input de type file associé
         onFileUpload: function (event) {
             this.postPicture = event.target.files[0]
         },
@@ -189,8 +213,9 @@ export default {
         },
         // Fonction pour récupérer et afficher la liste des posts
         getListOfPosts: function () {
+            if(this.url == 'http://localhost:3000/api/posts?category=Infos') {
             this.axios
-                .get('http://localhost:3000/api/posts', 
+                .get(this.url, 
                     {headers: 
                         { "Authorization": `Bearer ${this.token}`}
                     }
@@ -198,14 +223,116 @@ export default {
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
                     console.log(response.data);
-                    this.listOfPosts = response.data.data;
-                    this.postPicture = response.data.data.picture;
+                    this.listOfPosts = response.data.data.filter(post => post.category == "Infos");
+                    this.postPicture = this.listOfPosts.picture;
                     console.log(this.listOfPosts);
+                    if(this.listOfPosts.length == 0){
+                        this.noPost = true;
+                    }
+                    else{
+                        this.noPost = false;
+                    }
                 })
                 .catch((error) =>{
                     console.log(error.message);
                 }) 
-                // Je vais appeler cette méthode en utilisant les doubles accolades dans l'élément HTML concerné. 
+            }
+            else if(this.url == 'http://localhost:3000/api/posts?category=Projets') {
+            this.axios
+                .get(this.url, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                .then(response => {
+                    console.log(response.data);
+                    this.listOfPosts = response.data.data.filter(post => post.category == "Projets");
+                    this.postPicture = this.listOfPosts.picture;
+                    console.log(this.listOfPosts);
+                    if(this.listOfPosts.length == 0){
+                        this.noPost = true;
+                    }
+                    else{
+                        this.noPost = false;
+                    }
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                }) 
+            }
+            else if(this.url == 'http://localhost:3000/api/posts?category=Entraide') {
+            this.axios
+                .get(this.url, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                .then(response => {
+                    console.log(response.data);
+                    this.listOfPosts = response.data.data.filter(post => post.category == "Entraide");
+                    this.postPicture = this.listOfPosts.picture;
+                    console.log(this.listOfPosts);
+                    if(this.listOfPosts.length == 0){
+                        this.noPost = true;
+                    }
+                    else{
+                        this.noPost = false;
+                    }
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                }) 
+            }
+            else if(this.url == 'http://localhost:3000/api/posts?category=Fun') {
+            this.axios
+                .get(this.url, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                .then(response => {
+                    console.log(response.data);
+                    this.listOfPosts = response.data.data.filter(post => post.category == "Fun");
+                    this.postPicture = this.listOfPosts.picture;
+                    console.log(this.listOfPosts);
+                    if(this.listOfPosts.length == 0){
+                        this.noPost = true;
+                    }
+                    else{
+                        this.noPost = false;
+                    }
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                }) 
+            }
+            else {
+                this.axios
+                    .get('http://localhost:3000/api/posts', 
+                        {headers: 
+                            { "Authorization": `Bearer ${this.token}`}
+                        }
+                    )
+                    // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                    .then(response => {
+                        console.log(response.data);
+                        this.listOfPosts = response.data.data;
+                        this.postPicture = this.listOfPosts.picture;
+                        console.log(this.listOfPosts);
+                        if(this.listOfPosts.length == 0){
+                            this.noPost = true;
+                        }
+                        else{
+                            this.noPost = false;
+                    }
+                    })
+                    .catch((error) =>{
+                        console.log(error.message);
+                    }) 
+            }
         }, 
 
         // Fonction de modification d'un post où l'ID de la carte correspond à l'ID du post. EN paramètre de la fonction, je passerais  le "item.id" récupéré dans la boucle for de l'élément HTML. 

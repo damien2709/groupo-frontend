@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid BarreNav">
-        <nav class="navbar d-flex flex-nowrap" style="background-color: aliceblue;">
+    <div class="container-fluid BarreNav px-0 border-bottom">
+        <nav class="navbar d-flex flex-nowrap sticky-top" style="background-color: aliceblue;">
             <a class="navbar-brand logoNavbar" href="#">
                 <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo" height="50">
             </a>
@@ -20,8 +20,7 @@
                 </div>
             </div>          
         </nav>
-    </div>
-    
+    </div> 
 </template>
 
 <script>
