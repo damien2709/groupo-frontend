@@ -36,15 +36,6 @@
                     </div>
                     <div class="row text-start">
                         <div class="col-md-12">
-                            <label for="username" class="col-form-label text-primary fw-bold">Nom d'utilisateur</label>
-                            <input type="text" 
-                                class="form-control"
-                                id="username" 
-                                name="username"
-                                v-bind:value= "this.username" 
-                                :disabled="modifyStatus ? false : true">
-                        </div>
-                        <div class="col-md-12">
                             <label for="email" class="col-form-label text-primary fw-bold">Email</label>
                             <input type="email" 
                             class="form-control" 
@@ -157,7 +148,6 @@ export default {
             picture: '',
             surname: '',
             name: '',
-            username: '',
             email: '',
             department: '',
             tel: '',
@@ -197,7 +187,6 @@ export default {
         }, 
         // pour récupérer et afficher les infos du profil : je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
         getProfil: function () {
-            console.log(`je vois mon profil et le token : ${this.token}`);
             this.axios
                 .get(`http://localhost:3000/api/users/${this.userId}`, 
                     {headers: 

@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid BarreNav px-0 border-bottom">
-        <nav class="navbar d-flex flex-nowrap sticky-top" style="background-color: aliceblue;">
+        <nav class="navbar d-flex flex-nowrap sticky-top px-5" style="background-color: #4E5166;">
             <a class="navbar-brand logoNavbar" href="#">
                 <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo" height="50">
             </a>
@@ -32,6 +32,7 @@ export default {
         token: JSON.parse(localStorage.getItem("token")),
         userId: JSON.parse(localStorage.getItem("userId")),
         userPicture: '',
+        email: '',
         isLogged: '',
     }
   },
@@ -52,8 +53,8 @@ export default {
                 )
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
-                    console.log(response.data);
                     this.userPicture = response.data.data.picture;
+                    this.email = response.data.data.email;
                 })
                 .catch((error) =>{
                     console.log(error.message);
@@ -66,6 +67,7 @@ export default {
             localStorage.removeItem("userId");
             localStorage.removeItem("userSurname");
             localStorage.removeItem("userName");
+            console.log(`L'utilisateur ${this.email}  s'est déconnecté !`)
             this.$router.push('/login');
         }
         

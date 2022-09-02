@@ -1,8 +1,13 @@
 <template>
     <div class="container bg-white">
         <div class="row">
-            <div class="famousPosts">
-                <h3>Les plus populaires</h3>
+            <div class="usefulInfos">
+                <h3>Les infos utiles</h3>
+                <ul>
+                    <li>L'Express</li>
+                    <li>Le Monde</li>
+                    <li>Google news</li>
+                </ul>
             </div>
         </div>
         <div class="row wallOfPopularPosts">
@@ -145,33 +150,10 @@
 
 <script>
 export default {
-    name: 'FamousPosts',
-
-    mounted: function () {
-        this.getListOfPopularPosts();
-    }, 
+    name: 'UsefulInfos',
 
     methods: {
-        // Fonction pour récupérer et afficher la liste des posts
-        getListOfPopularPosts: function () {
-                this.axios
-                    .get('http://localhost:3000/api/posts', 
-                        {headers: 
-                            { "Authorization": `Bearer ${this.token}`}
-                        }
-                    )
-                    // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
-                    .then(response => {
-                        console.log(response.data);
-                        this.listOfPosts = response.data.data;
-                        this.postPicture = this.listOfPosts.picture;
-                        console.log(this.listOfPosts);
-                    })
-                    .catch((error) =>{
-                        console.log(error.message);
-                    }) 
-            
-        }, 
+        
     }
 
 }

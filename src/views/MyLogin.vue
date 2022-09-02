@@ -11,13 +11,13 @@
                 <div class="form-group">
                     <div class="col">
                         <input 
-                        type="text" 
+                        type="email" 
                         class="form-control" 
-                        id="username" 
-                        name="username"
-                        aria-describedby="userName" 
-                        placeholder="Nom d'utilisateur"
-                        v-model="username" 
+                        id="email" 
+                        name="email"
+                        aria-describedby="helpEmail" 
+                        placeholder="Email"
+                        v-model="email" 
                         required>
                     </div>
                     <div class="col">
@@ -54,15 +54,6 @@
                         required>
                     </div>
                     <input 
-                    type="email" 
-                    class="form-control" 
-                    id="email" 
-                    name="email"
-                    aria-describedby="helpEmail" 
-                    placeholder="Email"
-                    v-model="email" 
-                    required>
-                    <input 
                     type="text" 
                     class="form-control" 
                     id="department" 
@@ -89,6 +80,7 @@
                         required>
                             Je suis d'accord avec les <a href="">termes et conditions</a> du réseau social
                 </p>
+                <p class="loginError text-danger" v-if="loginError == true">L'utilisateur demandé n'existe pas !</p>
                 <!-- EN mode 'login', en cliquant sur le bouton j'appelle la méthode de login-->
                 <!-- Je vais créer un bouton qui aura une classe dynamique en fontion d'un état (true ou false, selon le résultat de la méthode validatedFields qui vérifie que tous les champs sont remplis), grace à v-bind. C'est la classe disabled--><!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
                 <button 
@@ -128,7 +120,6 @@ export default {
         // je crée une donnée/état "mode" qui aura pour valeur initiale "login". Le mode me permettra de switcher entre l'affichage pour se logger ou celui pour créer un compte. 
         mode: 'login', //par défaut au chargement de la page, le mode a pour valeur 'login', on affichera donc les éléments qui concernent ce mode. 
         // je créé maintenant mes données issus des champs qui utilisent v-model, et je leur passe la valeur "" (vide) par défaut. Dés qu'un user va entrer une valeur, la donnée correspondante sera mise à jour. 
-        username : "",
         password: "",
         surname: "",
         name:"",
@@ -137,6 +128,8 @@ export default {
         tel: "",
         userPicture: '',
         checkConditions: false,
+        loginError: false,
+        loginErrorMessage: '',
     }
   },
 
@@ -144,7 +137,7 @@ export default {
     // Je crée la fonction qui va retourner une valeur true ou false (et donc une erreur à afficher) si les champs sont remplis ou pas. 
     validatedFields: function () {
         if(this.mode == 'create') {
-            if(this.username != "" && this.password != "" && this.surname != "" && this.name != "" && this.email != "" && this.checkConditions != false) {
+            if(this.password != "" && this.surname != "" && this.name != "" && this.email != "" && this.checkConditions != false) {
                 return true;
             }
             else {
@@ -152,7 +145,7 @@ export default {
             }
         }
         else {
-            if(this.username != "" && this.password != "")
+            if(this.email != "" && this.password != "")
                 return true;
             else{
                 return false;
@@ -174,6 +167,7 @@ export default {
     // fonction pour l'affichage conditionnel des champs du formulaire login/création de compte
     switchToCreateAccount : function () {
         this.mode = 'create'; // la méthode sert à passer la valeur du 'mode' à 'create' quand on clique sur le lien de création de compte. 
+        this.loginError = false; // S'il y a un message d'erreur de login auparavnt, je l'enlève
     },
 
     // fonction pour renvoyer le user vers la page d'accueil s'il est déjà loggé
@@ -183,7 +177,7 @@ export default {
             this.$router.push('/'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
         }
         else {
-            console.log("l'accès à la page est autorisée")
+            console.log("l'accès à la page d'accueil n'est pas autorisé, vous devez vous logger !")
         }
     }, 
 
@@ -193,7 +187,7 @@ export default {
        this.axios
         .post('http://localhost:3000/api/login', 
             {
-            username: this.username,
+            email: this.email,
             password: this.password
             },
             {headers: 
@@ -205,7 +199,7 @@ export default {
                 console.log(response.status);
                 this.isLogged = true;
                 localStorage.setItem("login", JSON.stringify(this.isLogged));
-                console.log(this.isLogged);
+                console.log(`L'utilisateur ${this.email} s'est bien connecté !`);
                 localStorage.setItem("token", JSON.stringify(response.data.token));
                 localStorage.setItem("userId", JSON.stringify(response.data.data.id));
                 localStorage.setItem("userSurname", JSON.stringify(response.data.data.surname));
@@ -215,17 +209,17 @@ export default {
         )
         .catch((error) =>{
             console.log(error.message);
+            this.loginError = true;
         })
 
     },
     // fonction pour créer un compte
     createAccount: function () {
         let formData = new FormData() // Je crée un nouvel objet formData
-        formData.append('username', this.username) // j'ajoute la propriété et sa valeur à formData
+        formData.append('email', this.email) // j'ajoute la propriété et sa valeur à formData
         formData.append('password', this.password)
         formData.append('surname', this.surname)
         formData.append('name', this.name)
-        formData.append('email', this.email)
         formData.append('department', this.department)
         formData.append('tel', this.tel)
         //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
@@ -237,6 +231,7 @@ export default {
         )
         // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
         .then( () => {
+                console.log(`L'utilisateur ${this.email} a bien été créé !`)
                 this.mode = 'login';
                 this.$router.push('/login'); // je renvoie vers la page de login
             }      

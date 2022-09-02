@@ -1,32 +1,33 @@
 <template>
     <div class="container px-0">
-        <div class="row mb-2 d-flex justify-content-between">
-            <div class="col-8 text-start">
-                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Infos')">Infos</button>
-                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Projets')">Projets</button>
-                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Entraide')">Entraide</button>
-                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Fun')">Fun</button>
-                <button class="btn btn-primary me-2 mb-2" @click="setCatPostAll()">Toutes</button>
-                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Projets')">Populaires</button>
+        <div class="row categories p-2 mb-2 d-flex justify-content-between" style="background: #4E5166;">
+            <div class="col-8 px-0 text-start">
+                <button class="btn btn-primary me-2 " @click="setCatPost('Infos')">Infos</button>
+                <button class="btn btn-primary me-2 " @click="setCatPost('Projets')">Projets</button>
+                <button class="btn btn-primary me-2 " @click="setCatPost('Entraide')">Entraide</button>
+                <button class="btn btn-primary me-2 " @click="setCatPost('Fun')">Fun</button>
+                <button class="btn btn-primary me-2 " @click="setCatPostAll()">Toutes</button>
+                <button class="btn btn-primary me-2 " @click="setCatPost('Projets')">Populaires</button>
                 <p v-if="noPost == true" class="mt-2">Il n'y a pas d'article pour le moment !</p>
             </div>
-            <div class="col-4 text-end">
-                <button class=" btn btn-success me-2" @click="setCatPost('Infos')">Mes posts</button>
+            <div class="col-4 px-0 text-end">
+                <button class=" btn btn-success" @click="setCatPost('Infos')">Mes posts</button>
                 
             </div>
         </div>
         <div class="row wallOfPosts">
 <!-- CARD POST -->
             <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler. Pour les éléments créés qui seront modifiables individuellement, je dois leur attribuer des id dynamiques -->
-            <div class="card cardPost text-start mb-3"  v-for="(item, id) in listOfPosts"  v-bind:key="id">
+            <div class="card cardPost text-start mb-3"  v-for="(item, idx) in listOfPosts"  v-bind:key="idx">
 
     <!-- CARD HEADER NOM USER + MENU POST - DROPDOWN-->
                     <div class="card-header d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                            <img src="../../../backend/images/unknownUser.jpg" id="userPicture" alt="user Profil"/>
-                            <p class="authorPost ms-3 mb-0">{{ item.authorSurname }} {{item.authorName}}</p>
+                            <p>{{ searchAuthor(item.user_id) }}</p>
+                            <img :src="this.authorPicture" class="authorPicture" alt="author Profil"/>
+                            <p class="authorPost ms-3 mb-0">  {{ authorSurname }} {{authorName}}</p>
                         </div>
-                        <div v-if="item.authorId == this.userId">
+                        <div v-if="item.user_id == this.userId">
                             <!-- Ici je crée un bouton dropdown menu avec Bootstrap pour modifier ou supprimer le post, uniquement si le post appartient au user (v-if="item.authorId == this.userId").-->
                             <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -137,14 +138,14 @@
     <!-- CARD BODY AFFICHAGE COMMENTAIRES-->
                     <div class="card-body commentPost w-75 ps-5">
                         <div class="d-flex">
-                            <img src="http://localhost:3000/images/unknownUser.jpg" id="userPicture" alt="user Profil" class="me-2"/>
+                            <img src="http://localhost:3000/images/unknownUser.jpg" class="authorPicture me-2" alt="user Profil"/>
                             <p class="contentPost card-text bg-light py-2 px-4">{{ item.content }}</p>
                         </div>
                     </div>
 
     <!-- CARD FOOTER ECRIRE UN COMMENTAIRE -->
                     <div class="like card-footer d-flex bg-white">
-                        <img :src="userPicture" id="userPicture" alt="user Profil" class="me-2"/>
+                        <img :src="userPicture" class="authorPicture me-2" alt="user Profil"/>
                         <input class="form-control inputComment" type="text" placeholder="Écrivez un commentaire">
                     </div>
                 </div>  
@@ -160,6 +161,8 @@ export default {
     data () {
         return {
             listOfPosts : [],
+            listOfUsers: [],
+            author: {},
             token: JSON.parse(localStorage.getItem("token")),
             thatsMyArticle: false,
             userId: JSON.parse(localStorage.getItem("userId")),
@@ -169,6 +172,9 @@ export default {
             usersLike: [],
             userPicture: '',
             postPicture: '',
+            authorPicture: '',
+            authorSurname: '',
+            authorName:'',
             url: '',
             noPost: false,
         }
@@ -180,6 +186,7 @@ export default {
     mounted: function() {
         this.getListOfPosts();
         this.getProfil();
+        this.getListOfUsers();
     },
 
     methods: {
@@ -204,12 +211,33 @@ export default {
                 )
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
-                    console.log(response.data);
                     this.userPicture = response.data.data.picture;
                 })
                 .catch((error) =>{
                     console.log(error.message);
                 })
+        },
+        // On récupère la liste des utilisateurs
+        getListOfUsers: function() {
+            this.axios
+                .get(`http://localhost:3000/api/users/`, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API qui sera la liste des users. Je filtre ensuite l'utilisateur dans le tableau par son id. 
+                .then(response => {
+                    this.listOfUsers = response.data.data;
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                })
+        },
+        searchAuthor: function (para) {
+                    this.author = this.listOfUsers.filter(user => user.id == para);
+                    this.authorPicture = this.author[0].picture;
+                    this.authorName = this.author[0].name;
+                    this.authorSurname = this.author[0].surname;
         },
         // Fonction pour récupérer et afficher la liste des posts
         getListOfPosts: function () {
@@ -298,7 +326,7 @@ export default {
                     this.listOfPosts = response.data.data.filter(post => post.category == "Fun");
                     this.postPicture = this.listOfPosts.picture;
                     console.log(this.listOfPosts);
-                    if(this.listOfPosts.length == 0){
+                    if(this.listOfPosts.length == 0){ // si la liste des posts de la catégorie est vide, j'affiche que la liste est vide 
                         this.noPost = true;
                     }
                     else{
@@ -321,7 +349,6 @@ export default {
                         console.log(response.data);
                         this.listOfPosts = response.data.data;
                         this.postPicture = this.listOfPosts.picture;
-                        console.log(this.listOfPosts);
                         if(this.listOfPosts.length == 0){
                             this.noPost = true;
                         }
@@ -471,7 +498,7 @@ export default {
     width: 29%;
 }
 
-#userPicture {
+.authorPicture {
     height: 35px;
     width: 35px;
     border-radius: 50%;
@@ -492,8 +519,13 @@ export default {
     
 }
 
+.categories {
+    box-shadow: 1px 1px 3px rgb(220, 219, 219);
+    border-radius: 5px;
+}
+
 .card-img-top{
-        height: auto;
+    height: auto;
 }
 
 .menuImage {

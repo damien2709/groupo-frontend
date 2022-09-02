@@ -1,7 +1,7 @@
 <template>
-    <div class="container d-flex my-2 p-3 bg-white">
+    <div class="container d-flex my-2 p-3 bg-white" >
         <img :src="userPicture" id="userPicture" alt="user Profil" class="me-2"/>
-        <input class="inputPost w-100 p-2" data-bs-toggle="modal" data-bs-target="#creationPost" :placeholder=" 'Quoi de neuf' + ' '+ this.authorSurname + ' ?'">
+        <input class="inputPost w-100 p-2" data-bs-toggle="modal" data-bs-target="#creationPost" :placeholder=" 'Quoi de neuf' + ' '+ this.userSurname + ' ?'">
         <!-- Modal -->
         <div class="modal fade" id="creationPost" tabindex="-1" aria-labelledby="creationPost" aria-hidden="true">
             <div class="modal-dialog" >
@@ -72,12 +72,10 @@ export default {
 
     data () {
         return {
-            authorId: JSON.parse(localStorage.getItem("userId")),
-            authorSurname: JSON.parse(localStorage.getItem("userSurname")),
-            authorName: JSON.parse(localStorage.getItem("userName")),
             token: JSON.parse(localStorage.getItem("token")),
             userId: JSON.parse(localStorage.getItem("userId")),
             userPicture: '',
+            userSurname: '',
             postPicture: '',
             title: "",
             content: "",
@@ -105,10 +103,10 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                // je récupère la réponse de l'API, je récupère .
                 .then(response => {
-                    console.log(response.data);
                     this.userPicture = response.data.data.picture;
+                    this.userSurname = response.data.data.surname;
                 })
                 .catch((error) =>{
                     console.log(error.message);
@@ -120,15 +118,12 @@ export default {
         this.axios
             .post('http://localhost:3000/api/posts', 
                 {
-                    authorId: this.authorId,
-                    authorSurname: this.authorSurname,
-                    authorName: this.authorName,
                     title: this.title,
                     content: this.content,
                     category: this.category,
                     nbLike: this.nbLike,
                     picture: this.postPicture,
-                    UserId: this.authorId,
+                    userId: this.userId,
                 },
                 {headers: 
                     { 

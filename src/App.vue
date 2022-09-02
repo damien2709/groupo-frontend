@@ -17,23 +17,12 @@ export default {
 <!-- La balise "style" accueille le code CSS de notre composant. Il y a une feuille de style incorporée pour chaque composant.-->
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+
+  font-family: 'Lato', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
 </style>

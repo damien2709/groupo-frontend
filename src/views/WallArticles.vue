@@ -15,7 +15,7 @@
 
             </div>
             <div class="col-lg-4">
-                <FamousPosts/>
+                <UsefulInfos/>
             </div>
             
         </div>
@@ -30,7 +30,7 @@ import BarreNav from '@/components/BarreNav.vue'
 import BarrePresentation from '@/components/BarrePresentation.vue'
 import BarreCreationPost from '@/components/BarreCreationPost.vue'
 import AllPosts from '@/components/AllPosts.vue' // import du composant
-import FamousPosts from '@/components/FamousPosts.vue' // import du composant
+import UsefulInfos from '@/components/UsefulInfos.vue' // import du composant
 
 export default {
     name: 'WallArticles',
@@ -39,7 +39,7 @@ export default {
         BarrePresentation,
         BarreCreationPost,
         AllPosts,
-        FamousPosts,
+        UsefulInfos,
  
     },
     //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
