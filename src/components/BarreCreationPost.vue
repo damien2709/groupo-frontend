@@ -123,7 +123,7 @@ export default {
                     category: this.category,
                     nbLike: this.nbLike,
                     picture: this.postPicture,
-                    userId: this.userId,
+                    userId: this.userId, // pour le token
                 },
                 {headers: 
                     { 

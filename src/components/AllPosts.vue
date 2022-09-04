@@ -27,7 +27,7 @@
                             <img :src="this.authorPicture" class="authorPicture" alt="author Profil"/>
                             <p class="authorPost ms-3 mb-0">  {{ authorSurname }} {{authorName}}</p>
                         </div>
-                        <div v-if="item.user_id == this.userId">
+                        <div v-if="item.user_id == this.userId || isAdmin == true">
                             <!-- Ici je crée un bouton dropdown menu avec Bootstrap pour modifier ou supprimer le post, uniquement si le post appartient au user (v-if="item.authorId == this.userId").-->
                             <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -81,7 +81,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!! Ici je passe en paramètres de la fonction l'ID du post (item) récupéré dans la boucle, puis les id dynamiques des inputs du titre, du content, de la catégorie, pour que le bon post soit modifié ! -->
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="modifyPost(item.id, 'titlePost'+item.id, 'contentPost'+item.id, 'categoryPost'+item.id, )">Modifier le post</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="modifyPost(item.id, 'titlePost'+item.id, 'contentPost'+item.id, 'categoryPost'+item.id, item.user_id)">Modifier le post</button>
                                     </div>
                                 </div>
                             </div>
@@ -175,6 +175,7 @@ export default {
             authorPicture: '',
             authorSurname: '',
             authorName:'',
+            isAdmin: false,
             url: '',
             noPost: false,
         }
@@ -212,6 +213,7 @@ export default {
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
                     this.userPicture = response.data.data.picture;
+                    this.isAdmin = response.data.data.isAdmin;
                 })
                 .catch((error) =>{
                     console.log(error.message);
@@ -363,32 +365,38 @@ export default {
         }, 
 
         // Fonction de modification d'un post où l'ID de la carte correspond à l'ID du post. EN paramètre de la fonction, je passerais  le "item.id" récupéré dans la boucle for de l'élément HTML. 
-        modifyPost: function (para, title, content, category) {
-            this.axios
-                .put(`http://localhost:3000/api/posts/${para}`, 
-                    {
-                        title: document.getElementById(`${title}`).value, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
-                        content: document.getElementById(`${content}`).value,
-                        category: document.getElementById(`${category}`).value,
-                        picture: this.postPicture,
-                    },
-                    {headers: 
-                        { 
-                            "Authorization": `Bearer ${this.token}`,
-                            "Content-Type": 'multipart/form-data'
+        modifyPost: function (para, title, content, category, user_id) {
+            // Si l'utilisateur est l'auteur du post ou si l'utilisateur est admin, on peut effectuer la requête de modification de post
+            if(user_id == this.userId || this.isAdmin == true) {
+                this.axios
+                    .put(`http://localhost:3000/api/posts/${para}`, 
+                        {
+                            title: document.getElementById(`${title}`).value, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
+                            content: document.getElementById(`${content}`).value,
+                            category: document.getElementById(`${category}`).value,
+                            picture: this.postPicture,
+                        },
+                        {headers: 
+                            { 
+                                "Authorization": `Bearer ${this.token}`,
+                                "Content-Type": 'multipart/form-data'
+                            }
                         }
-                    }
-                )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
-                .then(response => {
-                    console.log(response.data);
-                    this.$router.go();
-                })
-                .catch((error) =>{
-                    console.log(error.message);
-                })
+                    )
+                    // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                    .then(response => {
+                        console.log(response.data);
+                        this.$router.go();
+                    })
+                    .catch((error) =>{
+                        console.log(error.message);
+                    })
+            }
+            // Sinon on ne passe pas de requête et on affiche une erreur
+            else {
+                console.log("Vous n'êtes pas autorisé à modifier cet article !");
+            }
         },
-
         // Fonction de suppression d'un post. 
         deletePost: function (para) {
             this.axios
