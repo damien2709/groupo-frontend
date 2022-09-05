@@ -5,19 +5,16 @@
         </div>
     </div>
     <div class="container">
-        <div class="row">
+        <div class="row col-lg-8 mx-auto">
             <BarrePresentation/>
             <BarreCreationPost/>
         </div>
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-8 mx-auto">
                 <AllPosts :key="componentKey"/>
 
             </div>
-            <div class="col-lg-4">
-                <UsefulInfos/>
-            </div>
-            
+
         </div>
     </div>
 
@@ -30,7 +27,6 @@ import BarreNav from '@/components/BarreNav.vue'
 import BarrePresentation from '@/components/BarrePresentation.vue'
 import BarreCreationPost from '@/components/BarreCreationPost.vue'
 import AllPosts from '@/components/AllPosts.vue' // import du composant
-import UsefulInfos from '@/components/UsefulInfos.vue' // import du composant
 
 export default {
     name: 'WallArticles',
@@ -39,7 +35,6 @@ export default {
         BarrePresentation,
         BarreCreationPost,
         AllPosts,
-        UsefulInfos,
  
     },
     //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
