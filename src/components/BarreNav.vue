@@ -1,24 +1,20 @@
 <template>
     <div class="container-fluid BarreNav px-0 border-bottom">
-        <nav class="navbar d-flex flex-nowrap sticky-top px-5" style="background-color: #4E5166;">
-            <a class="navbar-brand logoNavbar" href="#">
-                <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo" height="50">
-            </a>
-            <form class="input-group d-flex me-3 w-50" role="search">
-                <input class="form-control" type="search" placeholder="Rechercher vos articles par mots clés !" aria-label="Search">
-                <button class="btn btn-outline-primary" type="button"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
-            </form>
-            <div class="profil-menu dropdown">
-                <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
-                <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img :src="userPicture" alt="" class="userPicture">
+        <nav class="navbar sticky-top col-lg-8 d-flex justify-content-around" style="background-color: #4E5166;">
+                <a class="navbar-brand logoNavbar" href="#">
+                    <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo" height="50">
                 </a>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <router-link class="dropdown-item" to="/">Accueil</router-link>
-                    <router-link class="dropdown-item" to="/profil">Profil</router-link>
-                    <a href="#"  class="dropdown-item" @click="deconnectUser()">Déconnexion</a>
-                </div>
-            </div>          
+                <div class="profil-menu dropdown">
+                    <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
+                    <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img :src="userPicture" alt="" class="userPicture">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <router-link class="dropdown-item" to="/">Accueil</router-link>
+                        <router-link class="dropdown-item" to="/profil">Profil</router-link>
+                        <a href="#"  class="dropdown-item" @click="deconnectUser()">Déconnexion</a>
+                    </div>
+                </div>      
         </nav>
     </div> 
 </template>
@@ -34,6 +30,7 @@ export default {
         userPicture: '',
         email: '',
         isLogged: '',
+
     }
   },
 

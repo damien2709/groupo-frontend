@@ -1,21 +1,24 @@
 <template>
+<!-- Bannière des catégories et de recherche-->
     <div class="container px-0">
-        <div class="row categories p-2 mb-2 d-flex justify-content-between" style="background: #4E5166;">
-            <div class="col-8 px-0 text-start">
-                <button class="btn btn-primary me-2 " @click="setCatPost('Infos')">Infos</button>
-                <button class="btn btn-primary me-2 " @click="setCatPost('Projets')">Projets</button>
-                <button class="btn btn-primary me-2 " @click="setCatPost('Entraide')">Entraide</button>
-                <button class="btn btn-primary me-2 " @click="setCatPost('Fun')">Fun</button>
-                <button class="btn btn-primary me-2 " @click="setCatPostAll()">Toutes</button>
-                <button class="btn btn-primary me-2 " @click="setCatPost('Projets')">Populaires</button>
-                <p v-if="noPost == true" class="mt-2">Il n'y a pas d'article pour le moment !</p>
-            </div>
-            <div class="col-4 px-0 text-end">
-                <button class=" btn btn-success" @click="setCatPost('Infos')">Mes posts</button>
-                
+        <div class="row categories p-2 mb-2 d-flex" style="background: #4E5166;">
+            <div class="px-0 text-start">
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Infos')">Infos</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Projets')">Projets</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Entraide')">Entraide</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Fun')">Fun</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPostAll()">Toutes</button>
+                <button class=" btn btn-success me-2 mb-2" @click="setCatPost('Infos')">Mes posts</button> 
+                <form class="input-group d-flex me-3" role="search">
+                    <input class="form-control" type="search" placeholder="Recherche par mots clés !" aria-label="Search" v-model="searchWords">
+                    <button class="btn btn-outline-primary" type="button" @click="setSearch()"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
+            </form>
             </div>
         </div>
+         <p v-if="noPost == true" class="mt-2">Il n'y a pas d'article pour le moment !</p> 
         <div class="row wallOfPosts">
+<!-- Barre de recherche-->
+
 <!-- CARD POST -->
             <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler. Pour les éléments créés qui seront modifiables individuellement, je dois leur attribuer des id dynamiques -->
             <div class="card cardPost text-start mb-3"  v-for="(item, idx) in listOfPosts"  v-bind:key="idx">
@@ -177,6 +180,7 @@ export default {
             authorName:'',
             isAdmin: false,
             url: '',
+            searchWords: '',
             noPost: false,
         }
     },
@@ -194,7 +198,11 @@ export default {
         setCatPost: function (para){
             this.url = `http://localhost:3000/api/posts?category=${para}`;
             this.getListOfPosts();
-        },   
+        },
+        setSearch: function() {
+            this.url = `http://localhost:3000/api/posts?content=${this.searchWords}`;
+            this.getListOfPosts();
+        },  
         setCatPostAll: function (){
             this.url = `http://localhost:3000/api/posts`;
             this.getListOfPosts();
@@ -243,7 +251,7 @@ export default {
         },
         // Fonction pour récupérer et afficher la liste des posts
         getListOfPosts: function () {
-            if(this.url == 'http://localhost:3000/api/posts?category=Infos') {
+            if(this.url == `http://localhost:3000/api/posts?content=${this.searchWords}`) {
             this.axios
                 .get(this.url, 
                     {headers: 
@@ -252,8 +260,32 @@ export default {
                 )
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
-                    console.log(response.data);
-                    this.listOfPosts = response.data.data.filter(post => post.category == "Infos");
+                    console.log(response.data); // je récupère le tableau des posts de la catégorie 
+                    this.listOfPosts = response.data.data;
+                    this.postPicture = this.listOfPosts.picture;
+                    console.log(this.listOfPosts);
+                    if(this.listOfPosts.length == 0){
+                        this.noPost = true;
+                    }
+                    else{
+                        this.noPost = false;
+                    }
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                }) 
+            }
+            else if(this.url == 'http://localhost:3000/api/posts?category=Infos') {
+            this.axios
+                .get(this.url, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                .then(response => {
+                    console.log(response.data); // je récupère le tableau des posts de la catégorie 
+                    this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
                     console.log(this.listOfPosts);
                     if(this.listOfPosts.length == 0){
@@ -277,7 +309,7 @@ export default {
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
                     console.log(response.data);
-                    this.listOfPosts = response.data.data.filter(post => post.category == "Projets");
+                    this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
                     console.log(this.listOfPosts);
                     if(this.listOfPosts.length == 0){
@@ -301,7 +333,7 @@ export default {
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
                     console.log(response.data);
-                    this.listOfPosts = response.data.data.filter(post => post.category == "Entraide");
+                    this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
                     console.log(this.listOfPosts);
                     if(this.listOfPosts.length == 0){
@@ -325,7 +357,7 @@ export default {
                 // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
                     console.log(response.data);
-                    this.listOfPosts = response.data.data.filter(post => post.category == "Fun");
+                    this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
                     console.log(this.listOfPosts);
                     if(this.listOfPosts.length == 0){ // si la liste des posts de la catégorie est vide, j'affiche que la liste est vide 
