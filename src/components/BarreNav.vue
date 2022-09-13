@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid BarreNav px-0 border-bottom">
-        <nav class="navbar sticky-top col-lg-8 d-flex justify-content-around" style="background-color: #4E5166;">
+        <nav class="navbar sticky-top  d-flex justify-content-around" style="background-color: #4E5166;">
                 <a class="navbar-brand logoNavbar" href="#">
                     <img src="../assets/images/logo_groupo.png" class="logo d-inline-block align-top" alt="groupomania logo" height="50">
                 </a>

@@ -143,7 +143,7 @@ export default {
     },
     data() {
         return {
-            userId: 0,
+            userId: '',
             token: '',
             picture: '',
             surname: '',
@@ -199,7 +199,6 @@ export default {
                     this.surname = response.data.data.surname;
                     console.log(response.data.data.surname);
                     this.name = response.data.data.name;
-                    this.username = response.data.data.username;
                     this.email = response.data.data.email;
                     this.department = response.data.data.department;
                     this.tel = response.data.data.tel;
@@ -219,7 +218,6 @@ export default {
                     {
                         surname: this.surname, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
                         name: this.name,
-                        username: document.getElementById('username').value,
                         email: document.getElementById('email').value, 
                         department: document.getElementById('department').value,
                         tel: document.getElementById('tel').value,
