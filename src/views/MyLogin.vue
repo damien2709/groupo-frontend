@@ -80,7 +80,7 @@
                         required>
                             Je suis d'accord avec les <a href="">termes et conditions</a> du réseau social
                 </p>
-                <p class="loginError text-danger" v-if="loginError == true">L'utilisateur demandé n'existe pas !</p>
+                <p class="loginError text-danger" v-if="loginError == true">Veuillez vérifier votre email et votre mot de passe ! </p>
                 <!-- EN mode 'login', en cliquant sur le bouton j'appelle la méthode de login-->
                 <!-- Je vais créer un bouton qui aura une classe dynamique en fontion d'un état (true ou false, selon le résultat de la méthode validatedFields qui vérifie que tous les champs sont remplis), grace à v-bind. C'est la classe disabled--><!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
                 <button 
