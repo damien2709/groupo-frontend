@@ -119,7 +119,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteAccount ()">Supprimer</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteAccount()">Supprimer</button>
                                     </div>
                                 </div>
                             </div>
@@ -245,7 +245,11 @@ export default {
         // Une fonction pour supprimer son compte
         deleteAccount: function () {
                 this.axios
-                    .delete(`http://localhost:3000/api/users/${this.userId}`)
+                    .delete(`http://localhost:3000/api/users/${this.userId}`,
+                        {headers: 
+                            { "Authorization": `Bearer ${this.token}`}
+                        }
+                    )
                     .then(response => {
                         console.log(response.data.message);
                         localStorage.removeItem("token");
@@ -259,8 +263,6 @@ export default {
                         console.log(error.message);
                     })
             }
-
-
      }
 }
         
