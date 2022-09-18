@@ -299,7 +299,7 @@ export default {
                     console.log(error.message);
                 }) 
             }
-            else if(this.url == 'http://localhost:3000/api/posts?category=Projets') {
+            else if(this.url == 'http://localhost:3000/api/posts?category=Projet') {
             this.axios
                 .get(this.url, 
                     {headers: 
