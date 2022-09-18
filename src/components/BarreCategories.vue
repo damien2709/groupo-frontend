@@ -7,7 +7,7 @@
                     <h5 class="card-title">Infos</h5>
                 </div>
             </button>
-            <button class="card col-md-6 col-lg-3 h-25" @click="reqCat('Projets')">
+            <button class="card col-md-6 col-lg-3 h-25" @click="reqCat('Projet')">
                 <img class="card-img-top" src="../assets/images/projet-1.jpeg" alt="Projet de Groupomania">
                 <div class="card-body">
                     <h5 class="card-title">Projets</h5>

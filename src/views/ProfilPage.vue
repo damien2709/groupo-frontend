@@ -156,8 +156,8 @@ export default {
         }
     },
 
-    //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
-    mounted: function() {
+    //pour exécuter la méthode avant le montage de la page, on va l'appeler dans le hook "created"
+    created: function() {
         this.getTheProfilPage();
     },
 

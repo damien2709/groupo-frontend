@@ -4,7 +4,7 @@
         <div class="row categories p-2 mb-2 d-flex" style="background: #4E5166;">
             <div class="px-0 text-start">
                 <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Infos')">Infos</button>
-                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Projets')">Projets</button>
+                <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Projet')">Projets</button>
                 <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Entraide')">Entraide</button>
                 <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Fun')">Fun</button>
                 <button class="btn btn-primary me-2 mb-2" @click="setCatPostAll()">Toutes</button>
@@ -102,7 +102,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deletePost(item.id)">Supprimer</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deletePost(item.id, item.user_id)">Supprimer</button>
                                     </div>
                                 </div>
                             </div>
@@ -407,6 +407,8 @@ export default {
                             content: document.getElementById(`${content}`).value,
                             category: document.getElementById(`${category}`).value,
                             picture: this.postPicture,
+                            user_id: this.userId,
+                            isAdmin: this.isAdmin,
                         },
                         {headers: 
                             { 
@@ -418,7 +420,7 @@ export default {
                     // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                     .then(response => {
                         console.log(response.data);
-                        this.$router.go();
+                        this.getListOfPosts();
                     })
                     .catch((error) =>{
                         console.log(error.message);
@@ -430,20 +432,28 @@ export default {
             }
         },
         // Fonction de suppression d'un post. 
-        deletePost: function (para) {
-            this.axios
-                .delete(`http://localhost:3000/api/posts/${para}`, 
-                    {headers: 
-                        { "Authorization": `Bearer ${this.token}`}
-                    }
-                )
-                .then(response => {
-                    console.log(response.data.message);
-                    this.$router.go(); // pour enlever le modal qui est bloqué suite à la supression du profil. Pas besoin de renvoyer vers la page login, comme l'utilisateur n'est plus connecté, il y est automatiquement redirigé   
-                })
-                .catch(error => {
-                    console.log(error.message);
-                })
+        deletePost: function (para, user_id) {
+            if(user_id == this.userId || this.isAdmin == true) {
+                this.axios
+                    .delete(`http://localhost:3000/api/posts/${para}`,
+                        {
+                            data: {user_id: this.userId},
+                            headers: { "Authorization": `Bearer ${this.token}`}
+
+                        }
+                    )
+                    .then(response => {
+                        console.log(response.data.message);
+                        this.getListOfPosts(); // pour enlever le modal qui est bloqué suite à la supression 
+                    })
+                    .catch(error => {
+                        console.log(error.message);
+                    })
+            }
+            // Sinon on ne passe pas de requête et on affiche une erreur
+            else {
+                console.log("Vous n'êtes pas autorisé à modifier cet article !");
+            }
         },
         // Fonction d'ajout ou de suppression du user du tableau des likers de post. Permet de savoir qui aime tel ou tel post et d'afficher la liste des likers
         addLike: function (para, id, para2) {
@@ -462,11 +472,13 @@ export default {
                             if (myIndex == -1) {
                                 document.getElementById(id).classList.add('text-primary'); // j'ajoute la classe "text-primary" de l'élément avec l'id concerné. Comme c'est un id, je peux écraser la méthode "doLike" qui agit sur la classe pour changer la couleur des posts que le user aime déjà. 
                                 this.usersLike.push(this.userId);
+                                console.log(this.usersLike);
                                 para2.nbLike++;
                                 console.log(`Le user avec l'ID ${this.userId} a bien été ajouté en frontend de la liste des likers pour cet article`)
                                 this.axios
                                     .put(`http://localhost:3000/api/posts/${para}`, 
                                         {
+                                            user_id: this.userId,
                                             usersLike: this.usersLike,
                                             nbLike: para2.nbLike,
                                         },
@@ -497,6 +509,7 @@ export default {
                                 this.axios
                                     .put(`http://localhost:3000/api/posts/${para}`, 
                                         {
+                                            user_id: this.userId,
                                             usersLike: this.usersLike,
                                             nbLike: para2.nbLike,
                                         },

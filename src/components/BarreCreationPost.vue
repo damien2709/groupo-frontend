@@ -21,20 +21,21 @@
                                 name="title"
                                 placeholder="Titre">
                             </div>
-                            <div>
+                            <div class="required d-flex w-75 mx-auto">
                                 <textarea 
                                 type="text" 
-                                class="form-control content mt-3 mx-auto" 
-                                style="width: 75%;" 
+                                class="form-control content mt-3 mx-auto"  
                                 v-model="content" 
                                 name="content"
+                                required
                                 placeholder="Ecrivez votre article !"></textarea>
                             </div>
                             <div class="mx-auto text-start" style="width: 75%;">
-                                <p class="me-3 mt-2">Choisissez une catégorie : </p>
+                                <p class="me-3 mt-2 required d-flex">Choisissez une catégorie : </p>
                                 <select 
                                 v-model="category"
                                 name="category" 
+                                required
                                 class="form-select mt-3">
                                     <option value="" disabled>Catégorie</option>
                                     <option>Fun</option>
@@ -57,7 +58,11 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                         <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
-                        <button type="button" class="btn btn-primary" @click="createPost()">Créer le post</button>
+                        <button 
+                        type="button" 
+                        class="btn btn-primary"
+                        :class="{'disabled' : !validatedFields}" 
+                        @click="createPost()">Créer le post</button>
                     </div>
                 </div>
             </div>
@@ -83,6 +88,18 @@ export default {
             nbLike: 0, 
             showModal: false,
         }
+    },
+
+    computed: {
+        // Je crée la fonction qui va retourner une valeur true ou false (et donc une erreur à afficher) si les champs sont remplis ou pas. 
+        validatedFields: function () {
+                if(this.content != "" && this.category != "") {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
     },
 
     //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
@@ -173,6 +190,14 @@ export default {
     width: 40px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.required::after {
+    content: "*";
+    color: red;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 5px;
 }
 
 </style>

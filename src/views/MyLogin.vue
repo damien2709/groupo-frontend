@@ -9,7 +9,7 @@
             <h1 class= "login_title" v-else>Créer son compte</h1>
             <form class="form col-10 col-md-8 col-lg-6" id="form" action="">
                 <div class="form-group">
-                    <div class="col">
+                    <div class="col required d-flex">
                         <input 
                         type="email" 
                         class="form-control" 
@@ -17,10 +17,10 @@
                         name="email"
                         aria-describedby="helpEmail" 
                         placeholder="Email"
-                        v-model="email" 
+                        v-model="email"
                         required>
                     </div>
-                    <div class="col">
+                    <div class="col required d-flex">
                         <!-- SI toutes mes règles de validation sont contrôlées dans le backend, je suis obligé de valider le mot de passe initial dans html5 car dans le back, la règle de validation s'applique après le traitement Bcrypt et pas à l'envoie de la requête !-->
                         <input 
                         type="password" 
@@ -30,28 +30,34 @@
                         placeholder="Mot de passe" 
                         v-model="password" 
                         required  
-                        pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" />
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 3}$" />
                     </div>
                 </div>
+                <p class="loginError text-danger" v-if="loginError == true" >{{ this.loginErrorMessage }} </p>
+                <p class="text-success" v-if="mode == 'create'">Le mot de passe doit comprendre au minimum 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial</p>
                 <div class="form-group" v-if="mode == 'create'" >
                     <div class="d-flex justify-content-between" >
-                        <input 
-                        type="text" 
-                        class="form-control me-2" 
-                        id="surname"
-                        name="surname" 
-                        aria-describedby="Surname" 
-                        placeholder="Prénom"
-                        v-model="surname" 
-                        required>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="name" 
-                        aria-describedby="Name" 
-                        placeholder="Nom"
-                        v-model="name" 
-                        required>
+                        <div class="d-flex required">
+                            <input 
+                            type="text" 
+                            class="form-control" 
+                            id="surname"
+                            name="surname" 
+                            aria-describedby="Surname" 
+                            placeholder="Prénom"
+                            v-model="surname" 
+                            required>
+                        </div>
+                        <div class="d-flex required">
+                            <input 
+                            type="text" 
+                            class="form-control" 
+                            id="name" 
+                            aria-describedby="Name" 
+                            placeholder="Nom"
+                            v-model="name" 
+                            required>
+                        </div>
                     </div>
                     <input 
                     type="text" 
@@ -69,18 +75,19 @@
                     placeholder="Tel du poste"
                     v-model="tel">
                 </div>
-                <p v-if="mode == 'create'">
+                <div class="d-flex required" v-if="mode == 'create'">
                     <!-- Ici on va créer un input checkbox qui devra être coché pour valider le formulaire. On va devoir envoyer la valeur de l'input une fois validé (value="ok") à l'API (propriété "checkConditions" du modèle User)pour que le formulaire ne soit pas envoyé sans que la box soit checkée. -->
-                    <input 
-                        class="form-check-input" 
-                        type="checkbox" 
-                        id="agrementCheck"
-                        v-model="checkConditions"
-                        @click="validateConditions()" 
-                        required>
-                            Je suis d'accord avec les <a href="">termes et conditions</a> du réseau social
-                </p>
-                <p class="loginError text-danger" v-if="loginError == true">Veuillez vérifier votre email et votre mot de passe ! </p>
+                        <input 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            id="agrementCheck"
+                            v-model="checkConditions"
+                            @click="validateConditions()" 
+                            required>
+                            <p class="ps-1">Je suis d'accord avec les <a href="">termes et conditions</a> du réseau social</p>
+                            
+
+                </div>
                 <!-- EN mode 'login', en cliquant sur le bouton j'appelle la méthode de login-->
                 <!-- Je vais créer un bouton qui aura une classe dynamique en fontion d'un état (true ou false, selon le résultat de la méthode validatedFields qui vérifie que tous les champs sont remplis), grace à v-bind. C'est la classe disabled--><!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
                 <button 
@@ -203,12 +210,14 @@ export default {
                 localStorage.setItem("token", JSON.stringify(response.data.token));
                 localStorage.setItem("userId", JSON.stringify(response.data.data.id));
                 localStorage.setItem("userSurname", JSON.stringify(response.data.data.surname));
-                localStorage.setItem("userName", JSON.stringify(response.data.data.name))
+                localStorage.setItem("userName", JSON.stringify(response.data.data.name));
                 this.$router.push('/'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
             }      
         )
         .catch((error) =>{
-            console.log(error.message);
+            //on va récupérer le message d'erreur construit dans le backend
+            console.log(error.response.data.message);
+            this.loginErrorMessage = error.response.data.message;
             this.loginError = true;
         })
 
@@ -237,7 +246,10 @@ export default {
             }      
         )
         .catch((error) =>{
-            console.log(error.message);
+            //on va récupérer le message d'erreur construit dans le backend
+            console.log(error.response.data.message.split(':')[1]);
+            this.loginErrorMessage = error.response.data.message.split(':')[1];
+            this.loginError = true;
         })
     }
 
@@ -280,4 +292,12 @@ export default {
 .creationCompte {
     margin-top: 40px;
 }
+
+.required::after {
+    content: "*";
+    color: red;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
 </style>
