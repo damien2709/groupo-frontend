@@ -1,5 +1,6 @@
+<!-- La barre de recherche par catégories et mots clés + le mur des posts -->
 <template>
-<!-- Bannière des catégories et de recherche-->
+<!-- Bannière de recherche par catégorie ou mots clés-->
     <div class="container px-0">
         <div class="row categories p-2 mb-2 d-flex" style="background: #4E5166;">
             <div class="px-0 text-start">
@@ -17,33 +18,29 @@
         </div>
          <p v-if="noPost == true" class="mt-2">Il n'y a pas d'article pour le moment !</p> 
         <div class="row wallOfPosts">
-<!-- Barre de recherche-->
 
-<!-- CARD POST -->
-            <!-- Je crée une boucle dans la list des posts avec la clé paramétrée sur "index" pour dire à la boucle sur quel item boucler. Pour les éléments créés qui seront modifiables individuellement, je dois leur attribuer des id dynamiques -->
+<!-- Affichage des posts -->
+    <!-- CARD POST -->
             <div class="card cardPost text-start mb-3"  v-for="(item, idx) in listOfPosts"  v-bind:key="idx">
-
-    <!-- CARD HEADER NOM USER + MENU POST - DROPDOWN-->
+        <!-- CARD HEADER NOM USER + MENU POST - DROPDOWN-->
                     <div class="card-header d-flex justify-content-between">
                         <div class="d-flex align-items-center">
                             <p>{{ searchAuthor(item.user_id) }}</p>
-                            <img :src="this.authorPicture" class="authorPicture" alt="author Profil"/>
+                            <img :src="this.authorPicture" class="authorPicture" alt="USER"/>
                             <p class="authorPost ms-3 mb-0">  {{ authorSurname }} {{authorName}}</p>
                         </div>
                         <div v-if="item.user_id == this.userId || isAdmin == true">
-                            <!-- Ici je crée un bouton dropdown menu avec Bootstrap pour modifier ou supprimer le post, uniquement si le post appartient au user (v-if="item.authorId == this.userId").-->
                             <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img class="menuImage" src="../assets/images/dots.png" alt="">
                                 </a>
-                                <!-- Pour que chaque modal soit bien associé au dropdown de chaque item, (et pas un dropdown unique pour l'ensemble des posts!) il faut générer pour chaque modal un id dynamique basé sur l'id du post ():id="'modPost'+item.id"), puis lui associer le lien qui l'active reprenant comme targe l'id dynamique (:data-bs-target="'#modPost'+item.id") ! -->
                                 <div class="dropdown-menu">
                                     <a href="" class="dropdown-item" data-bs-toggle="modal" :data-bs-target="'#modPost'+item.id">Modifier l'article</a>
                                     <a href="" class="dropdown-item" data-bs-toggle="modal" :data-bs-target="'#suppPost'+item.id">Supprimer l'article</a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Modal Modification article. Il doit avoir un id dynamique pour correspondre à son lien qui est attaché à chaque post.-->
+                        <!-- Modal Modification article -->
                         <div class="modal fade" :id="'modPost'+item.id" tabindex="-1" aria-labelledby="modificationPost" aria-hidden="true">
                             <div class="modal-dialog" >
                                 <div class="modal-content">
@@ -51,7 +48,6 @@
                                         <h5 class="modal-title">Modifier la publication</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <!-- J'utilise ':value="item.x"' pour afficher le contenu de chaque post dans les champs du formulaire. Les id des champs sont dynamiques pour afficher le contenu de chaque post issu de la boucle. -->
                                     <div class="modal-body" id='form' action="" method="post" enctype='multipart/form-data'>
                                         <form class="form mt-3 mb-5 ">
                                             <div class=" d-flex text-center">
@@ -83,13 +79,12 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!! Ici je passe en paramètres de la fonction l'ID du post (item) récupéré dans la boucle, puis les id dynamiques des inputs du titre, du content, de la catégorie, pour que le bon post soit modifié ! -->
                                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="modifyPost(item.id, 'titlePost'+item.id, 'contentPost'+item.id, 'categoryPost'+item.id, item.user_id)">Modifier le post</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Modal suppression article. Il doit avoir un id dynamique pour correspondre à son lien qui est attaché à chaque post. -->
+                        <!-- Modal suppression article. -->
                         <div class="modal fade" :id="'suppPost'+item.id" tabindex="-1" aria-labelledby="suppressionPost" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -109,52 +104,30 @@
                         </div>
                     </div>
 
-    <!-- CARD IMAGE -->
+        <!-- CARD IMAGE -->
                     <div class="card-img-top">
                         <img :src="item.picture" alt="" class="postPicture">
                     </div>
 
-    <!-- CARD BODY TITRE ET CONTENU POST -->
+        <!-- CARD BODY TITRE ET CONTENU POST -->
                     <div class="card-body bodyPost">
                         <h2 class="titlePost card-title fs-3">{{ item.title }}</h2>
                         <p class="contentPost card-text">{{ item.content }}</p>
                     </div>
 
-    <!-- CARD FOOTER NOMBRE DE LIKES-->
+        <!-- CARD FOOTER NOMBRE DE LIKES-->
                     <div class="like card-footer d-flex align-items-center">
                         <font-awesome-icon icon="fa-brands fa-gratipay" class="fa-gratipay"/>
                         <span class="countLike ms-2">{{ item.nbLike }}</span>
-                        <ul v-for="(liker, idx) in item.usersLike"  v-bind:key="idx">
-                            <p>{{searchLiker(liker)}}</p>
-                            <li>{{likerSurname}} {{likerName}}</li>
-                        </ul>
                     </div>
-
-    <!-- CARD FOOTER LIKER ET COMMENTER -->
+        <!-- CARD FOOTER LIKER ET COMMENTER -->
                     <div class="like card-footer d-flex align-items-stretch bg-white px-0 pt-1 pb-1 border-bottom">
                         <div class="d-flex align-items-center toLike w-50 justify-content-center py-1" :id="'like'+item.id" :class="doLike(item.usersLike) ? 'text-primary' : '' " @click="addLike(item.id, `like${item.id}`, item)">
                             <font-awesome-icon icon="fa-solid fa-heart" class="fa-heart-solid"/>
                             <span class="jaime ms-3">J'aime</span>
                         </div>
-                        <div class="d-flex align-items-center toComment w-50 justify-content-center" >
-                            <font-awesome-icon icon="fa-regular fa-message" />
-                            <span class="jaime ms-3">Commenter</span>
-                        </div>
                     </div>
 
-    <!-- CARD BODY AFFICHAGE COMMENTAIRES-->
-                    <div class="card-body commentPost w-75 ps-5">
-                        <div class="d-flex">
-                            <img src="http://localhost:3000/images/unknownUser.jpg" class="authorPicture me-2" alt="user Profil"/>
-                            <p class="contentPost card-text bg-light py-2 px-4">{{ item.content }}</p>
-                        </div>
-                    </div>
-
-    <!-- CARD FOOTER ECRIRE UN COMMENTAIRE -->
-                    <div class="like card-footer d-flex bg-white">
-                        <img :src="userPicture" class="authorPicture me-2" alt="user Profil"/>
-                        <input class="form-control inputComment" type="text" placeholder="Écrivez un commentaire">
-                    </div>
                 </div>  
             </div>
     </div>
@@ -193,7 +166,7 @@ export default {
     components: {
 
     },
-        //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
+
     mounted: function() {
         this.getListOfPosts();
         this.getProfil();
@@ -201,26 +174,31 @@ export default {
     },
 
     methods: {
+        // recherche par catégorie
         setCatPost: function (para){
             this.url = `http://localhost:3000/api/posts?category=${para}`;
             this.getListOfPosts();
         },
+        // recherche par mots clés
         setSearch: function() {
             this.url = `http://localhost:3000/api/posts?content=${this.searchWords}`;
             this.getListOfPosts();
         },  
+        // recherche par auteur
         setUserPosts: function() {
             this.url = `http://localhost:3000/api/posts?userId=${this.userId}`;
             this.getListOfPosts();
         },
+        // recherche de tous les posts
         setCatPostAll: function (){
             this.url = `http://localhost:3000/api/posts`;
             this.getListOfPosts();
-        },    // Pour récupérer le fichier de l'input de type file associé
+        },  
+        // récupération du fichier utilisateur  
         onFileUpload: function (event) {
             this.postPicture = event.target.files[0]
         },
-        // pour récupérer et afficher les infos du profil : je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
+        // pour récupérer et afficher les infos du profil 
         getProfil: function () {
             this.axios
                 .get(`http://localhost:3000/api/users/${this.userId}`, 
@@ -253,12 +231,14 @@ export default {
                     console.log(error.message);
                 })
         },
+        // pour afficher les noms et prénoms des auteurs de post
         searchAuthor: function (para) {
                     this.author = this.listOfUsers.filter(user => user.id == para);
                     this.authorPicture = this.author[0].picture;
                     this.authorName = this.author[0].name;
                     this.authorSurname = this.author[0].surname;
         },
+        // Pour afficher le nom des likers
         searchLiker: function (para) {
             this.liker = this.listOfUsers.filter(user => user.id == para);
             this.likerName = this.liker[0].name;
@@ -434,8 +414,7 @@ export default {
                     }) 
             }
         }, 
-
-        // Fonction de modification d'un post où l'ID de la carte correspond à l'ID du post. EN paramètre de la fonction, je passerais  le "item.id" récupéré dans la boucle for de l'élément HTML. 
+        // Fonction de modification d'un post 
         modifyPost: function (para, title, content, category, user_id) {
             // Si l'utilisateur est l'auteur du post ou si l'utilisateur est admin, on peut effectuer la requête de modification de post
             if(user_id == this.userId || this.isAdmin == true) {
@@ -494,7 +473,7 @@ export default {
                 console.log("Vous n'êtes pas autorisé à modifier cet article !");
             }
         },
-        // Fonction d'ajout ou de suppression du user du tableau des likers de post. Permet de savoir qui aime tel ou tel post et d'afficher la liste des likers
+        // Fonction d'ajout ou de suppression du user du tableau des likers de post. 
         addLike: function (para, id, para2) {
             // Je fais une requête GET pour vérifier si le user like déjà cet article ou pas.
             this.axios
@@ -568,9 +547,12 @@ export default {
                                         console.log(error.message);
                                     })
                             }
-                    });
+                    })
+                    .catch((error) =>{
+                        console.log(error.message);
+                    })
         },
-        // Une fonction qui me permet de comparer si le userId de l'utilisateur est dans le tableau des likers du post. Si oui, je returnn true. Ensuite j'incorpore la fonction (par la-même son résultat) dans un v-if dans la boucle d'itération de chaque post. D'où le paramètre de la fonction qui me permet de rentrer dans le scope de la boucle. 
+        // Une fonction qui permet d'afficher si le user like le post
         doLike : function (para) {
             for(let i in para){
                 if(this.userId == para[i]) {

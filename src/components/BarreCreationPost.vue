@@ -1,8 +1,10 @@
+<!-- Composant pour créer un post -->
 <template>
+    <!-- Barre de création de post sous forme d'input-->
     <div class="container d-flex my-2 p-3 bg-white" >
-        <img :src="userPicture" id="userPicture" alt="user Profil" class="me-2"/>
+        <img :src="userPicture" id="userPicture" alt="USER" class="me-2"/>
         <input class="inputPost w-100 p-2" data-bs-toggle="modal" data-bs-target="#creationPost" :placeholder=" 'Quoi de neuf' + ' '+ this.userSurname + ' ?'">
-        <!-- Modal -->
+        <!-- Modal formulaire de création de post-->
         <div class="modal fade" id="creationPost" tabindex="-1" aria-labelledby="creationPost" aria-hidden="true">
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -91,7 +93,7 @@ export default {
     },
 
     computed: {
-        // Je crée la fonction qui va retourner une valeur true ou false (et donc une erreur à afficher) si les champs sont remplis ou pas. 
+        // Vérification des champs du formulaire
         validatedFields: function () {
                 if(this.content != "" && this.category != "") {
                     return true;
@@ -102,7 +104,6 @@ export default {
             }
     },
 
-    //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
     mounted: function() {
         this.getProfil();
     },
@@ -112,7 +113,7 @@ export default {
         onFileUpload: function (event) {
             this.postPicture = event.target.files[0]
         },
-        // pour récupérer et afficher les infos du profil : je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
+        // pour récupérer et afficher les infos du profil 
         getProfil: function () {
             this.axios
                 .get(`http://localhost:3000/api/users/${this.userId}`, 
@@ -120,7 +121,6 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je récupère .
                 .then(response => {
                     this.userPicture = response.data.data.picture;
                     this.userSurname = response.data.data.surname;
@@ -131,7 +131,6 @@ export default {
         },
         // Fonction pour créer un post
         createPost: function () {
-        //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
         this.axios
             .post('http://localhost:3000/api/posts', 
                 {
@@ -149,7 +148,6 @@ export default {
                     }
                 }
             )
-            // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
             .then(response => {
                     console.log(response.data.message);
                     this.showModal = false;

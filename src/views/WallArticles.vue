@@ -1,3 +1,4 @@
+<!-- La view qui affiche l'ensemble de la page et ses composants -->
 <template>
     <div class="container-fluid sticky-top">
         <div class="row ">
@@ -22,11 +23,10 @@
 
 <script>
 
-/* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
 import BarreNav from '@/components/BarreNav.vue'
 import BarrePresentation from '@/components/BarrePresentation.vue'
 import BarreCreationPost from '@/components/BarreCreationPost.vue'
-import AllPosts from '@/components/AllPosts.vue' // import du composant
+import AllPosts from '@/components/AllPosts.vue' 
 
 export default {
     name: 'WallArticles',
@@ -37,7 +37,6 @@ export default {
         AllPosts,
  
     },
-    //pour exécuter la méthode après le montage de la page, on va l'appeler dans le hook "mounted"
     mounted: function() {
         this.getTheWallPage();
     },
@@ -46,7 +45,7 @@ export default {
         getTheWallPage: function (){
             let isLogged = JSON.parse(localStorage.getItem("login"));
             if(isLogged == false) {
-                this.$router.push('/login'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
+                this.$router.push('/login'); 
             }
             else {
                 console.log("l'accès à la page est autorisée")

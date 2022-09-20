@@ -1,6 +1,5 @@
 <!-- RÔLE :  ICI ON CREE LA VIEW LOGIN ET CREATION DE COMPTE ET ON ECRIT LA LOGIQUE DU LOGIN ET DE LA CREATION DE COMPTE-->
 
-<!-- On implémente le HTML avec des v-if, v-else en fonction de si on est en mode 'login' ou 'create'.-->
 <template>
   <div id="loginBox" class="container">
         <div class="row justify-content-center">
@@ -9,6 +8,7 @@
             <h1 class= "login_title" v-else>Créer son compte</h1>
             <form class="form col-10 col-md-8 col-lg-6" id="form" action="">
                 <div class="form-group">
+                    <!-- EMAIL -->
                     <div class="col required d-flex">
                         <input 
                         type="email" 
@@ -20,8 +20,8 @@
                         v-model="email"
                         required>
                     </div>
+                    <!-- PASSWORD -->
                     <div class="col required d-flex">
-                        <!-- SI toutes mes règles de validation sont contrôlées dans le backend, je suis obligé de valider le mot de passe initial dans html5 car dans le back, la règle de validation s'applique après le traitement Bcrypt et pas à l'envoie de la requête !-->
                         <input 
                         type="password" 
                         class="form-control" 
@@ -37,6 +37,7 @@
                 <p class="text-success" v-if="mode == 'create'">Le mot de passe doit comprendre au minimum 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial</p>
                 <div class="form-group" v-if="mode == 'create'" >
                     <div class="d-flex justify-content-between" >
+                        <!-- SURNAME -->
                         <div class="d-flex required">
                             <input 
                             type="text" 
@@ -48,6 +49,7 @@
                             v-model="surname" 
                             required>
                         </div>
+                        <!-- NAME -->
                         <div class="d-flex required">
                             <input 
                             type="text" 
@@ -59,6 +61,7 @@
                             required>
                         </div>
                     </div>
+                    <!-- DEPARTMENT -->
                     <input 
                     type="text" 
                     class="form-control" 
@@ -66,6 +69,7 @@
                     aria-describedby="Department" 
                     placeholder="Service"
                     v-model="department">
+                    <!-- TEL -->
                     <input 
                     type="tel" 
                     class="form-control" 
@@ -88,8 +92,7 @@
                             
 
                 </div>
-                <!-- EN mode 'login', en cliquant sur le bouton j'appelle la méthode de login-->
-                <!-- Je vais créer un bouton qui aura une classe dynamique en fontion d'un état (true ou false, selon le résultat de la méthode validatedFields qui vérifie que tous les champs sont remplis), grace à v-bind. C'est la classe disabled--><!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
+                <!-- BUTTON LOGIN -->
                 <button 
                     type="button" 
                     class="btn btn-primary login_button"
@@ -97,7 +100,7 @@
                     v-if="mode == 'login'"
                     @click="loginUser()">
                     Connexion</button>
-                <!-- EN mode 'creation de compte', en cliquant sur le bouton j'appelle la méthode createAccount--><!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
+                <!-- BUTTON CREATE ACCOUNT-->
                 <button 
                     type="button" 
                     class="btn btn-primary createAccount_button"
@@ -109,12 +112,11 @@
         </div>
         <div class="row creationCompte justify-content-center" >
             <p>Vous n'avez pas encore de compte : <span @click="switchToCreateAccount()">Créez un compte</span></p>
-            <p>Vous avez oublié votre mot de passe : <span>Réinitialiser le mot de passe</span></p>
         </div>
     </div>
 </template>
 
-<!-- On écrit la logique du composant puis on l'exporte -->
+
 <script>
 
 export default {
@@ -122,11 +124,8 @@ export default {
 
   data() {
     return {
-        // je crée un état "isLogged" qui exprime si le user est loggé ou pas. La valeur par défaut est non, donc false. 
         isLogged: false,
-        // je crée une donnée/état "mode" qui aura pour valeur initiale "login". Le mode me permettra de switcher entre l'affichage pour se logger ou celui pour créer un compte. 
-        mode: 'login', //par défaut au chargement de la page, le mode a pour valeur 'login', on affichera donc les éléments qui concernent ce mode. 
-        // je créé maintenant mes données issus des champs qui utilisent v-model, et je leur passe la valeur "" (vide) par défaut. Dés qu'un user va entrer une valeur, la donnée correspondante sera mise à jour. 
+        mode: 'login', 
         password: "",
         surname: "",
         name:"",
@@ -141,7 +140,7 @@ export default {
   },
 
   computed: {
-    // Je crée la fonction qui va retourner une valeur true ou false (et donc une erreur à afficher) si les champs sont remplis ou pas. 
+    // Validation des champs du formulaire
     validatedFields: function () {
         if(this.mode == 'create') {
             if(this.password != "" && this.surname != "" && this.name != "" && this.email != "" && this.checkConditions != false) {
@@ -161,27 +160,27 @@ export default {
     }
   },
 
-   //pour exécuter la méthode après le monatge de la page, on va l'appeler dans le hook "mounted
     mounted: function() {
         this.redirectionIfIsLogged();
     },
 
   methods: {
+    //Vérification de validation des conditions
     validateConditions : function () {
-        this.checkConditions = true; // Lorsque l'on coche la validation des conditions, la donnée "checkConditions" passe à "true".
+        this.checkConditions = true; 
     },
 
-    // fonction pour l'affichage conditionnel des champs du formulaire login/création de compte
+    //Aaffichage conditionnel des champs du formulaire login/création de compte
     switchToCreateAccount : function () {
-        this.mode = 'create'; // la méthode sert à passer la valeur du 'mode' à 'create' quand on clique sur le lien de création de compte. 
-        this.loginError = false; // S'il y a un message d'erreur de login auparavnt, je l'enlève
+        this.mode = 'create'; 
+        this.loginError = false; 
     },
 
     // fonction pour renvoyer le user vers la page d'accueil s'il est déjà loggé
     redirectionIfIsLogged : function () {
         let isLogged = JSON.parse(localStorage.getItem("login"));
         if(isLogged == true) {
-            this.$router.push('/'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
+            this.$router.push('/'); 
         }
         else {
             console.log("l'accès à la page d'accueil n'est pas autorisé, vous devez vous logger !")
@@ -190,7 +189,6 @@ export default {
 
     // fonction pour se logger
     loginUser: function () {
-        //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
        this.axios
         .post('http://localhost:3000/api/login', 
             {
@@ -201,7 +199,6 @@ export default {
                 { "Content-Type": "application/json"}
             }
         )
-        // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token". 
         .then(response => {
                 console.log(response.status);
                 this.isLogged = true;
@@ -211,11 +208,10 @@ export default {
                 localStorage.setItem("userId", JSON.stringify(response.data.data.id));
                 localStorage.setItem("userSurname", JSON.stringify(response.data.data.surname));
                 localStorage.setItem("userName", JSON.stringify(response.data.data.name));
-                this.$router.push('/'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
+                this.$router.push('/'); 
             }      
         )
         .catch((error) =>{
-            //on va récupérer le message d'erreur construit dans le backend
             console.log(error.response.data.message);
             this.loginErrorMessage = error.response.data.message;
             this.loginError = true;
@@ -224,33 +220,29 @@ export default {
     },
     // fonction pour créer un compte
     createAccount: function () {
-        // On vérifie que le mot de passe est bien conforme aux exigences de la regex
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$/;
         if(regex.test(this.password)) {
-            let formData = new FormData() // Je crée un nouvel objet formData
-                formData.append('email', this.email) // j'ajoute la propriété et sa valeur à formData
+            let formData = new FormData() 
+                formData.append('email', this.email) 
                 formData.append('password', this.password)
                 formData.append('surname', this.surname)
                 formData.append('name', this.name)
                 formData.append('department', this.department)
                 formData.append('tel', this.tel)
-                //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
             this.axios
                 .post('http://localhost:3000/api/users', formData,
                     {headers: 
                         { 'Content-Type': 'application/json'}
                     }
                 )
-                // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
                 .then( () => {
                         console.log(`L'utilisateur ${this.email} a bien été créé !`)
                         this.mode = 'login';
                         this.loginError = false;
-                        this.$router.push('/login'); // je renvoie vers la page de login
+                        this.$router.push('/login'); 
                     }      
                 )
                 .catch((error) =>{
-                    //on va récupérer le message d'erreur construit dans le backend
                     console.log(error.response.data.message);
                     this.loginErrorMessage = error.response.data.message;
                     this.loginError = true;
@@ -268,7 +260,6 @@ export default {
 
 </script>
 
-<!-- On gère le style du HTML du composant. On ajoute l'attribut "scoped" pour limiter le code CSS au composant -->
 <style scoped lang="scss">
 
 #loginBox {

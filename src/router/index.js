@@ -1,15 +1,12 @@
+// Configuration de V-router et des routes de l'application 
+
 import { createRouter, createWebHistory } from 'vue-router'
-import WallArticles from '@/views/WallArticles.vue' // j'importe le fichier .view. @ permet de se placer directement dans le fichier "src"
+import WallArticles from '@/views/WallArticles.vue' 
 import MyLogin from '@/views/MyLogin.vue'
 import ProfilPage from '@/views/ProfilPage.vue'
 import NotFound from '@/views/NotFound.vue'
 
-/* Ici, les routes de notre application Vue sont définies via un tableau contenant des objets qui définissent chaque route. Chaque objet route contient trois propriétés clés :
-	• path (chemin) - l'URL correspondant au composant ;
-	• name (nom) - le nom de cette route pour l'étiquetage et le débuggage ;
-	• component (composant) - le composant qui doit s'afficher lorsque le path est trouvé.
-*/
-//je définis également un objet 'meta' pour chaque route comprenant un titre et une description pour les moteurs de recherche
+// définition des routes de l'application
 const routes = [
   {
     name: 'accueil',
@@ -35,10 +32,10 @@ const routes = [
       title: "Profil",
     }
   },
-  // On va créer une route pour gérer les 404 : 
+    //route pour gérer les 404 : 
   {
     name : 'Page non trouvée',
-    path: '/:pathMatch(.*)', // c'est une regex pour rediriger toutes les routes non trouvées,
+    path: '/:pathMatch(.*)', 
     component: NotFound,
     meta: {
       title: "404 Page non trouvée !",
@@ -53,11 +50,11 @@ const router = createRouter({
   routes,
 });
 
-// Grace à la méthode 'afterEach()' de router, je déclare les titres et descriptions des pages web de l'appli en les associant aux métas déclarées dans les routes.
+// déclare les titres des pages web de l'appli 
 router.afterEach((to) => {
   document.title = to.meta.title;
 })
 
-// J'exporte le router pour qu'il soit disponible dans l'application
+
 export default router;
 

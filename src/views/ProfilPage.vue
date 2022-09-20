@@ -1,20 +1,18 @@
+<!-- Affichage - modification- suppression du profil/compte -->
 <template>
     <BarreNav/>
-    <div class="container rounded bg-white p-5 w-75">
-        <div class="row ">
-            <div class="col-12 d-flex justify-content-center align-items-center">
-                <h1>Profil utilisateur</h1>
-                <div class=" photo-utilisateur col-md-6  mb-4 text-end">
-                    <!-- Je rend dynamique avec v-bind l'affichage de l'image avec la donnée que je récupère de la requête API et que j'enregistre dans ma data "userPicture" du view-->
+    <div class="container rounded bg-white p-5">
+        <div class="row d-flex justify-content-center">
+            <form class="form d-flex flex-wrap col-12 col-md-8" id='form' action="" method="put" enctype='multipart/form-data'>
+                <h1 class="fs-2 text col-12 col-md-6 text-wrap badge bg-primary mb-3">Profil utilisateur</h1>
+                <div class=" photo-utilisateur mb-4 col-12 col-md-6">
                     <img :src="this.userPicture" id="userPicture" alt="user Profil">
                 </div> 
-            </div>
-            <form class="form d-flex flex-wrap" id='form' action="" method="put" enctype='multipart/form-data'>
-                <div class="infos-utilisateur col-12 col-lg-8 ps-3">
+                <div class="infos-utilisateur col-12  ps-3">
                     <div class="row g-2"  >
-                    <!--Je vais afficher les données récupérées de la BDD sur le user dans les champs du formulaire, grace à l'attribut "value" de l'input et la directive "v-bind" de VueJS qui me permet d'afficher des valeurs dynamiques. Ensuite, si le status "modifyStatus est "false", il est impossible de modifier les champs car l'attribut "disabled" défini dynamiquement est actif grace au test conditionnel de savoir si "modifyStatus" est false ou true. Si le status est true, alors on peut modifier. -->
+                        <!-- SURNAME -->
                         <div class="col">
-                            <label for="surname" class="col-form-label text-primary fw-bold ">Prénom</label>
+                            <label for="surname" class="col-form-label text-primary fw-bold text-start">Prénom</label>
                             <input 
                                 type="text" 
                                 class="form-control"
@@ -23,6 +21,7 @@
                                 v-bind:value= "this.surname" 
                                 :disabled="modifyStatus ? false : true">
                         </div>
+                        <!-- NAME -->
                         <div class="col">
                             <label for="name" class="col-form-label text-primary fw-bold">Nom</label>
                             <input 
@@ -35,6 +34,7 @@
                         </div>
                     </div>
                     <div class="row text-start">
+                        <!-- EMAIL -->
                         <div class="col-md-12">
                             <label for="email" class="col-form-label text-primary fw-bold">Email</label>
                             <input type="email" 
@@ -44,6 +44,7 @@
                             v-bind:value= "this.email" 
                             :disabled="modifyStatus ? false : true">
                         </div>
+                        <!-- DEPARTMENT -->
                         <div class="col-md-12">
                             <label for="department" class="col-form-label text-primary fw-bold">Service</label>
                             <input type="text" 
@@ -52,6 +53,7 @@
                             name=" department"
                             v-bind:value= "this.department" :disabled="modifyStatus ? false : true">
                         </div>
+                        <!-- TEL -->
                         <div class="col-md-12">
                             <label for="tel" class="col-form-label text-primary fw-bold">Tel du poste</label>
                             <input type="tel" 
@@ -61,6 +63,7 @@
                             v-bind:value= "this.tel" 
                             :disabled="modifyStatus ? false : true">
                         </div> 
+                        <!-- FICHIER UTILISATEUR -->
                         <div class="d-flex align-items-center">
                             <div class="col-md-6">
                                 <label for="picture" class="col-form-label text-primary fw-bold" v-if="modifyStatus == true">Changer la photo du profil</label>
@@ -73,53 +76,55 @@
                             </div>  
                         </div>    
                     </div>
-                    
-                    <div class="text-start mt-5">
-                        <button 
-                        class="btn btn-primary profile-button" 
-                        type="button" 
-                        v-if="modifyStatus == false"
-                        @click="changeStatus()">
-                        Modifier le profil
-                        </button>
-                        <!-- Surtout pas de bouton de type "submit" car ca bug avec Axios ! Il faur passer le type du button en "button" !!!-->
-                        <div v-else>
+                    <div class="d-flex align-items-center flex-wrap">
+                        <div class="text-start mt-5 col-12 col-md-6">
+                            <!-- BUTTON MODIFIER-->
                             <button 
-                        class="btn btn-primary profile-button me-3" 
-                        type="button" 
-                        @click="updateAccount()">
-                            Sauvegarder le profil
+                            class="btn btn-primary profile-button" 
+                            type="button" 
+                            v-if="modifyStatus == false"
+                            @click="changeStatus()">
+                            Modifier le profil
                             </button>
-                            <button 
-                        class="btn btn-secondary profile-button" 
-                        type="button" 
-                        @click="changeStatus()">
-                            Annuler
-                            </button>
+                            <!-- BUTTONS SAUVEGARDER - ANNULER -->
+                            <div v-else>
+                                <button 
+                            class="btn btn-primary profile-button me-3" 
+                            type="button" 
+                            @click="updateAccount()">
+                                Sauvegarder le profil
+                                </button>
+                                <button 
+                            class="btn btn-secondary profile-button" 
+                            type="button" 
+                            @click="changeStatus()">
+                                Annuler
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="photo-delete col-12 col-lg-4">
-                    <div class="bouton-delete mt-2 text-end">
-                        <button
-                            class="btn btn-danger" 
-                            data-bs-toggle="modal" data-bs-target="#confirmationDeleteAccount" 
-                            type="button">Supprimer le profil
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="confirmationDeleteAccount" tabindex="-1" aria-labelledby="confirmationDeleteAccount" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="">Êtes-vous sûr(e) ?</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Voulez-vous vraiment supprimer votre compte ?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteAccount()">Supprimer</button>
+                        <div class="photo-delete col-12 col-md-6">
+                            <div class="bouton-delete mt-5 text-end">
+                                <button
+                                    class="btn btn-danger" 
+                                    data-bs-toggle="modal" data-bs-target="#confirmationDeleteAccount" 
+                                    type="button">Supprimer le profil
+                                </button>
+                                <!-- MODAL SUPPRESSION DE COMPTE -->
+                                <div class="modal fade" id="confirmationDeleteAccount" tabindex="-1" aria-labelledby="confirmationDeleteAccount" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="">Êtes-vous sûr(e) ?</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Voulez-vous vraiment supprimer votre compte ?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteAccount()">Supprimer</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -132,8 +137,8 @@
 </template>
 
 <script>
-/* Ici on ajoute les propriétés de données, les méthodes, les cycles de vie (hooks) */
-import BarreNav from '@/components/BarreNav.vue' // import du composant
+
+import BarreNav from '@/components/BarreNav.vue' 
 
 export default {
     name: 'ProfilPage',
@@ -156,7 +161,6 @@ export default {
         }
     },
 
-    //pour exécuter la méthode avant le montage de la page, on va l'appeler dans le hook "created"
     created: function() {
         this.getTheProfilPage();
     },
@@ -166,10 +170,7 @@ export default {
         changeStatus: function () {
             this.modifyStatus = !this.modifyStatus;
         },
-        // Une méthode pour indiquer que le user veut changer sa photo
-        modifyPictureTrue: function () {
-            this.changePicture = true;
-        },
+        // Pour récupérer le fichier utilisateur fourni
         onFileUpload: function (event) {
           this.userPicture = event.target.files[0]
         },
@@ -177,7 +178,7 @@ export default {
         getTheProfilPage: function (){
             let isLogged = JSON.parse(localStorage.getItem("login"));
             if(isLogged == false) {
-                this.$router.push('/login'); //ici je crée une redirection de page (de view) avec la méthode push du router. Le paramètre est le chemin de la route. 
+                this.$router.push('/login'); 
             }
             else {
                 this.token = JSON.parse(localStorage.getItem("token"));
@@ -185,7 +186,7 @@ export default {
                 this.getProfil();
             }
         }, 
-        // pour récupérer et afficher les infos du profil : je me connecte avec axios sur la route du profil en lui passant en paramètre la route, l'objet d'entête http avec le token.
+        // pour récupérer et afficher les infos du profil : 
         getProfil: function () {
             this.axios
                 .get(`http://localhost:3000/api/users/${this.userId}`, 
@@ -193,7 +194,6 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
                     console.log(response.data);
                     this.surname = response.data.data.surname;
@@ -216,7 +216,7 @@ export default {
             this.axios
                 .put(`http://localhost:3000/api/users/${this.userId}`, 
                     {
-                        surname: this.surname, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
+                        surname: this.surname, 
                         name: this.name,
                         email: document.getElementById('email').value, 
                         department: document.getElementById('department').value,
@@ -230,7 +230,6 @@ export default {
                         }
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                 .then(response => {
                     console.log(response.data);
                     localStorage.setItem('userSurname', JSON.stringify(this.surname));
@@ -257,7 +256,7 @@ export default {
                         localStorage.removeItem("userId");
                         localStorage.removeItem("userName");
                         localStorage.removeItem("userSurname");
-                        this.$router.push('/login'); // pour enlever le modal qui est bloqué suite à la supression du profil. Pas besoin de renvoyer vers la page login, comme l'utilisateur n'est plus connecté, il y est automatiquement redirigé   
+                        this.$router.push('/login'); 
                     })
                     .catch(error => {
                         console.log(error.message);
@@ -296,6 +295,8 @@ export default {
         box-shadow: none
     }
 }
+
+
 
 </style>
 

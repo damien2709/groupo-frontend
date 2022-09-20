@@ -30,7 +30,7 @@ library.add(faMagnifyingGlass, farHeart, fasHeart, faGratipay, faMessage)
 createApp(App)
     .component('font-awesome-icon', FontAwesomeIcon)
     .use(BootstrapVue3)
-    .use(VueAxios, axios) // on exporte pour l'ensemble des composants un middleware utilisant axios. On l'appelera dans le composant concerné avec le mot clé "this". 
-    .use(router) // on exporte pour l'ensemble des composants un middleware utilisant vue-router.
+    .use(VueAxios, axios)
+    .use(router) 
     .mount('#app')
 
