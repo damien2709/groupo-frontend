@@ -30,7 +30,7 @@
                         placeholder="Mot de passe" 
                         v-model="password" 
                         required  
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 3}$" />
+                         />
                     </div>
                 </div>
                 <p class="loginError text-danger" v-if="loginError == true" >{{ this.loginErrorMessage }} </p>
@@ -224,33 +224,43 @@ export default {
     },
     // fonction pour créer un compte
     createAccount: function () {
-        let formData = new FormData() // Je crée un nouvel objet formData
-        formData.append('email', this.email) // j'ajoute la propriété et sa valeur à formData
-        formData.append('password', this.password)
-        formData.append('surname', this.surname)
-        formData.append('name', this.name)
-        formData.append('department', this.department)
-        formData.append('tel', this.tel)
-        //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
-       this.axios
-        .post('http://localhost:3000/api/users', formData,
-            {headers: 
-                { 'Content-Type': 'application/json'}
-            }
-        )
-        // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
-        .then( () => {
-                console.log(`L'utilisateur ${this.email} a bien été créé !`)
-                this.mode = 'login';
-                this.$router.push('/login'); // je renvoie vers la page de login
-            }      
-        )
-        .catch((error) =>{
-            //on va récupérer le message d'erreur construit dans le backend
-            console.log(error.response.data.message.split(':')[1]);
-            this.loginErrorMessage = error.response.data.message.split(':')[1];
+        // On vérifie que le mot de passe est bien conforme aux exigences de la regex
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$/;
+        if(regex.test(this.password)) {
+            let formData = new FormData() // Je crée un nouvel objet formData
+                formData.append('email', this.email) // j'ajoute la propriété et sa valeur à formData
+                formData.append('password', this.password)
+                formData.append('surname', this.surname)
+                formData.append('name', this.name)
+                formData.append('department', this.department)
+                formData.append('tel', this.tel)
+                //je me connecte avec axios sur la route de login en lui passant en paramètre la route, l'objet à transmettre et l'objet d'entête http.
+            this.axios
+                .post('http://localhost:3000/api/users', formData,
+                    {headers: 
+                        { 'Content-Type': 'application/json'}
+                    }
+                )
+                // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
+                .then( () => {
+                        console.log(`L'utilisateur ${this.email} a bien été créé !`)
+                        this.mode = 'login';
+                        this.loginError = false;
+                        this.$router.push('/login'); // je renvoie vers la page de login
+                    }      
+                )
+                .catch((error) =>{
+                    //on va récupérer le message d'erreur construit dans le backend
+                    console.log(error.response.data.message);
+                    this.loginErrorMessage = error.response.data.message;
+                    this.loginError = true;
+                })
+        }
+        else {
             this.loginError = true;
-        })
+            this.loginErrorMessage = "Le mot de passe n'est pas conforme aux exigences !"
+        }
+        
     }
 
   }

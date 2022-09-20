@@ -8,9 +8,9 @@
                 <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Entraide')">Entraide</button>
                 <button class="btn btn-primary me-2 mb-2" @click="setCatPost('Fun')">Fun</button>
                 <button class="btn btn-primary me-2 mb-2" @click="setCatPostAll()">Toutes</button>
-                <button class=" btn btn-success me-2 mb-2" @click="setCatPost('Infos')">Mes posts</button> 
-                <form class="input-group d-flex me-3" role="search">
-                    <input class="form-control" type="search" placeholder="Recherche par mots clés !" aria-label="Search" v-model="searchWords">
+                <button class=" btn me-2 mb-2" style="background-color:#FFD7D7 " @click="setUserPosts()">Mes posts</button> 
+                <form class="input-group d-flex me-3" role="search" v-on:submit.prevent>
+                    <input class="form-control" type="search" placeholder="Recherche par mots clés !" aria-label="Search" v-model="searchWords" @keyup.enter="setSearch()">
                     <button class="btn btn-outline-primary" type="button" @click="setSearch()"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
             </form>
             </div>
@@ -124,6 +124,10 @@
                     <div class="like card-footer d-flex align-items-center">
                         <font-awesome-icon icon="fa-brands fa-gratipay" class="fa-gratipay"/>
                         <span class="countLike ms-2">{{ item.nbLike }}</span>
+                        <ul v-for="(liker, idx) in item.usersLike"  v-bind:key="idx">
+                            <p>{{searchLiker(liker)}}</p>
+                            <li>{{likerSurname}} {{likerName}}</li>
+                        </ul>
                     </div>
 
     <!-- CARD FOOTER LIKER ET COMMENTER -->
@@ -178,6 +182,8 @@ export default {
             authorPicture: '',
             authorSurname: '',
             authorName:'',
+            likerSurname: '',
+            likerName:'',
             isAdmin: false,
             url: '',
             searchWords: '',
@@ -203,6 +209,10 @@ export default {
             this.url = `http://localhost:3000/api/posts?content=${this.searchWords}`;
             this.getListOfPosts();
         },  
+        setUserPosts: function() {
+            this.url = `http://localhost:3000/api/posts?userId=${this.userId}`;
+            this.getListOfPosts();
+        },
         setCatPostAll: function (){
             this.url = `http://localhost:3000/api/posts`;
             this.getListOfPosts();
@@ -248,6 +258,11 @@ export default {
                     this.authorPicture = this.author[0].picture;
                     this.authorName = this.author[0].name;
                     this.authorSurname = this.author[0].surname;
+        },
+        searchLiker: function (para) {
+            this.liker = this.listOfUsers.filter(user => user.id == para);
+            this.likerName = this.liker[0].name;
+            this.likerSurname = this.liker[0].surname;
         },
         // Fonction pour récupérer et afficher la liste des posts
         getListOfPosts: function () {
@@ -348,6 +363,30 @@ export default {
                 }) 
             }
             else if(this.url == 'http://localhost:3000/api/posts?category=Fun') {
+            this.axios
+                .get(this.url, 
+                    {headers: 
+                        { "Authorization": `Bearer ${this.token}`}
+                    }
+                )
+                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+                .then(response => {
+                    console.log(response.data);
+                    this.listOfPosts = response.data.data;
+                    this.postPicture = this.listOfPosts.picture;
+                    console.log(this.listOfPosts);
+                    if(this.listOfPosts.length == 0){ // si la liste des posts de la catégorie est vide, j'affiche que la liste est vide 
+                        this.noPost = true;
+                    }
+                    else{
+                        this.noPost = false;
+                    }
+                })
+                .catch((error) =>{
+                    console.log(error.message);
+                }) 
+            }
+            else if(this.url == `http://localhost:3000/api/posts?userId=${this.userId}`) {
             this.axios
                 .get(this.url, 
                     {headers: 
