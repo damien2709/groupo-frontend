@@ -27,8 +27,5 @@ Les articles peuvent être likés, modifiés et supprimés. L'administrateur peu
 
 3 articles sont créés par défaut au démarrage de l'application. 
 
-Il existe un administrateur par défaut créé au démarrage de l'application :
-- ID : admin@groupomania.fr
-- MDP : Groupo2709@
 
 
