@@ -228,6 +228,7 @@ export default {
                     }
                 )
                 .then(response => {
+                    console.log(response.data);
                     localStorage.setItem('userSurname', JSON.stringify(this.surname));
                     localStorage.setItem('userName', JSON.stringify(this.name));
                     this.modifyStatus = false;
@@ -246,6 +247,7 @@ export default {
                         }
                     )
                     .then(response => {
+                        console.log(response.data);
                         localStorage.removeItem("token");
                         localStorage.removeItem("login");
                         localStorage.removeItem("userId");

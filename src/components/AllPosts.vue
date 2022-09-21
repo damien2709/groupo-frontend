@@ -422,6 +422,7 @@ export default {
                     )
 
                     .then(response => {
+                        console.log(response.data);
                         this.getListOfPosts();
                     })
                     .catch((error) =>{
@@ -497,7 +498,7 @@ export default {
                                     })
                             }
                             else {
-                                document.getElementById(id).classList.remove("text-primary"); /
+                                document.getElementById(id).classList.remove("text-primary"); 
                                 // Si le user est déjà dans le tableau, Je dois le supprimer car il n'aime plus ! Je dois décrémenter également nbLike et l'enregistrer. 
                                 let myIndex = this.usersLike.indexOf(this.userId); 
                                 this.usersLike.splice(myIndex, 1);
