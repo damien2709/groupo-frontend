@@ -200,7 +200,6 @@ export default {
             }
         )
         .then(response => {
-                console.log(response.status);
                 this.isLogged = true;
                 localStorage.setItem("login", JSON.stringify(this.isLogged));
                 console.log(`L'utilisateur ${this.email} s'est bien connecté !`);
@@ -212,7 +211,6 @@ export default {
             }      
         )
         .catch((error) =>{
-            console.log(error.response.data.message);
             this.loginErrorMessage = error.response.data.message;
             this.loginError = true;
         })
@@ -243,7 +241,6 @@ export default {
                     }      
                 )
                 .catch((error) =>{
-                    console.log(error.response.data.message);
                     this.loginErrorMessage = error.response.data.message;
                     this.loginError = true;
                 })

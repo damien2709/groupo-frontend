@@ -1,24 +1,34 @@
-# frontend
+## FRONTEND
 
-## Project setup
-```
-npm install
-```
+Ouvrir le dossier Frontend dans le terminal de votre éditeur puis exécuter la commande:
+- 'npm install'
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+puis
+    
+- 'npm run serve'
 
-### Compiles and minifies for production
-```
-npm run build
-```
+si le navigateur ne s'ouvre pas automatiquement allez à :
 
-### Lints and fixes files
-```
-npm run lint
-```
+- http://localhost:8080/
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## UTILISATION DE L'APPLICATION
+
+Pour s'inscrire sur le réseau social de Groupomania, il vous faut renseigner :
+
+- Une adresse mail valide
+- Un mot de passe (de 8 à 20 caractères, lettres et chiffres acceptés uniquement, majuscules et minuscules, avec au moins un caractère spécial).
+  Vous pouvez par la suite modifier votre profil en allant sur votre profil. Votre compte peut être supprimé par vous-même.
+
+Une fois connecté vous pouvez voir les articles des utilisateurs et publier au choix:
+
+- un article avec un titre, un contenu texte et 1 image,
+
+Les articles peuvent être likés, modifiés et supprimés. L'administrateur peut également les modifier ou les supprimer.
+
+3 articles sont créés par défaut au démarrage de l'application. 
+
+Il existe un administrateur par défaut créé au démarrage de l'application :
+- ID : admin@groupomania.fr
+- MDP : Groupo2709@
+
+

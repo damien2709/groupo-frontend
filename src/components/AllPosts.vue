@@ -206,7 +206,7 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+
                 .then(response => {
                     this.userPicture = response.data.data.picture;
                     this.isAdmin = response.data.data.isAdmin;
@@ -223,7 +223,7 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API qui sera la liste des users. Je filtre ensuite l'utilisateur dans le tableau par son id. 
+
                 .then(response => {
                     this.listOfUsers = response.data.data;
                 })
@@ -253,12 +253,10 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+
                 .then(response => {
-                    console.log(response.data); // je récupère le tableau des posts de la catégorie 
                     this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
-                    console.log(this.listOfPosts);
                     if(this.listOfPosts.length == 0){
                         this.noPost = true;
                     }
@@ -277,12 +275,10 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+
                 .then(response => {
-                    console.log(response.data); // je récupère le tableau des posts de la catégorie 
                     this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
-                    console.log(this.listOfPosts);
                     if(this.listOfPosts.length == 0){
                         this.noPost = true;
                     }
@@ -301,12 +297,10 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+
                 .then(response => {
-                    console.log(response.data);
                     this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
-                    console.log(this.listOfPosts);
                     if(this.listOfPosts.length == 0){
                         this.noPost = true;
                     }
@@ -325,12 +319,10 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+
                 .then(response => {
-                    console.log(response.data);
                     this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
-                    console.log(this.listOfPosts);
                     if(this.listOfPosts.length == 0){
                         this.noPost = true;
                     }
@@ -349,13 +341,11 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+
                 .then(response => {
-                    console.log(response.data);
                     this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
-                    console.log(this.listOfPosts);
-                    if(this.listOfPosts.length == 0){ // si la liste des posts de la catégorie est vide, j'affiche que la liste est vide 
+                    if(this.listOfPosts.length == 0){ 
                         this.noPost = true;
                     }
                     else{
@@ -373,13 +363,11 @@ export default {
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+
                 .then(response => {
-                    console.log(response.data);
                     this.listOfPosts = response.data.data;
                     this.postPicture = this.listOfPosts.picture;
-                    console.log(this.listOfPosts);
-                    if(this.listOfPosts.length == 0){ // si la liste des posts de la catégorie est vide, j'affiche que la liste est vide 
+                    if(this.listOfPosts.length == 0){  
                         this.noPost = true;
                     }
                     else{
@@ -397,9 +385,7 @@ export default {
                             { "Authorization": `Bearer ${this.token}`}
                         }
                     )
-                    // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
                     .then(response => {
-                        console.log(response.data);
                         this.listOfPosts = response.data.data;
                         this.postPicture = this.listOfPosts.picture;
                         if(this.listOfPosts.length == 0){
@@ -416,12 +402,11 @@ export default {
         }, 
         // Fonction de modification d'un post 
         modifyPost: function (para, title, content, category, user_id) {
-            // Si l'utilisateur est l'auteur du post ou si l'utilisateur est admin, on peut effectuer la requête de modification de post
             if(user_id == this.userId || this.isAdmin == true) {
                 this.axios
                     .put(`http://localhost:3000/api/posts/${para}`, 
                         {
-                            title: document.getElementById(`${title}`).value, // ici on va utiliser getElement car v-model ne fonctionne pas en même tempa que v-bind dans un input. 
+                            title: document.getElementById(`${title}`).value, 
                             content: document.getElementById(`${content}`).value,
                             category: document.getElementById(`${category}`).value,
                             picture: this.postPicture,
@@ -435,16 +420,14 @@ export default {
                             }
                         }
                     )
-                    // je récupère la réponse de l'API, je charge dans le localStorage la clé/valeur "login" et la clé/valeur "token".
+
                     .then(response => {
-                        console.log(response.data);
                         this.getListOfPosts();
                     })
                     .catch((error) =>{
                         console.log(error.message);
                     })
             }
-            // Sinon on ne passe pas de requête et on affiche une erreur
             else {
                 console.log("Vous n'êtes pas autorisé à modifier cet article !");
             }
@@ -462,33 +445,30 @@ export default {
                     )
                     .then(response => {
                         console.log(response.data.message);
-                        this.getListOfPosts(); // pour enlever le modal qui est bloqué suite à la supression 
+                        this.getListOfPosts(); 
                     })
                     .catch(error => {
                         console.log(error.message);
                     })
             }
-            // Sinon on ne passe pas de requête et on affiche une erreur
             else {
                 console.log("Vous n'êtes pas autorisé à modifier cet article !");
             }
         },
         // Fonction d'ajout ou de suppression du user du tableau des likers de post. 
         addLike: function (para, id, para2) {
-            // Je fais une requête GET pour vérifier si le user like déjà cet article ou pas.
             this.axios
                 .get(`http://localhost:3000/api/posts/${para}`, 
                     {headers: 
                         { "Authorization": `Bearer ${this.token}`}
                     }
                 )
-                // je récupère la réponse de l'API, 
                     .then( (response) => {
-                        this.usersLike = response.data.data.usersLike; // je récupère le tableau des likers
-                        let myIndex = this.usersLike.indexOf(this.userId); // je cherche si le userId est présente dans le tableau.
+                        this.usersLike = response.data.data.usersLike; 
+                        let myIndex = this.usersLike.indexOf(this.userId); 
                         // S'il' n'existe pas, ça renvoie -1, et donc je vais ajouter l'utilisateur dans la liste des likers et je vais incrémenter nbLike puis enregistrer le tout dans la BDD. 
                             if (myIndex == -1) {
-                                document.getElementById(id).classList.add('text-primary'); // j'ajoute la classe "text-primary" de l'élément avec l'id concerné. Comme c'est un id, je peux écraser la méthode "doLike" qui agit sur la classe pour changer la couleur des posts que le user aime déjà. 
+                                document.getElementById(id).classList.add('text-primary'); 
                                 this.usersLike.push(this.userId);
                                 console.log(this.usersLike);
                                 para2.nbLike++;
@@ -507,7 +487,7 @@ export default {
                                             }
                                         }
                                     )
-                                // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
+
                                     .then(response => {
                                             console.log(response.data.message);
                                         }      
@@ -517,10 +497,9 @@ export default {
                                     })
                             }
                             else {
-                                document.getElementById(id).classList.remove("text-primary"); // je retire la class "text-primary" de l'élément avec l'id concerné. 
+                                document.getElementById(id).classList.remove("text-primary"); /
                                 // Si le user est déjà dans le tableau, Je dois le supprimer car il n'aime plus ! Je dois décrémenter également nbLike et l'enregistrer. 
-                                let myIndex = this.usersLike.indexOf(this.userId); // je cherche dans le tableau l'index dont le numéro  détient bien la valeur du userID de l'utilisateur actuel.
-                                //  je le supprime du tableau
+                                let myIndex = this.usersLike.indexOf(this.userId); 
                                 this.usersLike.splice(myIndex, 1);
                                 para2.nbLike--;
                                 console.log(`Le user avec l'ID ${this.userId} a bien été retiré en frontend de la liste des likers pour cet article`);
@@ -538,7 +517,6 @@ export default {
                                             }
                                         }
                                     )
-                                    // je récupère le message de la réponse de l'API, et je renvoie vers la page de login 
                                     .then(response => {
                                             console.log(response.data.message);
                                         }      

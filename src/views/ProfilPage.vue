@@ -195,9 +195,7 @@ export default {
                     }
                 )
                 .then(response => {
-                    console.log(response.data);
                     this.surname = response.data.data.surname;
-                    console.log(response.data.data.surname);
                     this.name = response.data.data.name;
                     this.email = response.data.data.email;
                     this.department = response.data.data.department;
@@ -210,7 +208,6 @@ export default {
         },
         // Une fonction pour mettre à jour les informations de son compte
         updateAccount : function () {
-            console.log(this.token);
                 this.surname = document.getElementById('surname').value;
                 this.name = document.getElementById('name').value;
             this.axios
@@ -231,7 +228,6 @@ export default {
                     }
                 )
                 .then(response => {
-                    console.log(response.data);
                     localStorage.setItem('userSurname', JSON.stringify(this.surname));
                     localStorage.setItem('userName', JSON.stringify(this.name));
                     this.modifyStatus = false;
@@ -250,7 +246,6 @@ export default {
                         }
                     )
                     .then(response => {
-                        console.log(response.data.message);
                         localStorage.removeItem("token");
                         localStorage.removeItem("login");
                         localStorage.removeItem("userId");
