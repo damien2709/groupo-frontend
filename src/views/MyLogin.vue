@@ -241,7 +241,7 @@ export default {
                     }      
                 )
                 .catch((error) =>{
-                    this.loginErrorMessage = error.response.data.message;
+                    this.loginErrorMessage = error.response.data.message.split(":")[1];
                     this.loginError = true;
                 })
         }
