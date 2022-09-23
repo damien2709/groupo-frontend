@@ -15,6 +15,7 @@
                         class="form-control" 
                         id="email" 
                         name="email"
+                        aria-label="email"
                         aria-describedby="helpEmail" 
                         placeholder="Email"
                         v-model="email"
@@ -27,6 +28,7 @@
                         class="form-control" 
                         id="password"
                         name="password" 
+                        aria-label="password"
                         placeholder="Mot de passe" 
                         v-model="password" 
                         required  
@@ -44,6 +46,7 @@
                             class="form-control" 
                             id="surname"
                             name="surname" 
+                            aria-label="surname"
                             aria-describedby="Surname" 
                             placeholder="Prénom"
                             v-model="surname" 
@@ -55,6 +58,7 @@
                             type="text" 
                             class="form-control" 
                             id="name" 
+                            aria-label="name"
                             aria-describedby="Name" 
                             placeholder="Nom"
                             v-model="name" 
@@ -66,6 +70,7 @@
                     type="text" 
                     class="form-control" 
                     id="department" 
+                    aria-label="department"
                     aria-describedby="Department" 
                     placeholder="Service"
                     v-model="department">
@@ -74,7 +79,8 @@
                     type="tel" 
                     class="form-control" 
                     id="tel"
-                    name="tel" 
+                    name="tel"
+                    aria-label="tel" 
                     aria-describedby="Telephone" 
                     placeholder="Tel du poste"
                     v-model="tel">
@@ -85,6 +91,7 @@
                             class="form-check-input" 
                             type="checkbox" 
                             id="agrementCheck"
+                            aria-label="agrementCheck"
                             v-model="checkConditions"
                             @click="validateConditions()" 
                             required>

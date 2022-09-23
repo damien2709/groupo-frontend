@@ -12,7 +12,8 @@
                 <button class=" btn me-2 mb-2" style="background-color:#FFD7D7 " @click="setUserPosts()">Mes posts</button> 
                 <form class="input-group d-flex me-3" role="search" v-on:submit.prevent>
                     <input class="form-control" type="search" placeholder="Recherche par mots clés !" aria-label="Search" v-model="searchWords" @keyup.enter="setSearch()">
-                    <button class="btn btn-outline-primary" type="button" @click="setSearch()"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
+                    <button class="btn btn-outline-primary" type="button" aria-label="search button"
+                    @click="setSearch()"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
             </form>
             </div>
         </div>
